@@ -137,14 +137,15 @@ export default function Topbar() {
         </div>
       </div>
 
-      {/* 2. MAIN NAVBAR */}
+   {/* 2. MAIN NAVBAR */}
       <div 
         className={`w-full transition-all duration-300 ease-in-out border-b px-4 lg:px-10 ${
           isScrolled 
-            ? 'fixed top-0 left-0 bg-[#004B87]/95 backdrop-blur-md shadow-2xl border-white/20 z-50 py-4' 
-            : 'relative bg-[#003865]/95 backdrop-blur-md border-white/10 shadow-xl py-5'
+            ? 'fixed top-0 left-0 bg-[#004B87]/95 backdrop-blur-md shadow-2xl border-white/20 z-50 py-3' 
+            : 'relative bg-gradient-to-b from-[#003865]/90 via-[#003865]/60 to-transparent backdrop-blur-md border-white/10 shadow-xl py-4'
         }`}
       >
+      
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           
           {/* Brand Logo & Title */}
