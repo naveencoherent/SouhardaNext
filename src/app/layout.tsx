@@ -1,5 +1,6 @@
 import './globals.css';
 import Topbar from '../components/layout/Topbar';
+import ChatAssistant from '../components/layout/ChatAssistant';
 import { LanguageProvider } from '../context/LanguageContext';
 
 export const metadata = {
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LanguageProvider>
           <Topbar />
           {children}
+          <ChatAssistant />
         </LanguageProvider>
       </body>
     </html>
