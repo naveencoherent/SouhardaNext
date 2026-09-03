@@ -3,25 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import HeroDignitaryCard from './HeroDignitaryCard';
+import { HERO_CONFIG } from '@/config/hero';
 
 export default function HeroCarousel() {
-  const bannerImages = [
-    '/images/homebanner/SahakaraSaptama2024.jpg',
-    '/images/homebanner/SahakaraSaptama20241.jpg',
-    '/images/homebanner/SahakaraSaptama20242.jpg',
-    '/images/homebanner/SahakaraSaptama20243.jpg',
-    '/images/homebanner/SahakaraSaptama20244.jpg',
-    '/images/homebanner/SahakaraSaptama20245.jpg',
-    '/images/homebanner/SahakaraSaptama20246.jpg',
-  ];
-
-  const categoryCards = [
-    { title: 'REGULATORY', image: '/images/home/Regulatory.jpg' },
-    { title: 'EDUCATION', image: '/images/home/Education.jpg' },
-    { title: 'SERVICES', image: '/images/home/Services.jpg' },
-    { title: 'KSSFCL COURT', image: '/images/home/SouhardaCourt.jpg' },
-  ];
-
+  const { bannerImages, categoryCards } = HERO_CONFIG;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
