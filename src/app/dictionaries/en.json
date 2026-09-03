@@ -1,0 +1,22 @@
+{
+  "topbar": {
+    "banking": "Banking",
+    "egrievance": "e-Grievance",
+    "greyhr": "Grey HR",
+    "news": "News",
+    "usefullinks": "Useful Links",
+    "family": "Family"
+  },
+  "nav": {
+    "title_kn": "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಹಕಾರಿ ನಿಯಮಿತ",
+    "title_en": "Karnataka State Souharda Federal Co-operative Ltd.",
+    "home": "Home",
+    "souharda": "Souharda",
+    "regulatory": "Regulatory",
+    "education": "Education",
+    "services": "Services",
+    "court": "Court",
+    "gallery": "Gallery",
+    "connect": "Connect"
+  }
+}
