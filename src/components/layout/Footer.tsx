@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 // --- Inline Brand SVG Icons ---
 const FacebookIcon = () => (
@@ -25,40 +26,52 @@ const InstagramIcon = () => (
 );
 
 interface Division {
-  name: string;
-  address: string;
+  nameKn: string;
+  nameEn: string;
+  addressKn: string;
+  addressEn: string;
   phone: string;
   qrCode: string;
 }
 
 const divisions: Division[] = [
   {
-    name: 'Bangalore Division',
-    address: '"Souharda Sahakari Soudha"\nMalleswaram, Bengaluru - 55.',
+    nameKn: 'ಬೆಂಗಳೂರು ವಿಭಾಗ',
+    nameEn: 'Bangalore Division',
+    addressKn: '"ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಸೌಧ"\nಮಲ್ಲೇಶ್ವರಂ, ಬೆಂಗಳೂರು - ೫೫.',
+    addressEn: '"Souharda Sahakari Soudha"\nMalleswaram, Bengaluru - 55.',
     phone: '080-23525546',
     qrCode: '/images/BangaloreQr.webp',
   },
   {
-    name: 'Belagavi Division',
-    address: '#1119/B, Industrial Area,\nAutonagar, Belagavi - 16.',
+    nameKn: 'ಬೆಳಗಾವಿ ವಿಭಾಗ',
+    nameEn: 'Belagavi Division',
+    addressKn: '#೧೧೧೯/ಬಿ, ಕೈಗಾರಿಕಾ ಪ್ರದೇಶ,\nಆಟೋನಗರ, ಬೆಳಗಾವಿ - ೧೬.',
+    addressEn: '#1119/B, Industrial Area,\nAutonagar, Belagavi - 16.',
     phone: '0831-24015',
     qrCode: '/images/BelagaviQr.webp',
   },
   {
-    name: 'Kalaburagi Division',
-    address: 'Site No: 2284, Near CADA,\nKalaburagi - 585 102.',
+    nameKn: 'ಕಲಬುರಗಿ ವಿಭಾಗ',
+    nameEn: 'Kalaburagi Division',
+    addressKn: 'ನಿವೇಶನ ಸಂಖ್ಯೆ: ೨೨೮೪, ಸಿಎಡಿಎ ಹತ್ತಿರ,\nಕಲಬುರಗಿ - ೫೮೫ ೧೦೨.',
+    addressEn: 'Site No: 2284, Near CADA,\nKalaburagi - 585 102.',
     phone: '084722-70222',
     qrCode: '/images/kalaburagiQr.webp',
   },
   {
-    name: 'Mysore Division',
-    address: 'F-13, Shankara matha road,\nMysore - 570 004.',
+    nameKn: 'ಮೈಸೂರು ವಿಭಾಗ',
+    nameEn: 'Mysore Division',
+    addressKn: 'ಎಫ್-೧೩, ಶಂಕರ ಮಠ ರಸ್ತೆ,\nಮೈಸೂರು - ೫೭೦ ೦೦೪.',
+    addressEn: 'F-13, Shankara matha road,\nMysore - 570 004.',
     phone: '080-23378377',
     qrCode: '/images/MysoreQr.webp',
   },
 ];
 
 export default function Footer() {
+  const { locale } = useLanguage();
+
   return (
     <footer className="bg-[#526a74] text-white pt-14 pb-8 px-6 lg:px-16 border-t border-slate-600/80">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -66,13 +79,17 @@ export default function Footer() {
         {/* Main Head Office Section */}
         <div className="text-center space-y-4">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
-            Karnataka State Souharda Federal Cooperative Ltd.
+            {locale === 'kn'
+              ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಂಯುಕ್ತ ಸಹಕಾರಿ ನಿಯಮಿತ'
+              : 'Karnataka State Souharda Federal Cooperative Ltd.'}
           </h2>
           <p className="text-amber-300 font-semibold text-lg sm:text-xl">
             "Souharda Sahakari Soudha"
           </p>
           <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            No.68, 1st Floor, Between 17th & 18th Cross, Margosa Road, Malleswaram, Bengaluru - 560 055.
+            {locale === 'kn'
+              ? 'ನಂ.೬೮, ೧ನೇ ಮಹಡಿ, ೧೭ ಮತ್ತು ೧೮ನೇ ಕ್ರಾಸ್ ಮಧ್ಯೆ, ಮಾರ್ಗೋಸಾ ರಸ್ತೆ, ಮಲ್ಲೇಶ್ವರಂ, ಬೆಂಗಳೂರು - ೫೬೦ ೦೫೫.'
+              : 'No.68, 1st Floor, Between 17th & 18th Cross, Margosa Road, Malleswaram, Bengaluru - 560 055.'}
           </p>
 
           {/* Contact Details */}
@@ -128,45 +145,59 @@ export default function Footer() {
 
         {/* Divisions Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-          {divisions.map((div) => (
-            <div 
-              key={div.name} 
-              className="flex flex-col items-center p-5 rounded-2xl bg-slate-700/20 border border-slate-500/20 hover:border-amber-300/40 transition-all duration-300"
-            >
-              <h3 className="text-amber-300 font-bold text-lg mb-2">{div.name}</h3>
-              <p className="text-xs text-slate-200 whitespace-pre-line leading-relaxed min-h-[40px] mb-3">
-                {div.address}
-              </p>
-              
-              <div className="flex items-center gap-1.5 text-xs text-slate-200 mb-4 bg-slate-800/40 px-3 py-1.5 rounded-md">
-                <Phone className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-                <span>{div.phone}</span>
-              </div>
+          {divisions.map((div) => {
+            const divName = locale === 'kn' ? div.nameKn : div.nameEn;
+            const divAddress = locale === 'kn' ? div.addressKn : div.addressEn;
 
-              {/* QR Code Frame */}
-              <div className="w-24 h-24 bg-white p-1.5 rounded-xl shadow-lg relative overflow-hidden group hover:scale-105 transition-transform duration-200">
-                <Image
-                  src={div.qrCode}
-                  alt={`${div.name} QR Code`}
-                  fill
-                  sizes="96px"
-                  className="object-contain p-1"
-                />
+            return (
+              <div 
+                key={div.nameEn} 
+                className="flex flex-col items-center p-5 rounded-2xl bg-slate-700/20 border border-slate-500/20 hover:border-amber-300/40 transition-all duration-300"
+              >
+                <h3 className="text-amber-300 font-bold text-lg mb-2">{divName}</h3>
+                <p className="text-xs text-slate-200 whitespace-pre-line leading-relaxed min-h-[40px] mb-3">
+                  {divAddress}
+                </p>
+                
+                <div className="flex items-center gap-1.5 text-xs text-slate-200 mb-4 bg-slate-800/40 px-3 py-1.5 rounded-md">
+                  <Phone className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
+                  <span>{div.phone}</span>
+                </div>
+
+                {/* QR Code Frame */}
+                <div className="w-24 h-24 bg-white p-1.5 rounded-xl shadow-lg relative overflow-hidden group hover:scale-105 transition-transform duration-200">
+                  <Image
+                    src={div.qrCode}
+                    alt={`${divName} QR Code`}
+                    fill
+                    sizes="96px"
+                    className="object-contain p-1"
+                    unoptimized
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Bottom Sub-links & Copyright */}
         <div className="pt-8 border-t border-slate-500/30 text-center text-xs text-slate-300 space-y-3">
           <div className="flex flex-wrap justify-center items-center gap-4 text-slate-200 font-medium">
-            <Link href="/" className="hover:text-amber-300 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-amber-300 transition-colors">
+              {locale === 'kn' ? 'ಮುಖ್ಯ ಪುಟ' : 'Home'}
+            </Link>
             <span className="text-slate-500">•</span>
-            <Link href="/about" className="hover:text-amber-300 transition-colors">About Us</Link>
+            <Link href="/about" className="hover:text-amber-300 transition-colors">
+              {locale === 'kn' ? 'ನಮ್ಮ ಬಗ್ಗೆ' : 'About Us'}
+            </Link>
             <span className="text-slate-500">•</span>
-            <Link href="/act" className="hover:text-amber-300 transition-colors">Souharda Act</Link>
+            <Link href="/act" className="hover:text-amber-300 transition-colors">
+              {locale === 'kn' ? 'ಸೌಹಾರ್ದ ಕಾಯ್ದೆ' : 'Souharda Act'}
+            </Link>
             <span className="text-slate-500">•</span>
-            <Link href="/contact" className="hover:text-amber-300 transition-colors">Contact</Link>
+            <Link href="/contact" className="hover:text-amber-300 transition-colors">
+              {locale === 'kn' ? 'ಸಂಪರ್ಕಿಸಿ' : 'Contact'}
+            </Link>
           </div>
           <p className="text-slate-300/80">
             © {new Date().getFullYear()} Karnataka State Souharda Federal Cooperative Ltd. All Rights Reserved.
