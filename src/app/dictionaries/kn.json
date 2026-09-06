@@ -1,22 +1,38 @@
 {
   "topbar": {
     "banking": "ಬ್ಯಾಂಕಿಂಗ್",
-    "egrievance": "ಇ-ದೂರು",
+    "egrievance": "ಇ-ಕುಂದುಕೊರತೆ",
     "greyhr": "ಗ್ರೇ ಎಚ್‌ಆರ್",
     "news": "ಸುದ್ದಿ",
     "usefullinks": "ಉಪಯುಕ್ತ ಲಿಂಕ್‌ಗಳು",
     "family": "ಕುಟುಂಬ"
   },
   "nav": {
-    "title_kn": "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಹಕಾರಿ ನಿಯಮಿತ",
+    "title_kn": "ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಂಯುಕ್ತ ಸಹಕಾರಿ ನಿಯಮಿತ",
     "title_en": "Karnataka State Souharda Federal Co-operative Ltd.",
-    "home": "ಮುಖಪುಟ",
+    "home": "ಮುಖ್ಯ ಪುಟ",
     "souharda": "ಸೌಹಾರ್ದ",
-    "regulatory": "ನಿಯಂತ್ರಕ",
+    "regulatory": "ನಿಯಂತ್ರಣ",
     "education": "ಶಿಕ್ಷಣ",
     "services": "ಸೇವೆಗಳು",
     "court": "ನ್ಯಾಯಾಲಯ",
     "gallery": "ಗ್ಯಾಲರಿ",
-    "connect": "ಸಂಪರ್ಕಿಸಿ"
+    "connect": "ಸಂಪರ್ಕಿಸಿ",
+    "coopMovement": "ಸಹಕಾರ ಚಳುವಳಿ",
+    "aboutKssfcl": "ಕೆ.ಎಸ್.ಎಸ್.ಎಫ್.ಸಿ.ಎಲ್ ಬಗ್ಗೆ",
+    "ourVoice": "ನಮ್ಮ ಧ್ವನಿ",
+    "directors": "ನಿರ್ದೇಶಕರು",
+    "members": "ಸದಸ್ಯರು",
+    "workforce": "ಸಿಬ್ಬಂದಿ ವರ್ಗ",
+    "actsRules": "ಕಾಯ್ದೆಗಳು ಮತ್ತು ನಿಯಮಗಳು",
+    "circulars": "ಸುತ್ತೋಲೆಗಳು ಮತ್ತು ಆದೇಶಗಳು",
+    "compliance": "ಅನುಸರಣೆ ಪರಿಶೀಲನಾಪಟ್ಟಿ",
+    "audit": "ಲೆಕ್ಕಪರಿಶೋಧನೆ ಮಾರ್ಗಸೂಚಿಗಳು",
+    "training": "ತರಬೇತಿ ಕಾರ್ಯಕ್ರಮಗಳು",
+    "courses": "ಸಹಕಾರ ಕೋರ್ಸ್‌ಗಳು",
+    "materials": "ಅಧ್ಯಯನ ಸಾಮಗ್ರಿಗಳು",
+    "eStamping": "ಡಿಜಿಟಲ್ ಇ-ಸ್ಟಾಂಪಿಂಗ್",
+    "consultancy": "ಸಲಹಾ ಸೇವೆಗಳು",
+    "itSupport": "ಐಟಿ ಮತ್ತು ಸಾಫ್ಟ್‌ವೇರ್ ಬೆಂಬಲ"
   }
 }

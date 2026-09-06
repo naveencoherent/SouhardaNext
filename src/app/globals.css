@@ -62,3 +62,10 @@ html.font-size-xlarge {
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+/* Graph paper grid background with larger boxes */
+.bg-grid-pattern {
+  background-size: 36px 36px; /* Increased from 24px to 36px */
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+}

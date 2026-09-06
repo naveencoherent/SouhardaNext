@@ -5,8 +5,6 @@ import SocialSection from '@/components/home/SocialSection';
 import MagazineSection from '@/components/home/MagazineSection';
 import GovernanceSection from '@/components/home/GovernanceSection';
 import LeadershipSection from '@/components/home/LeadershipSection';
-import Footer from '@/components/home/Footer';
-
 
 export default function Home() {
   return (
@@ -17,8 +15,7 @@ export default function Home() {
       <SocialSection />
       <MagazineSection />
       <GovernanceSection />
-      <LeadershipSection/>
-      <Footer/>
+      <LeadershipSection />
     </main>
   );
 }
