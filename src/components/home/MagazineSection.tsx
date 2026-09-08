@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 // Imported or directly embedded JSON dataset
 const magazineData = {
@@ -47,6 +48,7 @@ const getAssetPath = (year: string, month: string, baseName: string) => {
   // Pre-2026 path: /images/Swabhimani_Sahakari/2021_25/2025/Dec/filename
   return `/images/Swabhimani_Sahakari/2021_25/${year}/${month}/${baseName}`;
 };
+
 // Auto-fallback image handling (.webp -> .jpg -> .JPG -> .png)
 const AdaptiveImage = ({ basePath, alt, className }: { basePath: string; alt: string; className?: string }) => {
   const extensions = ['.webp', '.jpg', '.JPG', '.png'];
@@ -131,12 +133,12 @@ export default function MagazineSection() {
             </div>
 
             <div className="p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
-              <a
-                href="/images/Swabhimani_Sahakari/2021_25/2025/swabhimani25.html"
+              <Link
+                href="/education/swabhimani-sahakari"
                 className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
               >
                 Click here for Archives
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -152,12 +154,12 @@ export default function MagazineSection() {
 
             <div className="pt-2">
               <div className="inline-block p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
-                <a 
-                  href="/images/Swabhimani_Sahakari/2021_25/2025/swabhimani25.html"
+                <Link 
+                  href="/education/swabhimani-sahakari"
                   className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
                 >
                   Read more
-                </a>
+                </Link>
               </div>
             </div>
           </div>
