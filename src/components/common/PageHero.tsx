@@ -87,11 +87,10 @@ export default function PageHero({
           </div>
         )}
 
-        {/* Main Heading */}
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-wide text-white leading-tight drop-shadow-sm">
-          {mainPart} {lastWord && <span className="text-amber-400">{lastWord}</span>}
-        </h1>
-
+     {/* Main Heading */}
+<h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-wide text-white leading-tight drop-shadow-sm">
+  {mainPart} {lastWord && <span className="text-amber-400">{lastWord}</span>}
+</h1>
         {/* Gold Divider Bar */}
         <div className="w-12 h-0.5 bg-amber-500 mx-auto rounded-full" />
 
