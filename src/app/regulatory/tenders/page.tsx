@@ -4,6 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Search, FileText, Download, AlertCircle } from 'lucide-react';
 
+// Guarantees static HTML export compatibility
+export const dynamic = 'force-static';
+
 interface Tender {
   id: string;
   description: string;
@@ -22,21 +25,22 @@ export default function TendersPage() {
       description: 'Implementation of Integrated Co-operative ERP Software System',
       lastDate: '15-Apr-2026',
       status: 'Active',
-      documentUrl: '/Assets/docs/Tender_ERP_System_2026.pdf',
+      // Note: Use lowercase '/assets/...' to avoid case-sensitivity issues on Linux servers
+      documentUrl: '/assets/docs/Tender_ERP_System_2026.pdf',
     },
     {
       id: '2',
       description: 'Empanelment of Financial Auditors & Tax Consultants for 2026-27',
       lastDate: '05-Apr-2026',
       status: 'Under Review',
-      documentUrl: '/Assets/docs/RFP_Financial_Auditors_2026.pdf',
+      documentUrl: '/assets/docs/RFP_Financial_Auditors_2026.pdf',
     },
     {
       id: '3',
       description: 'Supply and Installation of IT Infrastructure Across Regional Offices',
       lastDate: '10-Jan-2026',
       status: 'Closed',
-      documentUrl: '/Assets/docs/Tender_Hardware_2025.pdf',
+      documentUrl: '/assets/docs/Tender_Hardware_2025.pdf',
     },
   ];
 
@@ -49,9 +53,8 @@ export default function TendersPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Standardized Hero Banner Section */}
+      {/* Hero Banner Section */}
       <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
-        {/* Background Banner Image */}
         {!hasBannerError ? (
           <Image
             src="/images/souharda/AllAboutKSSFCL.webp"
@@ -64,7 +67,6 @@ export default function TendersPage() {
           />
         ) : null}
 
-        {/* Centered Hero Content */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
           <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
             Procurement &amp; Contracts
@@ -77,14 +79,14 @@ export default function TendersPage() {
           </p>
         </div>
 
-        {/* Vignette Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
       </header>
 
-      {/* Main Table Content Section */}
+      {/* Main Content Section */}
       <section className="py-12 max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          {/* Card Header with Live Search Input */}
+          
+          {/* Live Search */}
           <div className="p-4 sm:p-6 bg-white border-b border-slate-100">
             <div className="relative max-w-md">
               <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -100,7 +102,7 @@ export default function TendersPage() {
             </div>
           </div>
 
-          {/* Table Responsive Container */}
+          {/* Table Container */}
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -111,7 +113,7 @@ export default function TendersPage() {
                   <th className="py-3.5 px-6 text-center whitespace-nowrap">Action</th>
                 </tr>
               </thead>
-              <tbody id="tenderTableBody" className="divide-y divide-slate-100 text-sm">
+              <tbody className="divide-y divide-slate-100 text-sm">
                 {filteredTenders.length > 0 ? (
                   filteredTenders.map((tender) => (
                     <tr key={tender.id} className="hover:bg-slate-50/80 transition-colors">
@@ -141,7 +143,7 @@ export default function TendersPage() {
                           rel="noopener noreferrer"
                           download
                           aria-label={`Download PDF: ${tender.description}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition-all shadow-xs"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition-all"
                         >
                           <FileText className="w-3.5 h-3.5" />
                           <span>PDF</span>
@@ -163,6 +165,7 @@ export default function TendersPage() {
               </tbody>
             </table>
           </div>
+
         </div>
       </section>
     </main>

@@ -3,55 +3,51 @@
 import React from 'react';
 import Image from 'next/image';
 
+interface Dignitary {
+  name: string;
+  role: string;
+  imageSrc: string;
+}
+
+const DIGNITARIES: Dignitary[] = [
+  {
+    name: 'Sri Amit Shah',
+    role: "Hon'ble Union Coop Minister",
+    imageSrc: '/images/home/SriAmithShah.png',
+  },
+  {
+    name: 'Sri Laxman Savadi',
+    role: "Hon'ble Coop Minister, Karnataka",
+    imageSrc: '/images/home/Sri_Lakshman_Savadi.png',
+  },
+];
+
 export default function HeroDignitaryCard() {
-  const dignitaries = [
-    {
-      name: "Sri Amit Shah",
-      role: "Hon'ble Union Coop Minister",
-      image: "/images/home/SriAmithShah.png",
-    },
-    {
-      name: "Sri Laxman Savadi",
-      role: "Hon'ble Coop Minister, Karnataka",
-      image: "/images/home/Sri_Lakshman_Savadi.png",
-    },
-  ];
-
   return (
-    <div className="absolute top-8 left-6 sm:left-12 z-30 animate-fade-in-down">
-      {/* Outer Glow Container */}
-      <div className="relative group p-[2px] rounded-2xl bg-gradient-to-b from-amber-400 via-orange-500 to-amber-600 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-        
-        {/* Inner Card Grid */}
-        <div className="bg-slate-950/85 backdrop-blur-md rounded-[14px] p-4 flex items-center gap-6 border border-white/10">
-          {dignitaries.map((person, idx) => (
-            <div key={idx} className="flex flex-col items-center text-center">
-              
-              {/* Circular Image Frame */}
-              <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[2px] bg-gradient-to-tr from-amber-300 via-orange-400 to-amber-500 shadow-md mb-2">
-                <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-slate-900">
-                  <Image
-                    src={person.image}
-                    alt={person.name}
-                    fill
-                    className="object-cover object-top hover:scale-105 transition-transform duration-500"
-                    priority
-                  />
-                </div>
-              </div>
-
-              {/* Text Info */}
-              <h4 className="text-amber-400 font-bold text-xs sm:text-sm leading-tight">
-                {person.name}
-              </h4>
-              <p className="text-slate-300 text-[10px] sm:text-xs mt-1 font-medium max-w-[110px]">
-                {person.role}
-              </p>
-
+    <div className="mx-4 sm:mx-8 lg:mx-12 max-w-sm rounded-2xl bg-slate-950/80 backdrop-blur-md border border-amber-500/30 p-4 sm:p-5 shadow-2xl">
+      <div className="flex items-center justify-around gap-4">
+        {DIGNITARIES.map((person, index) => (
+          <div key={index} className="flex flex-col items-center text-center">
+            {/* Circular Avatar Container */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-slate-800">
+              <Image
+                src={person.imageSrc}
+                alt={person.name}
+                fill
+                sizes="(max-width: 640px) 80px, 96px"
+                className="object-cover object-top"
+              />
             </div>
-          ))}
-        </div>
 
+            {/* Name & Role */}
+            <h4 className="mt-2 text-xs sm:text-sm font-bold text-amber-400 drop-shadow-sm">
+              {person.name}
+            </h4>
+            <p className="text-[10px] sm:text-xs text-slate-300 font-medium max-w-[120px] leading-tight mt-0.5">
+              {person.role}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

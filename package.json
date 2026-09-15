@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npx --yes kill-port 3000",
     "dev": "cross-env NODE_OPTIONS='--max-old-space-size=8192' next dev",
     "build": "cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
     "start": "next start",
