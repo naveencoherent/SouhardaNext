@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Mail, Menu, X, Globe, MapPin, ChevronDown } from 'lucide-react';
+import { Phone, Mail, Globe, MapPin, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { NAV_ITEMS } from '../../config/nav';
 
 export default function Topbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const { locale, t, toggleLanguage } = useLanguage();
@@ -23,62 +23,16 @@ export default function Topbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
-    { name: t?.nav?.home || 'Home', href: '/' },
-    {
-      name: t?.nav?.souharda || 'Souharda',
-      href: '/souharda',
-      dropdown: [
-        { title: t?.nav?.coopMovement || 'Co-operative Movement', href: '/souharda/cooperative-movement' },
-        { title: t?.nav?.aboutKssfcl || 'All About KSSFCL', href: '/souharda/all-about-kssfcl' },
-        { title: t?.nav?.ourVoice || 'Our Voice', href: '/souharda/our-voice' },
-        { title: t?.nav?.directors || 'KSSFCL Directors', href: '/souharda/directors' },
-        { title: t?.nav?.members || 'Members', href: '/souharda/members' },
-        { title: t?.nav?.workforce || "Souharda's Workforce", href: '/souharda/workforce' },
-      ],
-    },
-    {
-      name: t?.nav?.regulatory || 'Regulatory',
-      href: '/regulatory',
-      dropdown: [
-        { title: 'Souharda Act', href: '/regulatory/souharda-act' },
-        { title: 'Task Force', href: '/regulatory/task-force' },
-        { title: 'Orders', href: '/regulatory/orders' },
-        { title: 'Liquidation', href: '/regulatory/liquidation' },
-        { title: 'Circulars', href: '/regulatory/circulars' },
-        { title: 'Tenders', href: '/regulatory/tenders' },
-      ],
-    },
-    {
-      name: t?.nav?.education || 'Education',
-      href: '/education',
-      dropdown: [
-        { title: 'Education Home', href: '/education' },
-        { title: 'Training', href: '/education/training' },
-        { title: 'Swabhimani Sahakari', href: '/education/swabhimani-sahakari' },
-        { title: 'Study Materials', href: '/education/study-materials' },
-        { title: 'Publications', href: '/education/publications' },
-      ],
-    },
-    {
-      name: t?.nav?.services || 'Services',
-      href: '/services',
-      dropdown: [
-        { title: 'E-Stamping', href: '/services/e-stamping' },
-        { title: 'Digital Intelligence', href: '/services/digital-intelligence' },
-        { title: 'Info to Members', href: '/services/info-to-members' },
-        { title: 'CSC Services', href: '/services/csc' },
-      ],
-    },
-    { name: t?.nav?.court || 'Court', href: '/court' },
-    { name: t?.nav?.gallery || 'Gallery', href: '/gallery' },
-    { name: t?.nav?.connect || 'Connect', href: '/connect' },
-  ];
+  // Map NAV_ITEMS to use translations while preserving fallback values and URLs safely
+  const navItems = NAV_ITEMS.map((item) => ({
+    ...item,
+    name: t?.nav?.[item.nameKey] || item.fallbackName,
+  }));
 
   return (
     <header className="relative w-full z-50 font-sans antialiased">
       
-      {/* 1. TOP UTILITY BAR (PULLED LEFT) */}
+      {/* 1. TOP UTILITY BAR */}
       <div className="bg-[#00182E] text-white text-xs py-1.5 px-2 lg:px-6 border-b border-white/10">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
           
@@ -149,7 +103,7 @@ export default function Topbar() {
         </div>
       </div>
 
-      {/* 2. MAIN NAVBAR (PULLED LEFT) */}
+      {/* 2. MAIN NAVBAR */}
       <div 
         className={`w-full transition-all duration-300 ease-in-out border-b border-white/10 px-2 lg:px-6 ${
           isScrolled 
@@ -157,31 +111,31 @@ export default function Topbar() {
             : 'relative bg-gradient-to-b from-[#001D38] via-[#0A2E52] to-[#1C3E68] backdrop-blur-sm shadow-sm py-3.5'
         }`}
       >
-        <div className="w-full flex justify-between items-center">
+        <div className="w-full flex justify-between items-center gap-4">
           
-          <Link href="/" className="flex items-center gap-2.5 group">
-           <div className="relative w-12 h-12 lg:w-14 lg:h-14 flex-shrink-0 drop-shadow-md">
-  <Image
-    src="/images/logo/KSSFCL.png"
-    alt="KSSFCL Logo"
-    fill
-    sizes="(max-width: 1024px) 48px, 56px"
-    className="object-contain"
-    priority
-  />
-</div>
+          <Link href="/" prefetch={false} className="flex items-center gap-2.5 group flex-shrink-0">
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 flex-shrink-0 drop-shadow-md">
+              <Image
+                src="/images/logo/KSSFCL.png"
+                alt="KSSFCL Logo"
+                fill
+                sizes="(max-width: 1024px) 48px, 56px"
+                className="object-contain"
+                priority
+              />
+            </div>
             <div className="leading-snug">
-              <div className="font-bold text-sm sm:text-base lg:text-lg text-amber-400 tracking-wide font-kannada drop-shadow">
+              <div className="font-bold text-xs sm:text-sm lg:text-lg text-amber-400 tracking-wide font-kannada drop-shadow">
                 {t?.nav?.title_kn || 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಂಯುಕ್ತ ಸಹಕಾರಿ ನಿಯಮಿತ'}
               </div>
-              <div className="text-[11px] sm:text-xs lg:text-sm text-white font-semibold tracking-tight drop-shadow">
+              <div className="text-[10px] sm:text-xs lg:text-sm text-white font-semibold tracking-tight drop-shadow">
                 {t?.nav?.title_en || 'Karnataka State Souharda Federal Co-operative Ltd.'}
               </div>
             </div>
           </Link>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden xl:flex items-center gap-5 lg:gap-6 font-bold text-sm lg:text-[15px] tracking-wide text-white">
+          <nav className="flex flex-wrap items-center justify-end gap-2.5 sm:gap-4 xl:gap-6 font-bold text-xs sm:text-sm xl:text-[15px] tracking-wide text-white">
             {navItems.map((item) => (
               <div
                 key={item.name}
@@ -191,6 +145,7 @@ export default function Topbar() {
               >
                 <Link
                   href={item.href}
+                  prefetch={false}
                   className={`flex items-center gap-1 transition-all duration-200 drop-shadow-sm ${
                     activeDropdown === item.name 
                       ? 'text-amber-400 scale-105' 
@@ -200,7 +155,7 @@ export default function Topbar() {
                   {item.name}
                   {item.dropdown && (
                     <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 ${
+                      className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 ${
                         activeDropdown === item.name ? 'rotate-180 text-amber-400' : ''
                       }`}
                     />
@@ -212,17 +167,19 @@ export default function Topbar() {
                   <AnimatePresence>
                     {activeDropdown === item.name && (
                       <motion.div
-                        initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                        initial={{ opacity: 0, y: 0, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                        exit={{ opacity: 0, y: 2, scale: 0.98 }}
                         transition={{ duration: 0.15, ease: 'easeOut' }}
-                        className="absolute top-full left-0 pt-2 z-50 min-w-[240px]"
+                        className="absolute top-full left-0 pt-1 z-[100] min-w-[220px] sm:min-w-[240px]"
                       >
                         <div className="bg-[#001D38] border border-blue-400/30 rounded-xl shadow-2xl py-2 backdrop-blur-lg overflow-hidden divide-y divide-blue-800/40">
                           {item.dropdown.map((subItem) => (
                             <Link
                               key={subItem.title}
                               href={subItem.href}
+                              prefetch={false}
+                              onClick={() => setActiveDropdown(null)}
                               className="block px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-100 hover:bg-amber-400 hover:text-blue-950 transition-all duration-150"
                             >
                               {subItem.title}
@@ -237,47 +194,8 @@ export default function Topbar() {
             ))}
           </nav>
 
-          {/* Mobile Menu Toggle Button */}
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-            className="xl:hidden p-2 text-slate-100 hover:text-amber-400 transition"
-          >
-            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
-
         </div>
       </div>
-
-      {/* 3. MOBILE MENU SLIDE-OUT */}
-      {mobileMenuOpen && (
-        <div className="xl:hidden bg-[#001D38] border-b border-blue-400/30 px-6 py-4 space-y-3 text-white">
-          {navItems.map((item) => (
-            <div key={item.name} className="border-b border-blue-800/40 pb-2">
-              <Link
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-sm font-bold text-amber-400 hover:text-amber-300"
-              >
-                {item.name}
-              </Link>
-              {item.dropdown && (
-                <div className="pl-4 mt-2 space-y-1.5 border-l border-blue-700/50">
-                  {item.dropdown.map((sub) => (
-                    <Link
-                      key={sub.title}
-                      href={sub.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block text-xs font-semibold text-slate-200 hover:text-amber-300"
-                    >
-                      {sub.title}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
 
     </header>
   );

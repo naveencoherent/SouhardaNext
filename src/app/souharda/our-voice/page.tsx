@@ -42,7 +42,7 @@ export default function OurVoicePage() {
     async function fetchSahakariMagazine() {
       try {
         const response = await fetch('/api/sahakari-magazine');
-        if (!response.ok) throw new Error('Failed to fetch magazine endpoint');
+        if (!response.ok) throw new Error('API route unavailable in static export');
 
         const data = await response.json();
         if (isMounted && data.imageUrl) {
@@ -53,7 +53,14 @@ export default function OurVoicePage() {
           });
         }
       } catch (err) {
-        console.warn('Falling back to default cover image:', err);
+        // Fallback gracefully without throwing server 500 logs during static export
+        if (isMounted) {
+          setSahakariMagazine({
+            imageUrl: '/souharda/President_Message.webp',
+            monthYear: 'Latest Edition',
+            linkUrl: '/education/swabhimani-sahakari'
+          });
+        }
       }
     }
 
@@ -87,7 +94,7 @@ export default function OurVoicePage() {
         subtitle="Official leadership messages, monthly publications, and administrative updates." 
       />
 
-      {/* 1. PRESIDENT'S MESSAGE - Dark Gradient Background */}
+      {/* 1. PRESIDENT'S MESSAGE */}
       <motion.section 
         initial="hidden"
         animate="visible"
@@ -148,7 +155,7 @@ export default function OurVoicePage() {
         </div>
       </motion.section>
 
-      {/* 2. MANAGING DIRECTOR'S MESSAGE - Pure White Background */}
+      {/* 2. MANAGING DIRECTOR'S MESSAGE */}
       <motion.section 
         initial="hidden"
         animate="visible"
@@ -168,7 +175,6 @@ export default function OurVoicePage() {
                 </h2>
               </div>
 
-              {/* Crimson Red Quote */}
               <p className="text-[#dc2626] font-bold text-base sm:text-lg leading-relaxed">
                 &ldquo;ಆರ್ಥಿಕ ಶಿಸ್ತು ಹಾಗೂ ವೃತ್ತಿ ನೈಪುಣ್ಯ ಕೌಶಲ್ಯಗಳಿಂದ ವೈವಿಧ್ಯಮಯ ಕಾರ್ಯನಿರ್ವಹಣೆಯೇ ನಮ್ಮ ಅಸ್ತಿತ್ವ ಮತ್ತು ಪ್ರಗತಿಯ ಸಂಕೇತ.&rdquo;
               </p>
@@ -182,7 +188,6 @@ export default function OurVoicePage() {
                   ಯಾವುದೇ ದೇಶದ ಯಾವುದೇ ಸಂಘ ಸಂಸ್ಥೆಗಳ ಸಂಘಟನೆಗಳ ಸಾಧನೆ, ಪ್ರಗತಿ ಅಭಿವೃದ್ಧಿಗಳಲ್ಲಿ ಮೂರು ವಿಷಯಗಳಿಗೆ ಪ್ರಾಧಾನ್ಯತೆ ನೀಡುವುದು ಅವಶ್ಯಕ.
                 </p>
 
-                {/* 3 Key Points - Bold on Separate Lines */}
                 <div className="space-y-1.5 my-3 font-bold text-slate-800">
                   <p>ಪ್ರಜೆಗಳ/ ಸಾರ್ವಜನಿಕರ/ ಸದಸ್ಯರ/ ಸಕ್ರಿಯ ಪಾಲುಗಾರಿಕೆ</p>
                   <p>ದಕ್ಷ/ ನಿಷ್ಠಾವಂತ/ ಕ್ರಿಯಾಶೀಲ ಹಾಗೂ ಪ್ರಾಮಾಣಿಕ ಸಿಬ್ಬಂದಿ</p>
@@ -235,18 +240,15 @@ export default function OurVoicePage() {
             {/* Left Column */}
             <motion.div variants={fadeInUp} className="lg:col-span-6 space-y-6">
               
-              {/* Badge */}
               <div className="inline-block px-4 py-1.5 rounded-full bg-blue-100/80 border border-blue-200/80 text-[#1e4e8c] text-xs font-semibold tracking-wide shadow-sm">
                 Karnataka State Souharda Federal Co-operative Ltd.
               </div>
 
-              {/* Main Headline */}
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
                 Empowering{' '}
                 <span className="text-[#0284c7]">our community through</span>
               </h2>
 
-              {/* Body Text */}
               <div className="space-y-3 text-slate-600 leading-relaxed">
                 <p className="font-bold text-[#dc2626] text-sm sm:text-base">
                   transparent communication, official publications, and real-time movement updates.
@@ -262,7 +264,6 @@ export default function OurVoicePage() {
             <motion.div variants={fadeInUp} className="lg:col-span-6">
               <div className="bg-[#0b1727] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
                 
-                {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
                   <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide">
                     Live Communication Ecosystem
@@ -276,7 +277,6 @@ export default function OurVoicePage() {
                   </div>
                 </div>
 
-                {/* List Items */}
                 <div className="space-y-4">
                   
                   {/* Item 1 */}

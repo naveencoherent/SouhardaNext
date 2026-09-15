@@ -24,6 +24,14 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+type TabType = 'training' | 'supervision' | 'contact' | 'law';
+
+interface DivisionalOffice {
+  name: string;
+  image: string;
+  description: string;
+}
+
 // Animation variants
 const fadeInUp = {
   hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
@@ -44,13 +52,13 @@ const staggerContainer = {
 };
 
 export default function AllAboutKSSFCLPage() {
-  const [activeTab, setActiveTab] = useState<'training' | 'supervision' | 'contact' | 'law'>('training');
+  const [activeTab, setActiveTab] = useState<TabType>('training');
 
   // Divisional Offices Data
-  const divisionalOffices = [
+  const divisionalOffices: DivisionalOffice[] = [
     {
       name: 'Bengaluru',
-      image: '/Divisional_Offices/Bengalurui_office.webp',
+      image: '/Divisional_Offices/Bengaluru_office.webp',
       description: 'Leading the digital cooperative wave in the capital region with expert regulatory oversight.'
     },
     {
@@ -60,7 +68,7 @@ export default function AllAboutKSSFCLPage() {
     },
     {
       name: 'Mysuru',
-      image: '/Divisional_Offices/Kalburgi_office.webp',
+      image: '/Divisional_Offices/Mysuru_office.webp',
       description: 'Preserving cooperative integrity while promoting education in the Southern & Coastal belts.'
     },
     {
@@ -100,7 +108,7 @@ export default function AllAboutKSSFCLPage() {
             <motion.div variants={fadeInUp} className="lg:col-span-6 flex justify-center">
               <div className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-100 group">
                 <Image 
-                  src="/AllAboutKSSFCL_Intro.webp" 
+                  src="/images/home/AllAboutKSSFCL_Intro.webp"
                   alt="KSSFCL Intro" 
                   width={600} 
                   height={450} 
@@ -173,17 +181,17 @@ export default function AllAboutKSSFCLPage() {
           {/* Navigation Tabs */}
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-3">
             {[
-              { id: 'training', label: 'ತರಬೇತಿ', icon: GraduationCap },
-              { id: 'supervision', label: 'ಮೇಲ್ವಿಚಾರಣೆ', icon: ShieldCheck },
-              { id: 'contact', label: 'ಸಂಪರ್ಕ & ನಿಧಿ', icon: Network },
-              { id: 'law', label: 'ಕಾನೂನು', icon: Gavel },
+              { id: 'training' as const, label: 'ತರಬೇತಿ', icon: GraduationCap },
+              { id: 'supervision' as const, label: 'ಮೇಲ್ವಿಚಾರಣೆ', icon: ShieldCheck },
+              { id: 'contact' as const, label: 'ಸಂಪರ್ಕ & ನಿಧಿ', icon: Network },
+              { id: 'law' as const, label: 'ಕಾನೂನು', icon: Gavel },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 border ${
                     isActive
                       ? 'bg-[#E5A93C] text-slate-900 border-[#E5A93C] shadow-lg shadow-amber-500/20 scale-105'
