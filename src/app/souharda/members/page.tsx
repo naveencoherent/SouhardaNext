@@ -1,16 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   MapPin, Users, ShieldCheck, Globe, 
   Search, Download, CheckCircle2 
 } from 'lucide-react';
-
 import PageHero from '@/components/common/PageHero';
 
-// Animated Counter Helper
-function AnimatedNumber({ value, duration = 2000, suffix = '' }: { value: number; duration?: number; suffix?: string }) {
+// --- Animated Counter Helper ---
+function AnimatedNumber({ value, duration = 1500, suffix = '' }: { value: number; duration?: number; suffix?: string }) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -37,8 +35,88 @@ function AnimatedNumber({ value, duration = 2000, suffix = '' }: { value: number
     </span>
   );
 }
+
+// --- Static Data Source ---
+const REGIONAL_DATA = [
+  {
+    region: 'BENGALURU REGION',
+    color: '#b91c1c',
+    districts: [
+      { name: 'RAMANAGARA', count: 24 },
+      { name: 'BENGALURU RURAL', count: 39 },
+      { name: 'BENGALURU', count: 509 },
+      { name: 'CHIKKABALLAPURA', count: 48 },
+      { name: 'CHITRADURGA', count: 104 },
+      { name: 'DAVANAGERE', count: 92 },
+      { name: 'KOLAR', count: 41 },
+      { name: 'SHIVAMOGGA', count: 183 },
+      { name: 'TUMAKURU', count: 247 },
+    ]
+  },
+  {
+    region: 'MYSURU REGION',
+    color: '#eab308',
+    districts: [
+      { name: 'CHIKKAMAGALURU', count: 59 },
+      { name: 'CHAMARAJANAGARA', count: 33 },
+      { name: 'HASSAN', count: 72 },
+      { name: 'KODAGU', count: 15 },
+      { name: 'MANDYA', count: 32 },
+      { name: 'DAKSHINA KANNADA', count: 139 },
+      { name: 'MYSURU', count: 84 },
+      { name: 'UDUPI', count: 155 },
+    ]
+  },
+  {
+    region: 'BELAGAVI REGION',
+    color: '#15803d',
+    districts: [
+      { name: 'BAGALKOTE', count: 485 },
+      { name: 'BELAGAVI', count: 1221 },
+      { name: 'VIJAYAPURA', count: 602 },
+      { name: 'DHARAWADA', count: 150 },
+      { name: 'GADAG', count: 79 },
+      { name: 'HAVERI', count: 168 },
+      { name: 'UTTARA KANNADA', count: 272 },
+    ]
+  },
+  {
+    region: 'KALABURAGI REGION',
+    color: '#0891b2',
+    districts: [
+      { name: 'BIDAR', count: 189 },
+      { name: 'BALLARI', count: 112 },
+      { name: 'KALABURAGI', count: 248 },
+      { name: 'KOPPALA', count: 441 },
+      { name: 'RAICHUR', count: 418 },
+      { name: 'VIJAYANAGARA', count: 181 },
+      { name: 'YADAGIRI', count: 78 },
+    ]
+  }
+];
+
 export default function SouhardaMembersPage() {
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter regional data & calculate dynamic totals dynamically
+  const filteredRegions = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase();
+    if (!query) return REGIONAL_DATA;
+
+    return REGIONAL_DATA.map(regionGroup => {
+      const regionMatches = regionGroup.region.toLowerCase().includes(query);
+      const matchingDistricts = regionGroup.districts.filter(d => 
+        d.name.toLowerCase().includes(query)
+      );
+
+      // Return full region if region name matches, or subset of matching districts
+      if (regionMatches) return regionGroup;
+      return {
+        ...regionGroup,
+        districts: matchingDistricts
+      };
+    }).filter(regionGroup => regionGroup.districts.length > 0);
+  }, [searchTerm]);
 
   return (
     <div className="relative w-full min-h-screen bg-[#fafafa] pb-12 font-sans text-slate-800 overflow-hidden">
@@ -130,7 +208,6 @@ export default function SouhardaMembersPage() {
           </div>
         </section>
 
-
         {/* 2. DUAL DOWNLOAD CARDS */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           <div className="bg-white/90 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex items-start space-x-5 cursor-pointer">
@@ -184,7 +261,6 @@ export default function SouhardaMembersPage() {
           </div>
         </section>
 
-
         {/* 3. SEARCH BAR & SUMMARY CARD */}
         <section className="w-full max-w-2xl mx-auto space-y-6 pt-2">
           <div className="relative flex items-center bg-[#f8fafc] border border-[#3b82f6] rounded-xl p-1 shadow-xs">
@@ -224,8 +300,7 @@ export default function SouhardaMembersPage() {
           </div>
         </section>
 
-
-        {/* 4. DONUT CHART & ALL 4 REGIONAL TABLES */}
+        {/* 4. DONUT CHART & REGIONAL TABLES */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Multi-Segment Donut Chart */}
@@ -257,104 +332,45 @@ export default function SouhardaMembersPage() {
             </div>
           </div>
 
-          {/* All 4 Regional Tables */}
+          {/* Dynamic Regional Tables (Filtered) */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-            
-            {/* 1. Bengaluru Region */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs text-xs flex flex-col justify-between">
-              <div>
-                <div className="bg-[#b91c1c] text-white font-extrabold text-center py-2.5 px-2 uppercase tracking-wider">
-                  BENGALURU REGION
-                </div>
-                <div className="p-3 divide-y divide-slate-100 font-medium text-slate-700 space-y-1.5">
-                  <div className="flex justify-between pt-1"><span>RAMANAGARA</span><span className="font-bold">24</span></div>
-                  <div className="flex justify-between pt-1"><span>BENGALURU RURAL</span><span className="font-bold">39</span></div>
-                  <div className="flex justify-between pt-1"><span>BENGALURU</span><span className="font-bold">509</span></div>
-                  <div className="flex justify-between pt-1"><span>CHIKKABALLAPURA</span><span className="font-bold">48</span></div>
-                  <div className="flex justify-between pt-1"><span>CHITRADURGA</span><span className="font-bold">104</span></div>
-                  <div className="flex justify-between pt-1"><span>DAVANAGERE</span><span className="font-bold">92</span></div>
-                  <div className="flex justify-between pt-1"><span>KOLAR</span><span className="font-bold">41</span></div>
-                  <div className="flex justify-between pt-1"><span>SHIVAMOGGA</span><span className="font-bold">183</span></div>
-                  <div className="flex justify-between pt-1"><span>TUMAKURU</span><span className="font-bold">247</span></div>
-                </div>
-              </div>
-              <div className="bg-slate-50 border-t border-slate-100 p-3 flex justify-between font-extrabold text-slate-800">
-                <span>Total</span>
-                <span>1287</span>
-              </div>
-            </div>
+            {filteredRegions.length > 0 ? (
+              filteredRegions.map((regionGroup) => {
+                const totalInRegion = regionGroup.districts.reduce((acc, d) => acc + d.count, 0);
 
-            {/* 2. Mysuru Region */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs text-xs flex flex-col justify-between">
-              <div>
-                <div className="bg-[#eab308] text-white font-extrabold text-center py-2.5 px-2 uppercase tracking-wider">
-                  MYSURU REGION
-                </div>
-                <div className="p-3 divide-y divide-slate-100 font-medium text-slate-700 space-y-1.5">
-                  <div className="flex justify-between pt-1"><span>CHIKKAMAGALURU</span><span className="font-bold">59</span></div>
-                  <div className="flex justify-between pt-1"><span>CHAMARAJANAGARA</span><span className="font-bold">33</span></div>
-                  <div className="flex justify-between pt-1"><span>HASSAN</span><span className="font-bold">72</span></div>
-                  <div className="flex justify-between pt-1"><span>KODAGU</span><span className="font-bold">15</span></div>
-                  <div className="flex justify-between pt-1"><span>MANDYA</span><span className="font-bold">32</span></div>
-                  <div className="flex justify-between pt-1"><span>DAKSHINA KANNADA</span><span className="font-bold">139</span></div>
-                  <div className="flex justify-between pt-1"><span>MYSURU</span><span className="font-bold">84</span></div>
-                  <div className="flex justify-between pt-1"><span>UDUPI</span><span className="font-bold">155</span></div>
-                </div>
+                return (
+                  <div key={regionGroup.region} className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs text-xs flex flex-col justify-between">
+                    <div>
+                      <div 
+                        className="text-white font-extrabold text-center py-2.5 px-2 uppercase tracking-wider"
+                        style={{ backgroundColor: regionGroup.color }}
+                      >
+                        {regionGroup.region}
+                      </div>
+                      <div className="p-3 divide-y divide-slate-100 font-medium text-slate-700 space-y-1.5">
+                        {regionGroup.districts.map((district) => (
+                          <div key={district.name} className="flex justify-between pt-1">
+                            <span>{district.name}</span>
+                            <span className="font-bold">{district.count}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-slate-50 border-t border-slate-100 p-3 flex justify-between font-extrabold text-slate-800">
+                      <span>Total</span>
+                      <span>{totalInRegion}</span>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center text-slate-500">
+                No districts or regions found matching &quot;{searchTerm}&quot;
               </div>
-              <div className="bg-slate-50 border-t border-slate-100 p-3 flex justify-between font-extrabold text-slate-800">
-                <span>Total</span>
-                <span>589</span>
-              </div>
-            </div>
-
-            {/* 3. Belagavi Region */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs text-xs flex flex-col justify-between">
-              <div>
-                <div className="bg-[#15803d] text-white font-extrabold text-center py-2.5 px-2 uppercase tracking-wider">
-                  BELAGAVI REGION
-                </div>
-                <div className="p-3 divide-y divide-slate-100 font-medium text-slate-700 space-y-1.5">
-                  <div className="flex justify-between pt-1"><span>BAGALKOTE</span><span className="font-bold">485</span></div>
-                  <div className="flex justify-between pt-1"><span>BELAGAVI</span><span className="font-bold">1221</span></div>
-                  <div className="flex justify-between pt-1"><span>VIJAYAPURA</span><span className="font-bold">602</span></div>
-                  <div className="flex justify-between pt-1"><span>DHARAWADA</span><span className="font-bold">150</span></div>
-                  <div className="flex justify-between pt-1"><span>GADAG</span><span className="font-bold">79</span></div>
-                  <div className="flex justify-between pt-1"><span>HAVERI</span><span className="font-bold">168</span></div>
-                  <div className="flex justify-between pt-1"><span>UTTARA KANNADA</span><span className="font-bold">272</span></div>
-                </div>
-              </div>
-              <div className="bg-slate-50 border-t border-slate-100 p-3 flex justify-between font-extrabold text-slate-800">
-                <span>Total</span>
-                <span>2977</span>
-              </div>
-            </div>
-
-            {/* 4. Kalaburagi Region */}
-            <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs text-xs flex flex-col justify-between">
-              <div>
-                <div className="bg-[#0891b2] text-white font-extrabold text-center py-2.5 px-2 uppercase tracking-wider">
-                  KALABURAGI REGION
-                </div>
-                <div className="p-3 divide-y divide-slate-100 font-medium text-slate-700 space-y-1.5">
-                  <div className="flex justify-between pt-1"><span>BIDAR</span><span className="font-bold">189</span></div>
-                  <div className="flex justify-between pt-1"><span>BALLARI</span><span className="font-bold">112</span></div>
-                  <div className="flex justify-between pt-1"><span>KALABURAGI</span><span className="font-bold">248</span></div>
-                  <div className="flex justify-between pt-1"><span>KOPPALA</span><span className="font-bold">441</span></div>
-                  <div className="flex justify-between pt-1"><span>RAICHUR</span><span className="font-bold">418</span></div>
-                  <div className="flex justify-between pt-1"><span>VIJAYANAGARA</span><span className="font-bold">181</span></div>
-                  <div className="flex justify-between pt-1"><span>YADAGIRI</span><span className="font-bold">78</span></div>
-                </div>
-              </div>
-              <div className="bg-slate-50 border-t border-slate-100 p-3 flex justify-between font-extrabold text-slate-800">
-                <span>Total</span>
-                <span>1647</span>
-              </div>
-            </div>
-
+            )}
           </div>
 
         </section>
-
 
         {/* 5. MEMBERSHIP DETAILS */}
         <section className="bg-white/90 backdrop-blur-sm border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-6 max-w-5xl mx-auto">

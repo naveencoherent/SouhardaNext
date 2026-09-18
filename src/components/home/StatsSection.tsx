@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Users, Award, TrendingUp, LucideIcon } from 'lucide-react';
+import { ShieldCheck, Users, Award, TrendingUp, type LucideIcon } from 'lucide-react';
 
 interface StatItem {
   label: string;
@@ -10,21 +10,21 @@ interface StatItem {
   icon: LucideIcon;
 }
 
-export default function StatsSection() {
-  const stats: StatItem[] = [
-    { label: 'Years of Trust', value: '25+', icon: ShieldCheck },
-    { label: 'Member Cooperatives', value: '5,000+', icon: Users },
-    { label: 'Statewide Presence', value: '100%', icon: Award },
-    { label: 'Growth Index', value: '98%', icon: TrendingUp },
-  ];
+const stats: StatItem[] = [
+  { label: 'Years of Trust', value: '25+', icon: ShieldCheck },
+  { label: 'Member Cooperatives', value: '5,000+', icon: Users },
+  { label: 'Statewide Presence', value: '100%', icon: Award },
+  { label: 'Growth Index', value: '98%', icon: TrendingUp },
+];
 
+export default function StatsSection() {
   return (
     <section className="py-16 px-6 lg:px-16 max-w-7xl mx-auto">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => {
           const IconComponent = stat.icon;
           return (
-            <motion.div 
+            <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

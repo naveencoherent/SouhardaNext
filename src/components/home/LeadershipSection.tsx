@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -42,6 +42,7 @@ const directors: Director[] = [
 ];
 
 export default function LeadershipSection() {
+  const [isPaused, setIsPaused] = useState(false);
   const duplicatedDirectors = [...directors, ...directors];
 
   return (
@@ -58,26 +59,32 @@ export default function LeadershipSection() {
         </p>
       </div>
 
-      <div className="relative w-full overflow-hidden group">
+      <div 
+        className="relative w-full overflow-hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
         <div className="absolute top-0 bottom-0 left-0 w-20 sm:w-32 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
         <div className="absolute top-0 bottom-0 right-0 w-20 sm:w-32 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
 
         <motion.div
           className="flex gap-6 w-max cursor-grab active:cursor-grabbing"
-          animate={{ x: ['0%', '-50%'] }}
+          animate={isPaused ? false : { x: ['0%', '-50%'] }}
           transition={{
             ease: 'linear',
-            duration: 45,
+            duration: 50,
             repeat: Infinity,
           }}
-          whileHover={{ animationPlayState: 'paused' }}
         >
           {duplicatedDirectors.map((director, idx) => {
-            const isExecutive = director.role === 'President' || director.role === 'Vice President' || director.role === 'Managing Director';
+            const isExecutive = 
+              director.role === 'President' || 
+              director.role === 'Vice President' || 
+              director.role === 'Managing Director';
 
             return (
               <Link
-                key={`${director.name}-${idx}`}
+                key={`director-${director.name}-${idx}`}
                 href={director.href || '/director'}
                 className="w-60 sm:w-64 bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group/card flex-shrink-0 hover:-translate-y-1.5"
               >

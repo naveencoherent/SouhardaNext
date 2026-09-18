@@ -1,41 +1,67 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Script from 'next/script';
+
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void;
+      };
+    };
+    twttr?: {
+      widgets: {
+        load: () => void;
+      };
+    };
+  }
+}
 
 export default function SocialSection() {
-  useEffect(() => {
-    // Load Instagram script
-    if (!document.getElementById('instagram-embed-script')) {
-      const scriptInsta = document.createElement('script');
-      scriptInsta.id = 'instagram-embed-script';
-      scriptInsta.src = '//www.instagram.com/embed.js';
-      scriptInsta.async = true;
-      document.body.appendChild(scriptInsta);
-    } else if ((window as any).instgrm) {
-      (window as any).instgrm.Embeds.process();
+  const handleInstagramLoad = () => {
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
     }
+  };
 
-    // Load Twitter/X script
-    if (!document.getElementById('twitter-embed-script')) {
-      const scriptTwitter = document.createElement('script');
-      scriptTwitter.id = 'twitter-embed-script';
-      scriptTwitter.src = 'https://platform.twitter.com/widgets.js';
-      scriptTwitter.async = true;
-      document.body.appendChild(scriptTwitter);
-    } else if ((window as any).twttr) {
-      (window as any).twttr.widgets.load();
+  const handleTwitterLoad = () => {
+    if (window.twttr) {
+      window.twttr.widgets.load();
+    }
+  };
+
+  useEffect(() => {
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+    if (window.twttr) {
+      window.twttr.widgets.load();
     }
   }, []);
 
   return (
     <section className="bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
+      {/* Social Embed External Scripts */}
+      <Script
+        id="instagram-embed-script"
+        src="https://www.instagram.com/embed.js"
+        strategy="lazyOnload"
+        onLoad={handleInstagramLoad}
+      />
+      <Script
+        id="twitter-embed-script"
+        src="https://platform.twitter.com/widgets.js"
+        strategy="lazyOnload"
+        onLoad={handleTwitterLoad}
+      />
+
       <div className="max-w-7xl mx-auto">
-        
-<h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-10 tracking-tight">
-  Be Part of the Community: Engage with Us Online!
-</h2>
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-center text-blue-800 mb-10 tracking-tight">
+          Be Part of the Community: Engage with Us Online!
+        </h2>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          
           {/* Instagram Feed */}
           <div className="flex flex-col items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 min-h-[500px]">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
@@ -71,7 +97,6 @@ export default function SocialSection() {
                 height="500"
                 style={{ border: 'none', overflow: 'hidden' }}
                 scrolling="no"
-                frameBorder="0"
                 allowFullScreen={true}
                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                 title="Facebook Page Feed"
@@ -95,7 +120,6 @@ export default function SocialSection() {
               </a>
             </div>
           </div>
-
         </div>
       </div>
     </section>

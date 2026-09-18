@@ -5,6 +5,9 @@ import { Search, Calendar, Gavel, FileText, Phone, Mail, MapPin } from 'lucide-r
 import { useLanguage } from '@/context/LanguageContext';
 import CourtHero from '@/components/common/CourtHero';
 
+// Guarantees static HTML export compatibility
+export const dynamic = 'force-static';
+
 interface CourtCase {
   slNo: number;
   caseNo: string;
@@ -102,6 +105,12 @@ export default function CourtPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDate, setSelectedDate] = useState('all');
 
+  // Extract unique dates for the dropdown selector
+  const uniqueDates = useMemo(() => {
+    const dates = CASES_DATA.map((item) => item.nextDate);
+    return Array.from(new Set(dates));
+  }, []);
+
   const filteredCases = useMemo(() => {
     return CASES_DATA.filter((item) => {
       const caseNo = item.caseNo || '';
@@ -109,24 +118,27 @@ export default function CourtPage() {
       const res = item.respondent || '';
       const term = searchTerm.toLowerCase();
 
-      return (
+      const matchesSearch =
         caseNo.toLowerCase().includes(term) ||
         pet.toLowerCase().includes(term) ||
-        res.toLowerCase().includes(term)
-      );
+        res.toLowerCase().includes(term);
+
+      const matchesDate = selectedDate === 'all' || item.nextDate === selectedDate;
+
+      return matchesSearch && matchesDate;
     });
-  }, [searchTerm]);
+  }, [searchTerm, selectedDate]);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* 1. HERO BANNER */}
+      {/* HERO BANNER */}
       <CourtHero />
 
-      {/* 2. CASE TRACKER SECTION */}
+      {/* CASE TRACKER SECTION */}
       <div className="max-w-7xl mx-auto my-6 px-3 sm:px-5 lg:px-6">
         <div className="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
           
-          {/* Maroon Header Matching Banner Theme */}
+          {/* Header Theme */}
           <div className="bg-gradient-to-r from-red-950 via-rose-950 to-stone-950 text-white p-5 flex items-center gap-3 border-b border-rose-900/40">
             <Gavel className="w-5 h-5 text-amber-400 shrink-0" />
             <div>
@@ -160,6 +172,11 @@ export default function CourtPage() {
                   className="w-full pl-10 pr-3 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none cursor-pointer"
                 >
                   <option value="all">{locale === 'kn' ? 'ಎಲ್ಲಾ ವಿಚಾರಣೆ ದಿನಾಂಕಗಳು' : 'All Hearing Dates'}</option>
+                  {uniqueDates.map((date) => (
+                    <option key={date} value={date}>
+                      {date}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -178,23 +195,31 @@ export default function CourtPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 bg-white">
-                  {filteredCases.map((item) => (
-                    <tr key={item.slNo} className="hover:bg-slate-50/80 transition-colors">
-                      <td className="px-4 py-3 text-slate-400 font-semibold text-xs">{item.slNo}</td>
-                      <td className="px-4 py-3 font-bold text-slate-900 text-sm">{item.caseNo}</td>
-                      <td className="px-4 py-3 font-medium text-blue-600 text-sm">{item.petitioner}</td>
-                      <td className="px-4 py-3 font-medium text-slate-900 text-sm">{item.respondent}</td>
-                      <td className="px-4 py-3">
-                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                          item.stage === 'Order' ? 'bg-amber-100 text-amber-900' :
-                          item.stage === 'Evidence' ? 'bg-orange-100 text-orange-900' : 'bg-yellow-100 text-yellow-900'
-                        }`}>
-                          {item.stage}
-                        </span>
+                  {filteredCases.length > 0 ? (
+                    filteredCases.map((item) => (
+                      <tr key={item.slNo} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="px-4 py-3 text-slate-400 font-semibold text-xs">{item.slNo}</td>
+                        <td className="px-4 py-3 font-bold text-slate-900 text-sm">{item.caseNo}</td>
+                        <td className="px-4 py-3 font-medium text-blue-600 text-sm">{item.petitioner}</td>
+                        <td className="px-4 py-3 font-medium text-slate-900 text-sm">{item.respondent}</td>
+                        <td className="px-4 py-3">
+                          <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                            item.stage === 'Order' ? 'bg-amber-100 text-amber-900' :
+                            item.stage === 'Evidence' ? 'bg-orange-100 text-orange-900' : 'bg-yellow-100 text-yellow-900'
+                          }`}>
+                            {item.stage}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-right font-bold text-rose-900 text-sm">{item.nextDate}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-8 text-center text-slate-500 font-medium">
+                        {locale === 'kn' ? 'ಯಾವುದೇ ಪ್ರಕರಣಗಳು ಕಂಡುಬಂದಿಲ್ಲ' : 'No matching cases found.'}
                       </td>
-                      <td className="px-4 py-3 text-right font-bold text-rose-900 text-sm">{item.nextDate}</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -206,7 +231,7 @@ export default function CourtPage() {
         </div>
       </div>
 
-      {/* 3. HERO CONTENT & RESOURCES */}
+      {/* HERO CONTENT & RESOURCES */}
       <div 
         className="py-12 px-3 sm:px-5 lg:px-6 border-t border-slate-200 bg-white"
         style={{
@@ -231,11 +256,11 @@ export default function CourtPage() {
 
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl">
                 {locale === 'kn'
-                  ? 'ಕೆ.ಎಸ್.ಎಸ್.ಎಫ್.ಸಿ.ಎಲ್ ನ್ಯಾಯಾಲಯವು ಕರ್ನಾಟಕ ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಕಾಯ್ದೆ, ೧೯೯೭ ರ ಅಡಿಯಲ್ಲಿ ವಿವಾದಗಳನ್ನು ಬಗೆಹರಿಸಲು ಕಾರ್ಯನಿರ್ವಹಿಸುವ ವಿಶೇಷ ನ್ಯಾಯಾಧಿಕರಣವಾಗಿದೆ.'
+                  ? 'ಕೆ.ಎಸ್.ಎಸ್.ಎಫ್.ಸಿ.ಎಲ್ ನ್ಯಾಯಾಲಯವು ಕರ್ನಾಟಕ ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಕಾಯ್ದೆ, ೧೯೯᱗ ರ ಅಡಿಯಲ್ಲಿ ವಿವಾದಗಳನ್ನು ಬಗೆಹರಿಸಲು ಕಾರ್ಯನಿರ್ವಹಿಸುವ ವಿಶೇಷ ನ್ಯಾಯಾಧಿಕರಣವಾಗಿದೆ.'
                   : 'The KSSFCL Court serves as a specialized tribunal for resolving disputes under the Karnataka Souharda Sahakari Act, 1997. It bridges the gap between legal complexity and cooperative harmony through streamlined arbitration.'}
               </p>
 
-              {/* Updated Contact Details Box: Changed blue border & background to Maroon Red Theme */}
+              {/* Contact Details Box */}
               <div className="bg-white rounded-xl border-2 border-rose-950/20 overflow-hidden shadow-lg">
                 <div className="bg-gradient-to-r from-red-950 via-rose-950 to-stone-950 text-white px-5 py-3 flex items-center gap-2.5 border-b border-rose-900/40">
                   <FileText className="w-5 h-5 text-amber-400 shrink-0" />
@@ -296,7 +321,7 @@ export default function CourtPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <a href="pdf/2022/Arbitration/ABN_list.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-amber-500/50 hover:bg-[#1b2942] transition-all group">
+                  <a href="/assets/pdf/2022/Arbitration/ABN_list.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-amber-500/50 hover:bg-[#1b2942] transition-all group">
                     <span className="w-3 h-3 bg-amber-400 rounded-full shrink-0 mt-1"></span>
                     <div className="flex-1">
                       <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-amber-400 transition-colors leading-snug">
@@ -306,7 +331,7 @@ export default function CourtPage() {
                     </div>
                   </a>
 
-                  <a href="pdf/2018/EP_Court_Fee_Structure.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-indigo-500/50 hover:bg-[#1b2942] transition-all group">
+                  <a href="/assets/pdf/2018/EP_Court_Fee_Structure.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-indigo-500/50 hover:bg-[#1b2942] transition-all group">
                     <span className="w-3 h-3 bg-indigo-400 rounded-full shrink-0 mt-1"></span>
                     <div className="flex-1">
                       <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-indigo-300 transition-colors leading-snug">
@@ -316,7 +341,7 @@ export default function CourtPage() {
                     </div>
                   </a>
 
-                  <a href="pdf/2016/2016-07-28_08-33-24.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-cyan-500/50 hover:bg-[#1b2942] transition-all group">
+                  <a href="/assets/pdf/2016/2016-07-28_08-33-24.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-cyan-500/50 hover:bg-[#1b2942] transition-all group">
                     <span className="w-3 h-3 bg-cyan-400 rounded-full shrink-0 mt-1"></span>
                     <div className="flex-1">
                       <h4 className="font-bold text-sm sm:text-base text-white group-hover:text-cyan-300 transition-colors leading-snug">
@@ -326,7 +351,7 @@ export default function CourtPage() {
                     </div>
                   </a>
 
-                  <a href="Circulars/Doc/Circular_StampAct.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-emerald-500/50 hover:bg-[#1b2942] transition-all group">
+                  <a href="/assets/Circulars/Doc/Circular_StampAct.pdf" target="_blank" rel="noopener noreferrer" className="block bg-[#162136] border border-slate-800/80 p-4 rounded-lg flex items-start gap-3 hover:border-emerald-500/50 hover:bg-[#1b2942] transition-all group">
                     <span className="w-3 h-3 bg-emerald-400 rounded-full shrink-0 mt-1"></span>
                     <div className="flex-1">
                       <h4 className="font-bold text-sm sm:text-base text-white leading-relaxed group-hover:text-emerald-300 transition-colors">

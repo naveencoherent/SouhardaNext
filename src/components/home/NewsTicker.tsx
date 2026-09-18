@@ -31,6 +31,7 @@ const newsItems: NewsItem[] = [
 
 export default function NewsTicker() {
   const { locale } = useLanguage();
+  const tickerItems = [...newsItems, ...newsItems];
 
   return (
     <div className="w-full bg-[#00284d] text-white border-y border-amber-500/30 shadow-lg">
@@ -44,14 +45,14 @@ export default function NewsTicker() {
 
         {/* Continuous Scrolling Text Container */}
         <div className="overflow-hidden relative w-full py-2 bg-[#001f3f]/80">
-          <div className="whitespace-nowrap animate-marquee flex items-center gap-12 text-xs sm:text-sm">
-            {newsItems.concat(newsItems).map((item, idx) => (
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-12 text-xs sm:text-sm hover:[animation-play-state:paused]">
+            {tickerItems.map((item, idx) => (
               <Link
-                key={idx}
+                key={`${item.href}-${idx}`}
                 href={item.href}
-                className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2"
+                className="hover:text-amber-400 transition-colors duration-200 flex items-center gap-2 shrink-0"
               >
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400" />
                 {locale === 'kn' ? item.textKn : item.textEn}
               </Link>
             ))}
@@ -59,6 +60,20 @@ export default function NewsTicker() {
         </div>
 
       </div>
+
+      <style jsx>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        .animate-marquee {
+          animation: marquee 25s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }

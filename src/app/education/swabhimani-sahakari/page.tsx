@@ -2,42 +2,43 @@
 
 import React, { useState, useMemo } from 'react';
 import { Search, Download, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 import EducationHero from '@/components/common/EducationHero';
 
 // 1. Dataset
 const magazineData = {
-  "issues": [
-    { "year": "2026", "month": "Aug", "baseName": "Swabhimani_Sahakari_Aug_2026", "displayName": "August 2026" },
-    { "year": "2026", "month": "Jul", "baseName": "Swabhimani_Sahakari_Jul_2026", "displayName": "July 2026" },
-    { "year": "2026", "month": "Apr", "baseName": "Swabhimani_Sahakari_Apr_2026", "displayName": "April 2026" },
-    { "year": "2026", "month": "Mar", "baseName": "Swabhimani_Sahakari_Mar_2026", "displayName": "March 2026" },
-    { "year": "2026", "month": "Feb", "baseName": "Swabhimani_Sahakari_Feb_2026", "displayName": "February 2026" },
-    { "year": "2026", "month": "Jan", "baseName": "Swabhimani_Sahakari_Jan_2026", "displayName": "January 2026" },
-    { "year": "2025", "month": "Dec", "baseName": "Swabhimani_Sahakari_Dec_2025", "displayName": "Dec 2025" },
-    { "year": "2025", "month": "Nov", "baseName": "Swabhimani_Sahakari_Nov_2025", "displayName": "Nov 2025" },
-    { "year": "2025", "month": "Oct", "baseName": "Swabhimani_Sahakari_Oct_2025", "displayName": "Oct 2025" },
-    { "year": "2025", "month": "Sep", "baseName": "Swabhimani_Sahakari_Sep_2025", "displayName": "Sep 2025" },
-    { "year": "2025", "month": "Aug", "baseName": "Swabhimani_Sahakari_Aug_2025", "displayName": "Aug 2025" },
-    { "year": "2025", "month": "Jul", "baseName": "Swabhimani_Sahakari_Jul_2025", "displayName": "Jul 2025" },
-    { "year": "2025", "month": "Jun", "baseName": "Swabhimani_Sahakari_Jun_2025", "displayName": "Jun 2025" },
-    { "year": "2025", "month": "May", "baseName": "Swabhimani_Sahakari_May_2025", "displayName": "May 2025" },
-    { "year": "2025", "month": "Apr", "baseName": "Swabhimani_Sahakari_Apr_2025", "displayName": "Apr 2025" },
-    { "year": "2025", "month": "Mar", "baseName": "Swabhimani_Sahakari_Mar_2025", "displayName": "Mar 2025" },
-    { "year": "2025", "month": "Feb", "baseName": "Swabhimani_Sahakari_Feb_2025", "displayName": "Feb 2025" },
-    { "year": "2025", "month": "Jan", "baseName": "Swabhimani_Sahakari_Jan_2025", "displayName": "Jan 2025" },
-    { "year": "2024", "month": "Dec", "baseName": "Swabhimani_Sahakari_Dec_2024", "displayName": "Dec 2024" },
-    { "year": "2024", "month": "Nov", "baseName": "Swabhimani_Sahakari_Nov_2024", "displayName": "Nov 2024" },
-    { "year": "2024", "month": "Oct", "baseName": "Swabhimani_Sahakari_Oct_2024", "displayName": "Oct 2024" },
-    { "year": "2024", "month": "Sep", "baseName": "Swabhimani_Sahakari_Sep_2024", "displayName": "Sep 2024" },
-    { "year": "2024", "month": "Aug", "baseName": "Swabhimani_Sahakari_Aug_2024", "displayName": "Aug 2024" },
-    { "year": "2024", "month": "Jul", "baseName": "Swabhimani_Sahakari_Jul_2024", "displayName": "Jul 2024" },
-    { "year": "2024", "month": "Jun", "baseName": "Swabhimani_Sahakari_Jun_2024", "displayName": "Jun 2024" },
-    { "year": "2024", "month": "May", "baseName": "Swabhimani_Sahakari_May_2024", "displayName": "May 2024" },
-    { "year": "2024", "month": "Apr", "baseName": "Swabhimani_Sahakari_Apr_2024", "displayName": "Apr 2024" },
-    { "year": "2024", "month": "Mar", "baseName": "Swabhimani_Sahakari_Mar_2024", "displayName": "Mar 2024" },
-    { "year": "2024", "month": "Feb", "baseName": "Swabhimani_Sahakari_Feb_2024", "displayName": "Feb 2024" },
-    { "year": "2024", "month": "Jan", "baseName": "Swabhimani_Sahakari_Jan_2024", "displayName": "Jan 2024" }
-  ]
+  issues: [
+    { year: '2026', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2026', displayNameEn: 'August 2026', displayNameKn: 'ಆಗಸ್ಟ್ ೨೦೨೬' },
+    { year: '2026', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2026', displayNameEn: 'July 2026', displayNameKn: 'ಜುಲೈ ೨೦೨೬' },
+    { year: '2026', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2026', displayNameEn: 'April 2026', displayNameKn: 'ಏಪ್ರಿಲ್ ೨೦೨೬' },
+    { year: '2026', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2026', displayNameEn: 'March 2026', displayNameKn: 'ಮಾರ್ಚ್ ೨೦೨೬' },
+    { year: '2026', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2026', displayNameEn: 'February 2026', displayNameKn: 'ಫೆಬ್ರವರಿ ೨೦೨೬' },
+    { year: '2026', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2026', displayNameEn: 'January 2026', displayNameKn: 'ಜನವರಿ ೨೦೨೬' },
+    { year: '2025', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2025', displayNameEn: 'Dec 2025', displayNameKn: 'ಡಿಸೆಂಬರ್ ೨೦೨೫' },
+    { year: '2025', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2025', displayNameEn: 'Nov 2025', displayNameKn: 'ನವೆಂಬರ್ ೨೦೨೫' },
+    { year: '2025', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2025', displayNameEn: 'Oct 2025', displayNameKn: 'ಅಕ್ಟೋಬರ್ ೨೦೨೫' },
+    { year: '2025', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2025', displayNameEn: 'Sep 2025', displayNameKn: 'ಸೆಪ್ಟೆಂಬರ್ ೨೦೨೫' },
+    { year: '2025', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2025', displayNameEn: 'Aug 2025', displayNameKn: 'ಆಗಸ್ಟ್ ೨೦೨೫' },
+    { year: '2025', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2025', displayNameEn: 'Jul 2025', displayNameKn: 'ಜುಲೈ ೨೦೨೫' },
+    { year: '2025', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2025', displayNameEn: 'Jun 2025', displayNameKn: 'ಜೂನ್ ೨೦೨೫' },
+    { year: '2025', month: 'May', baseName: 'Swabhimani_Sahakari_May_2025', displayNameEn: 'May 2025', displayNameKn: 'ಮೇ ೨೦೨೫' },
+    { year: '2025', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2025', displayNameEn: 'Apr 2025', displayNameKn: 'ಏಪ್ರಿಲ್ ೨೦೨೫' },
+    { year: '2025', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2025', displayNameEn: 'Mar 2025', displayNameKn: 'ಮಾರ್ಚ್ ೨೦೨೫' },
+    { year: '2025', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2025', displayNameEn: 'Feb 2025', displayNameKn: 'ಫೆಬ್ರವರಿ ೨೦೨೫' },
+    { year: '2025', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2025', displayNameEn: 'Jan 2025', displayNameKn: 'ಜನವರಿ ೨೦೨೫' },
+    { year: '2024', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2024', displayNameEn: 'Dec 2024', displayNameKn: 'ಡಿಸೆಂಬರ್ ೨೦೨೪' },
+    { year: '2024', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2024', displayNameEn: 'Nov 2024', displayNameKn: 'ನವೆಂಬರ್ ೨೦೨೪' },
+    { year: '2024', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2024', displayNameEn: 'Oct 2024', displayNameKn: 'ಅಕ್ಟೋಬರ್ ೨೦೨೪' },
+    { year: '2024', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2024', displayNameEn: 'Sep 2024', displayNameKn: 'ಸೆಪ್ಟೆಂಬರ್ ೨೦೨೪' },
+    { year: '2024', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2024', displayNameEn: 'Aug 2024', displayNameKn: 'ಆಗಸ್ಟ್ ೨೦೨೪' },
+    { year: '2024', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2024', displayNameEn: 'Jul 2024', displayNameKn: 'ಜುಲೈ ೨೦೨೪' },
+    { year: '2024', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2024', displayNameEn: 'Jun 2024', displayNameKn: 'ಜೂನ್ ೨೦೨೪' },
+    { year: '2024', month: 'May', baseName: 'Swabhimani_Sahakari_May_2024', displayNameEn: 'May 2024', displayNameKn: 'ಮೇ ೨೦೨೪' },
+    { year: '2024', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2024', displayNameEn: 'Apr 2024', displayNameKn: 'ಏಪ್ರಿಲ್ ೨೦೨೪' },
+    { year: '2024', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2024', displayNameEn: 'Mar 2024', displayNameKn: 'ಮಾರ್ಚ್ ೨೦೨೪' },
+    { year: '2024', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2024', displayNameEn: 'Feb 2024', displayNameKn: 'ಫೆಬ್ರವರಿ ೨೦೨೪' },
+    { year: '2024', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2024', displayNameEn: 'Jan 2024', displayNameKn: 'ಜನವರಿ ೨೦೨೪' },
+  ],
 };
 
 // 2. Asset Path Constructor
@@ -48,24 +49,32 @@ const getAssetPath = (year: string, month: string, baseName: string) => {
   return `/images/Swabhimani_Sahakari/2021_25/${year}/${month}/${baseName}`;
 };
 
-// 3. Fallback Image Loader
+// 3. Fallback Image Loader (Safe version to prevent infinite loop)
 const AdaptiveImage = ({ basePath, alt, className }: { basePath: string; alt: string; className?: string }) => {
   const extensions = ['.webp', '.jpg', '.JPG', '.png'];
+  const [extIndex, setExtIndex] = useState(0);
+  const [hasError, setHasError] = useState(false);
 
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>, index: number) => {
-    const target = e.currentTarget;
-    if (index + 1 < extensions.length) {
-      target.src = `${basePath}${extensions[index + 1]}`;
-      target.onerror = (newEvt) => handleError(newEvt as any, index + 1);
-    }
-  };
+  if (hasError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400 text-xs font-bold p-2 text-center">
+        No Preview
+      </div>
+    );
+  }
 
   return (
     <img
-      src={`${basePath}${extensions[0]}`}
+      src={`${basePath}${extensions[extIndex]}`}
       alt={alt}
       className={className}
-      onError={(e) => handleError(e, 0)}
+      onError={() => {
+        if (extIndex + 1 < extensions.length) {
+          setExtIndex((prev) => prev + 1);
+        } else {
+          setHasError(true);
+        }
+      }}
     />
   );
 };
@@ -73,6 +82,7 @@ const AdaptiveImage = ({ basePath, alt, className }: { basePath: string; alt: st
 const ITEMS_PER_PAGE = 20;
 
 export default function SwabhimaniSahakariPage() {
+  const { locale } = useLanguage();
   const [selectedYear, setSelectedYear] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -83,7 +93,7 @@ export default function SwabhimaniSahakariPage() {
       return {
         ...issue,
         basePath,
-        pdf: `${basePath}.pdf`
+        pdf: `${basePath}.pdf`,
       };
     });
   }, []);
@@ -93,11 +103,13 @@ export default function SwabhimaniSahakariPage() {
   const filteredIssues = useMemo(() => {
     return processedIssues.filter((item) => {
       const matchesYear = selectedYear === 'All' || item.year === selectedYear;
-      const matchesSearch = item.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                            item.year.includes(searchQuery);
+      const displayName = locale === 'kn' ? item.displayNameKn : item.displayNameEn;
+      const matchesSearch =
+        displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.year.includes(searchQuery);
       return matchesYear && matchesSearch;
     });
-  }, [processedIssues, selectedYear, searchQuery]);
+  }, [processedIssues, selectedYear, searchQuery, locale]);
 
   const totalPages = Math.ceil(filteredIssues.length / ITEMS_PER_PAGE);
   const paginatedIssues = useMemo(() => {
@@ -119,91 +131,89 @@ export default function SwabhimaniSahakariPage() {
     <main className="min-h-screen bg-slate-50 text-slate-800">
       {/* Top Banner */}
       <EducationHero
-        badgeText="Co-operative Education Wing"
-        title="Swabhimani Sahakari"
-        subtitle="Official Monthly Journal of Karnataka State Souharda Federal Co-operative Ltd."
-        imageSrc="/images/souharda/AllAboutKSSFCL.webp"
+        badgeText={locale === 'kn' ? 'ಸಹಕಾರ ಶಿಕ್ಷಣ ವಿಭಾಗ' : 'Co-operative Education Wing'}
+        title={locale === 'kn' ? 'ಸ್ವಾಭಿಮಾನಿ ಸಹಕಾರಿ' : 'Swabhimani Sahakari'}
+        subtitle={
+          locale === 'kn'
+            ? 'ಕರ್ನಾಟಕ ರಾಜ್ಯ ಸೌಹಾರ್ದ ಸಂಯುಕ್ತ ಸಹಕಾರಿಯ ಅಧಿಕೃತ ಮಾಸಪತ್ರಿಕೆ.'
+            : 'Official Monthly Journal of Karnataka State Souharda Federal Co-operative Ltd.'
+        }
+        imageSrc="/souharda/AllAboutKSSFCL_Intro.webp"
       />
 
-     {/* FULL-WIDTH FEATURED SECTION (CENTERED CONTAINER WITH ORIGINAL LEFT-ALIGNMENT) */}
-{/* FEATURED SECTION (FULL-WIDTH BACKGROUND WITH TIGHTER INNER GAP) */}
-<section className="relative w-full overflow-hidden bg-slate-900 border-b border-emerald-950/20">
-  {/* Full-width Background Image */}
-  <div 
-    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-    style={{ backgroundImage: `url('/images/Swabhimani_Sahakari/sahakari.jpg')` }}
-  />
+      {/* FEATURED SECTION */}
+      <section className="relative w-full overflow-hidden bg-slate-900 border-b border-emerald-950/20">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('/images/Swabhimani_Sahakari/sahakari.jpg')` }}
+        />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
 
-  {/* Dark Overlay Layer */}
-  <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px]" />
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
+            {/* Left Column Content */}
+            <div className="md:col-span-7 lg:col-span-8 space-y-5 text-left">
+              <div>
+                <span className="px-3.5 py-1 bg-[#FFBF00] text-slate-950 font-black text-[11px] uppercase tracking-wider rounded-md shadow-xs">
+                  {locale === 'kn' ? 'ಇತ್ತೀಚಿನ ಆವೃತ್ತಿ' : 'LATEST EDITION'}
+                </span>
+              </div>
 
-  {/* Tighter Centered Container (max-w-4xl) to drastically reduce the empty gap */}
-  <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
-      
-      {/* Left Column Content */}
-      <div className="md:col-span-7 lg:col-span-8 space-y-5 text-left">
-        
-        {/* Badge */}
-        <div>
-          <span className="px-3.5 py-1 bg-[#FFBF00] text-slate-950 font-black text-[11px] uppercase tracking-wider rounded-md shadow-sm">
-            LATEST EDITION
-          </span>
-        </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight drop-shadow-md">
+                ಸ್ವಾಭಿಮಾನಿ <span className="text-[#FFBF00]">ಸಹಕಾರಿ</span>
+              </h1>
 
-        {/* Kannada Headline */}
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight drop-shadow-md">
-          ಸ್ವಾಭಿಮಾನಿ <span className="text-[#FFBF00]">ಸಹಕಾರಿ</span>
-        </h1>
+              <div className="space-y-1.5">
+                <p className="text-base sm:text-lg text-emerald-100 font-bold leading-snug drop-shadow-xs">
+                  {locale === 'kn'
+                    ? 'ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಚಳುವಳಿಯ ಅಭಿವೃದ್ಧಿಗೆ ಮೀಸಲಾಗಿರುವ ಏಕೈಕ ಮಾಸಪತ್ರಿಕೆ.'
+                    : 'The exclusive monthly magazine dedicated to the development of Souharda Co-operative movement.'}
+                </p>
+                <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
+                  {locale === 'kn'
+                    ? 'ಇತ್ತೀಚಿನ ಸಹಕಾರ ಮಾಹಿತಿಯನ್ನು ವೀಕ್ಷಿಸಲಾಗುತ್ತಿದೆ...'
+                    : 'Loading the latest cooperative insights...'}
+                </p>
+              </div>
 
-        {/* Kannada Subtitle */}
-        <div className="space-y-1.5">
-          <p className="text-base sm:text-lg text-emerald-100 font-bold leading-snug drop-shadow-sm">
-            ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಚಳುವಳಿಯ ಅಭಿವೃದ್ಧಿಗೆ ಮೀಸಲಾಗಿರುವ ಏಕೈಕ ಮಾಸಪತ್ರಿಕೆ.
-          </p>
-          <p className="text-xs sm:text-sm text-slate-300 font-normal leading-relaxed">
-            Loading the latest cooperative insights...
-          </p>
-        </div>
-
-        {/* Button */}
-        <div className="pt-2">
-          <a
-            href={latestIssue?.pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-2.5 bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-xs rounded-full shadow-lg transition-transform active:scale-95"
-          >
-            Read Online
-          </a>
-        </div>
-      </div>
-
-      {/* Right Column (Positioned closer to left text using md:justify-start) */}
-      <div className="md:col-span-5 lg:col-span-4 flex justify-center md:justify-start">
-        <div className="w-48 h-64 sm:w-56 sm:h-72 bg-slate-200 rounded-lg shadow-2xl overflow-hidden border-2 border-white/30 relative transform hover:scale-105 transition-transform duration-300">
-          {latestIssue ? (
-            <AdaptiveImage
-              basePath={latestIssue.basePath}
-              alt={`Swabhimani Sahakari ${latestIssue.displayName}`}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold text-sm">
-              Latest Issue
+              <div className="pt-2">
+                <a
+                  href={latestIssue?.pdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-8 py-2.5 bg-white hover:bg-slate-100 text-slate-950 font-extrabold text-xs rounded-full shadow-lg transition-transform active:scale-95"
+                >
+                  {locale === 'kn' ? 'ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ಓದಿ' : 'Read Online'}
+                </a>
+              </div>
             </div>
-          )}
+
+            {/* Right Column Cover Preview */}
+            <div className="md:col-span-5 lg:col-span-4 flex justify-center md:justify-start">
+              <div className="w-48 h-64 sm:w-56 sm:h-72 bg-slate-200 rounded-lg shadow-2xl overflow-hidden border-2 border-white/30 relative transform hover:scale-105 transition-transform duration-300">
+                {latestIssue ? (
+                  <AdaptiveImage
+                    basePath={latestIssue.basePath}
+                    alt={`Swabhimani Sahakari ${latestIssue.displayNameEn}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold text-sm">
+                    {locale === 'kn' ? 'ಇತ್ತೀಚಿನ ಸಂಚಿಕೆ' : 'Latest Issue'}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-    </div>
-  </div>
-</section>
-
-      {/* ARCHIVE FILTER BAR (Standard Container Width) */}
+      {/* ARCHIVE FILTER BAR */}
       <nav className="sticky top-0 z-20 bg-white border-y border-slate-200 py-3 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <h3 className="text-lg font-bold text-slate-900 shrink-0">Archives</h3>
+          <h3 className="text-lg font-bold text-slate-900 shrink-0">
+            {locale === 'kn' ? 'ಸಂಗ್ರಹಾಲಯಗಳು (Archives)' : 'Archives'}
+          </h3>
 
           <div className="flex items-center gap-3 flex-wrap justify-center">
             {/* Year Controls */}
@@ -218,7 +228,7 @@ export default function SwabhimaniSahakariPage() {
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                   }`}
                 >
-                  {year}
+                  {year === 'All' ? (locale === 'kn' ? 'ಎಲ್ಲಾ' : 'All') : year}
                 </button>
               ))}
             </div>
@@ -252,7 +262,7 @@ export default function SwabhimaniSahakariPage() {
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search archive..."
+              placeholder={locale === 'kn' ? 'ಹುಡುಕಿ...' : 'Search archive...'}
               value={searchQuery}
               onChange={handleSearchChange}
               className="w-full pl-9 pr-4 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-slate-900"
@@ -279,19 +289,21 @@ export default function SwabhimaniSahakariPage() {
                   >
                     <AdaptiveImage
                       basePath={issue.basePath}
-                      alt={`Swabhimani Sahakari ${issue.displayName}`}
+                      alt={`Swabhimani Sahakari ${issue.displayNameEn}`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </a>
 
                   <div className="p-3 space-y-2 border-t border-slate-100 bg-white">
-                    <h4 className="text-xs font-bold text-slate-800">{issue.displayName}</h4>
+                    <h4 className="text-xs font-bold text-slate-800">
+                      {locale === 'kn' ? issue.displayNameKn : issue.displayNameEn}
+                    </h4>
                     <div className="flex items-center justify-center gap-4 pt-1 border-t border-slate-100 text-slate-500">
                       <a
                         href={issue.pdf}
                         target="_blank"
                         rel="noopener noreferrer"
-                        title="Read PDF"
+                        title={locale === 'kn' ? 'PDF ಓದಿ' : 'Read PDF'}
                         className="hover:text-emerald-600 transition-colors"
                       >
                         <FileText className="w-3.5 h-3.5" />
@@ -299,7 +311,7 @@ export default function SwabhimaniSahakariPage() {
                       <a
                         href={issue.pdf}
                         download
-                        title="Download PDF"
+                        title={locale === 'kn' ? 'PDF ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ' : 'Download PDF'}
                         className="hover:text-emerald-600 transition-colors"
                       >
                         <Download className="w-3.5 h-3.5" />
@@ -311,7 +323,9 @@ export default function SwabhimaniSahakariPage() {
             </div>
           ) : (
             <div className="text-center py-16 text-slate-500 text-sm">
-              No publication issues found matching your query.
+              {locale === 'kn'
+                ? 'ನಿಮ್ಮ ಶೋಧನೆಗೆ ಸೂಕ್ತವಾದ ನಿಯತಕಾಲಿಕ ಸಂಚಿಕೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ.'
+                : 'No publication issues found matching your query.'}
             </div>
           )}
         </div>

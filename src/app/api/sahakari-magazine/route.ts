@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import path from 'path';
 
-// Force Next.js to pre-render this route at build time
 export const dynamic = 'force-static';
 
 interface MagazineResponse {
@@ -10,8 +9,16 @@ interface MagazineResponse {
   monthYear: string;
 }
 
+// In-memory cache to prevent scanning the disk on every single request
+let cachedResponse: MagazineResponse | null = null;
+
 export async function GET(): Promise<NextResponse<MagazineResponse | { error: string }>> {
   try {
+    // Return cached payload immediately (0ms Execution Time)
+    if (cachedResponse) {
+      return NextResponse.json(cachedResponse);
+    }
+
     const dirPath = path.join(process.cwd(), 'public/images/Swabhimani_Sahakari');
 
     const fallbackResponse: MagazineResponse = {
@@ -19,25 +26,27 @@ export async function GET(): Promise<NextResponse<MagazineResponse | { error: st
       monthYear: 'Latest Edition',
     };
 
-    // Check if directory exists
-    if (!fs.existsSync(dirPath)) {
+    // Fast sync existence check
+    if (!existsSync(dirPath)) {
+      cachedResponse = fallbackResponse;
       return NextResponse.json(fallbackResponse);
     }
 
-    // Filter valid image files
-    const files = fs
-      .readdirSync(dirPath)
-      .filter((file) => /\.(webp|png|jpe?g)$/i.test(file));
+    // Async/Non-blocking directory read so Node.js event loop isn't frozen
+    const files = await fs.readdir(dirPath);
+    const validFiles = files.filter((file) => /\.(webp|png|jpe?g)$/i.test(file));
 
-    if (files.length === 0) {
+    if (validFiles.length === 0) {
+      cachedResponse = fallbackResponse;
       return NextResponse.json(fallbackResponse);
     }
 
-    // Sort files and grab the latest item safely
-    const sortedFiles = [...files].sort((a, b) => a.localeCompare(b));
+    // Sort files safely
+    const sortedFiles = validFiles.sort((a, b) => a.localeCompare(b));
     const latestFile = sortedFiles[sortedFiles.length - 1];
 
     if (!latestFile) {
+      cachedResponse = fallbackResponse;
       return NextResponse.json(fallbackResponse);
     }
 
@@ -45,10 +54,12 @@ export async function GET(): Promise<NextResponse<MagazineResponse | { error: st
     const match = latestFile.match(/([A-Za-z]+)_(\d{4})/);
     const monthYear = match ? `${match[1]} ${match[2]}` : 'Latest Edition';
 
-    return NextResponse.json({
+    cachedResponse = {
       imageUrl: `/images/Swabhimani_Sahakari/${latestFile}`,
       monthYear,
-    });
+    };
+
+    return NextResponse.json(cachedResponse);
   } catch (error) {
     console.error('Error fetching magazine asset:', error);
     return NextResponse.json(

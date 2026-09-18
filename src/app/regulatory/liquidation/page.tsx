@@ -1,19 +1,33 @@
 import RegulatoryHero from '@/components/common/RegulatoryHero';
-import { 
-  ShieldAlert, 
-  Gavel, 
-  CheckSquare 
-} from 'lucide-react';
+import { ShieldAlert, Gavel, CheckSquare } from 'lucide-react';
+
+interface DistrictData {
+  name: string;
+  notWorking: number;
+  liqPending: number;
+  liqOrder: number;
+  closed: number;
+  total: number;
+}
+
+interface DivisionData {
+  name: string;
+  notWorking: number;
+  liqPending: number;
+  liqOrder: number;
+  closed: number;
+  total: number;
+}
 
 export default function LiquidationPage() {
-  const divisionTotals = [
+  const divisionTotals: DivisionData[] = [
     { name: 'Bengaluru Division', notWorking: 185, liqPending: 169, liqOrder: 92, closed: 20, total: 466 },
     { name: 'Mysuru Division', notWorking: 22, liqPending: 6, liqOrder: 29, closed: 17, total: 74 },
     { name: 'Belagavi Division', notWorking: 291, liqPending: 192, liqOrder: 194, closed: 50, total: 727 },
     { name: 'Kalaburagi Division', notWorking: 182, liqPending: 29, liqOrder: 168, closed: 58, total: 437 },
   ];
 
-  const belagaviDistricts = [
+  const belagaviDistricts: DistrictData[] = [
     { name: 'BELAGAVI', notWorking: 100, liqPending: 124, liqOrder: 71, closed: 24, total: 319 },
     { name: 'VIJAYAPURA', notWorking: 92, liqPending: 37, liqOrder: 50, closed: 5, total: 184 },
     { name: 'BAGALKOT', notWorking: 35, liqPending: 15, liqOrder: 22, closed: 5, total: 77 },
@@ -23,7 +37,7 @@ export default function LiquidationPage() {
     { name: 'UTTARA KANNADA', notWorking: 19, liqPending: 0, liqOrder: 19, closed: 3, total: 41 },
   ];
 
-  const bengaluruDistricts = [
+  const bengaluruDistricts: DistrictData[] = [
     { name: 'BENGALURU URBAN', notWorking: 95, liqPending: 89, liqOrder: 17, closed: 5, total: 206 },
     { name: 'BENGALURU RURAL', notWorking: 5, liqPending: 0, liqOrder: 3, closed: 3, total: 11 },
     { name: 'RAMANAGARA', notWorking: 3, liqPending: 11, liqOrder: 0, closed: 0, total: 14 },
@@ -35,7 +49,7 @@ export default function LiquidationPage() {
     { name: 'DAVANAGERE', notWorking: 14, liqPending: 2, liqOrder: 9, closed: 0, total: 25 },
   ];
 
-  const mysuruDistricts = [
+  const mysuruDistricts: DistrictData[] = [
     { name: 'MYSURU', notWorking: 6, liqPending: 4, liqOrder: 7, closed: 5, total: 22 },
     { name: 'MANDYA', notWorking: 2, liqPending: 1, liqOrder: 1, closed: 0, total: 4 },
     { name: 'HASSAN', notWorking: 8, liqPending: 0, liqOrder: 7, closed: 3, total: 18 },
@@ -46,7 +60,7 @@ export default function LiquidationPage() {
     { name: 'UDUPI', notWorking: 0, liqPending: 0, liqOrder: 3, closed: 4, total: 7 },
   ];
 
-  const kalaburagiDistricts = [
+  const kalaburagiDistricts: DistrictData[] = [
     { name: 'KALABURAGI', notWorking: 43, liqPending: 12, liqOrder: 51, closed: 1, total: 107 },
     { name: 'BIDAR', notWorking: 28, liqPending: 2, liqOrder: 35, closed: 14, total: 79 },
     { name: 'YADAGIRI', notWorking: 20, liqPending: 4, liqOrder: 5, closed: 0, total: 29 },
@@ -55,6 +69,18 @@ export default function LiquidationPage() {
     { name: 'RAICHUR', notWorking: 28, liqPending: 0, liqOrder: 32, closed: 5, total: 65 },
     { name: 'KOPPAL', notWorking: 29, liqPending: 8, liqOrder: 29, closed: 3, total: 69 },
   ];
+
+  // Calculated Grand Totals
+  const stateTotals = divisionTotals.reduce(
+    (acc, cur) => ({
+      notWorking: acc.notWorking + cur.notWorking,
+      liqPending: acc.liqPending + cur.liqPending,
+      liqOrder: acc.liqOrder + cur.liqOrder,
+      closed: acc.closed + cur.closed,
+      total: acc.total + cur.total,
+    }),
+    { notWorking: 0, liqPending: 0, liqOrder: 0, closed: 0, total: 0 }
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
@@ -94,8 +120,8 @@ export default function LiquidationPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 font-medium text-slate-800">
-                {divisionTotals.map((item, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50">
+                {divisionTotals.map((item) => (
+                  <tr key={item.name} className="hover:bg-slate-50">
                     <td className="py-3.5 px-4 text-left font-semibold text-slate-900">{item.name}</td>
                     <td className="py-3.5 px-4">{item.notWorking}</td>
                     <td className="py-3.5 px-4">{item.liqPending}</td>
@@ -108,11 +134,11 @@ export default function LiquidationPage() {
               <tfoot>
                 <tr className="bg-slate-900 text-white font-bold text-base">
                   <td className="py-4 px-4 text-left">STATE GRAND TOTAL</td>
-                  <td className="py-4 px-4">680</td>
-                  <td className="py-4 px-4">396</td>
-                  <td className="py-4 px-4">483</td>
-                  <td className="py-4 px-4">145</td>
-                  <td className="py-4 px-4 text-amber-400">1704</td>
+                  <td className="py-4 px-4">{stateTotals.notWorking}</td>
+                  <td className="py-4 px-4">{stateTotals.liqPending}</td>
+                  <td className="py-4 px-4">{stateTotals.liqOrder}</td>
+                  <td className="py-4 px-4">{stateTotals.closed}</td>
+                  <td className="py-4 px-4 text-amber-400">{stateTotals.total}</td>
                 </tr>
               </tfoot>
             </table>
@@ -129,17 +155,10 @@ export default function LiquidationPage() {
           </div>
 
           <div className="divide-y divide-slate-200">
-            {/* BELAGAVI DIVISION */}
-            <DistrictTable title="BELAGAVI DIVISION" data={belagaviDistricts} totalNotWorking={291} totalLiqPending={192} totalLiqOrder={194} totalClosed={50} grandTotal={727} />
-
-            {/* BENGALURU DIVISION */}
-            <DistrictTable title="BENGALURU DIVISION" data={bengaluruDistricts} totalNotWorking={185} totalLiqPending={169} totalLiqOrder={92} totalClosed={20} grandTotal={466} />
-
-            {/* MYSURU DIVISION */}
-            <DistrictTable title="MYSURU DIVISION" data={mysuruDistricts} totalNotWorking={22} totalLiqPending={6} totalLiqOrder={29} totalClosed={17} grandTotal={74} />
-
-            {/* KALABURAGI DIVISION */}
-            <DistrictTable title="KALABURAGI DIVISION" data={kalaburagiDistricts} totalNotWorking={182} totalLiqPending={29} totalLiqOrder={168} totalClosed={58} grandTotal={437} />
+            <DistrictTable title="BELAGAVI DIVISION" data={belagaviDistricts} />
+            <DistrictTable title="BENGALURU DIVISION" data={bengaluruDistricts} />
+            <DistrictTable title="MYSURU DIVISION" data={mysuruDistricts} />
+            <DistrictTable title="KALABURAGI DIVISION" data={kalaburagiDistricts} />
           </div>
         </div>
       </section>
@@ -219,24 +238,25 @@ export default function LiquidationPage() {
   );
 }
 
-{/* Helper Component for Division Tables */}
+{/* Division Table Component */}
 function DistrictTable({
   title,
   data,
-  totalNotWorking,
-  totalLiqPending,
-  totalLiqOrder,
-  totalClosed,
-  grandTotal,
 }: {
   title: string;
-  data: { name: string; notWorking: number; liqPending: number; liqOrder: number; closed: number; total: number }[];
-  totalNotWorking: number;
-  totalLiqPending: number;
-  totalLiqOrder: number;
-  totalClosed: number;
-  grandTotal: number;
+  data: DistrictData[];
 }) {
+  const divisionTotals = data.reduce(
+    (acc, cur) => ({
+      notWorking: acc.notWorking + cur.notWorking,
+      liqPending: acc.liqPending + cur.liqPending,
+      liqOrder: acc.liqOrder + cur.liqOrder,
+      closed: acc.closed + cur.closed,
+      total: acc.total + cur.total,
+    }),
+    { notWorking: 0, liqPending: 0, liqOrder: 0, closed: 0, total: 0 }
+  );
+
   return (
     <div>
       <div className="bg-lime-100 text-blue-900 py-2.5 px-4 text-center font-bold text-sm tracking-wide border-y border-slate-200">
@@ -257,7 +277,7 @@ function DistrictTable({
           </thead>
           <tbody className="divide-y divide-slate-200 text-slate-700">
             {data.map((row, index) => (
-              <tr key={index} className="hover:bg-slate-50">
+              <tr key={row.name} className="hover:bg-slate-50">
                 <td className="py-2 px-3">{index + 1}</td>
                 <td className="py-2 px-3 text-left font-bold text-slate-900">{row.name}</td>
                 <td className="py-2 px-3">{row.notWorking}</td>
@@ -271,11 +291,11 @@ function DistrictTable({
           <tfoot>
             <tr className="bg-slate-100 font-bold text-slate-900 border-t border-slate-200">
               <td colSpan={2} className="py-2.5 px-3 text-left">DIVISION TOTAL</td>
-              <td className="py-2.5 px-3">{totalNotWorking}</td>
-              <td className="py-2.5 px-3">{totalLiqPending}</td>
-              <td className="py-2.5 px-3">{totalLiqOrder}</td>
-              <td className="py-2.5 px-3">{totalClosed}</td>
-              <td className="py-2.5 px-3 bg-amber-100">{grandTotal}</td>
+              <td className="py-2.5 px-3">{divisionTotals.notWorking}</td>
+              <td className="py-2.5 px-3">{divisionTotals.liqPending}</td>
+              <td className="py-2.5 px-3">{divisionTotals.liqOrder}</td>
+              <td className="py-2.5 px-3">{divisionTotals.closed}</td>
+              <td className="py-2.5 px-3 bg-amber-100">{divisionTotals.total}</td>
             </tr>
           </tfoot>
         </table>

@@ -101,7 +101,7 @@ export default function CircularsPage() {
         {/* Background Banner Image */}
         {!hasBannerError ? (
           <Image
-            src="/images/souharda/AllAboutKSSFCL.webp"
+            src="/souharda/AllAboutKSSFCL_Intro.webp"
             alt="KSSFCL Official Circulars Banner"
             fill
             priority

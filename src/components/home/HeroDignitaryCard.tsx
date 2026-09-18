@@ -24,23 +24,24 @@ const DIGNITARIES: Dignitary[] = [
 
 export default function HeroDignitaryCard() {
   return (
-    <div className="mx-4 sm:mx-8 lg:mx-12 max-w-sm rounded-2xl bg-slate-950/80 backdrop-blur-md border border-amber-500/30 p-4 sm:p-5 shadow-2xl">
-      <div className="flex items-center justify-around gap-4">
-        {DIGNITARIES.map((person, index) => (
-          <div key={index} className="flex flex-col items-center text-center">
+    <div className="w-full max-w-xs sm:max-w-sm rounded-2xl bg-slate-950/80 backdrop-blur-md border border-amber-500/30 p-3.5 sm:p-5 shadow-2xl">
+      <div className="flex items-center justify-around gap-3 sm:gap-4">
+        {DIGNITARIES.map((person) => (
+          <div key={person.name} className="flex flex-col items-center text-center">
             {/* Circular Avatar Container */}
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-slate-800">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-amber-400 shadow-md bg-slate-800">
               <Image
                 src={person.imageSrc}
                 alt={person.name}
                 fill
-                sizes="(max-width: 640px) 80px, 96px"
+                sizes="(max-width: 640px) 64px, 80px"
                 className="object-cover object-top"
+                priority
               />
             </div>
 
             {/* Name & Role */}
-            <h4 className="mt-2 text-xs sm:text-sm font-bold text-amber-400 drop-shadow-sm">
+            <h4 className="mt-2 text-xs sm:text-sm font-bold text-amber-400 drop-shadow-sm whitespace-nowrap">
               {person.name}
             </h4>
             <p className="text-[10px] sm:text-xs text-slate-300 font-medium max-w-[120px] leading-tight mt-0.5">

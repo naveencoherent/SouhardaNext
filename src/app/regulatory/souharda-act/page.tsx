@@ -362,16 +362,16 @@ export default function SouhardaActPage() {
               <p className="text-slate-300 text-sm">
                 No government interference in management. The General Body is the supreme authority.
               </p>
-              <Link
-                href="#"
+              <a
+                href="#statutory-resources"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
               >
                 View Details <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </div>
             <div className="w-36 h-48 relative rounded-xl overflow-hidden shrink-0 border border-slate-700 bg-slate-800 flex items-center justify-center">
               <Image
-                src="/images/souharda/ActBook.jpg"
+                src="/souharda/ActBook.jpg"
                 alt="Souharda Act Book Cover"
                 fill
                 sizes="(max-width: 768px) 100vw, 144px"
@@ -400,7 +400,7 @@ export default function SouhardaActPage() {
         </div>
 
         {/* Statutory PDF Downloads */}
-        <div className="pt-8 border-t border-slate-200">
+        <div id="statutory-resources" className="pt-8 border-t border-slate-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div>
               <h3 className="text-2xl font-bold">
@@ -425,7 +425,10 @@ export default function SouhardaActPage() {
                 ENGLISH VERSION
               </span>
               <a
-                href="#"
+                href="/assets/docs/souharda_act_1997_en.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
                 aria-label="Download Souharda Act 1997 in English PDF"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-medium hover:bg-slate-800 transition-colors"
               >
@@ -441,7 +444,10 @@ export default function SouhardaActPage() {
                 KANNADA VERSION
               </span>
               <a
-                href="#"
+                href="/assets/docs/souharda_act_1997_kn.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
                 aria-label="Download Souharda Act 1997 in Kannada PDF"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-medium hover:bg-slate-800 transition-colors"
               >

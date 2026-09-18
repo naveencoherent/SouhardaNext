@@ -6,6 +6,9 @@ import MagazineSection from '@/components/home/MagazineSection';
 import GovernanceSection from '@/components/home/GovernanceSection';
 import LeadershipSection from '@/components/home/LeadershipSection';
 
+// Guarantees static HTML export compatibility and max performance
+export const dynamic = 'force-static';
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-white text-slate-800 font-sans">

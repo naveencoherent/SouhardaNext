@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import RegulatoryHero from '@/components/common/RegulatoryHero';
 import { Search, FileText, Download, AlertCircle } from 'lucide-react';
 
 // Guarantees static HTML export compatibility
@@ -17,7 +17,6 @@ interface Tender {
 
 export default function TendersPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [hasBannerError, setHasBannerError] = useState(false);
 
   const tenders: Tender[] = [
     {
@@ -25,7 +24,6 @@ export default function TendersPage() {
       description: 'Implementation of Integrated Co-operative ERP Software System',
       lastDate: '15-Apr-2026',
       status: 'Active',
-      // Note: Use lowercase '/assets/...' to avoid case-sensitivity issues on Linux servers
       documentUrl: '/assets/docs/Tender_ERP_System_2026.pdf',
     },
     {
@@ -53,34 +51,12 @@ export default function TendersPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Hero Banner Section */}
-      <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
-        {!hasBannerError ? (
-          <Image
-            src="/images/souharda/AllAboutKSSFCL.webp"
-            alt="KSSFCL Tenders Banner"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center opacity-40"
-            onError={() => setHasBannerError(true)}
-          />
-        ) : null}
-
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
-          <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
-            Procurement &amp; Contracts
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-            Tenders &amp; Notifications
-          </h1>
-          <p className="text-base sm:text-lg text-slate-200 font-light max-w-2xl mx-auto">
-            Procurement opportunities for Souharda Cooperatives
-          </p>
-        </div>
-
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
-      </header>
+      {/* Shared Hero Component */}
+      <RegulatoryHero 
+        title="Tenders & Notifications"
+        subtitle="Procurement Opportunities & Public Notices for Souharda Cooperatives"
+        tag="PROCUREMENT & CONTRACTS"
+      />
 
       {/* Main Content Section */}
       <section className="py-12 max-w-6xl mx-auto px-4">

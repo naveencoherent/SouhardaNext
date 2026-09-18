@@ -1,14 +1,20 @@
-import Link from 'next/link';
 import RegulatoryHero from '@/components/common/RegulatoryHero';
 import { FileText, Download, ShieldCheck } from 'lucide-react';
 
+interface OrderItem {
+  date: string;
+  refNo: string;
+  subject: string;
+  pdfUrl: string;
+}
+
 export default function StatutoryOrdersPage() {
-  const orders = [
+  const orders: OrderItem[] = [
     {
       date: '01-Apr-2024',
       refNo: 'KSSFCL/ORD/2024/01',
       subject: 'Guidelines for Annual General Body Meetings',
-      pdfUrl: '#',
+      pdfUrl: '/assets/docs/orders/KSSFCL_ORD_2024_01.pdf',
     },
   ];
 
@@ -44,8 +50,8 @@ export default function StatutoryOrdersPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200 text-sm">
-                  {orders.map((order, index) => (
-                    <tr key={index} className="hover:bg-slate-50 transition-colors">
+                  {orders.map((order) => (
+                    <tr key={order.refNo} className="hover:bg-slate-50 transition-colors">
                       <td className="py-4 px-4 whitespace-nowrap text-slate-600">
                         {order.date}
                       </td>
@@ -56,14 +62,17 @@ export default function StatutoryOrdersPage() {
                         {order.subject}
                       </td>
                       <td className="py-4 px-4 text-center whitespace-nowrap">
-                        <Link
+                        <a
                           href={order.pdfUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          download
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-red-600 text-red-600 font-medium text-xs rounded-md hover:bg-red-600 hover:text-white transition-colors"
                         >
                           <FileText className="w-3.5 h-3.5" />
                           <span>PDF</span>
                           <Download className="w-3 h-3 ml-0.5" />
-                        </Link>
+                        </a>
                       </td>
                     </tr>
                   ))}

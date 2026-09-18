@@ -6,16 +6,19 @@ export interface NavSubItem {
 export interface NavItem {
   nameKey: string;
   fallbackName: string;
-  href: string;
+  href?: string;
   dropdown?: NavSubItem[];
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { nameKey: 'home', fallbackName: 'Home', href: '/' },
+  { 
+    nameKey: 'home', 
+    fallbackName: 'Home', 
+    href: '/' 
+  },
   {
     nameKey: 'souharda',
     fallbackName: 'Souharda',
-    href: '/souharda',
     dropdown: [
       { title: 'Co-operative Movement', href: '/souharda/cooperative-movement' },
       { title: 'All About KSSFCL', href: '/souharda/all-about-kssfcl' },
@@ -28,7 +31,6 @@ export const NAV_ITEMS: NavItem[] = [
   {
     nameKey: 'regulatory',
     fallbackName: 'Regulatory',
-    href: '/regulatory',
     dropdown: [
       { title: 'Souharda Act', href: '/regulatory/souharda-act' },
       { title: 'Task Force', href: '/regulatory/task-force' },
@@ -41,7 +43,6 @@ export const NAV_ITEMS: NavItem[] = [
   {
     nameKey: 'education',
     fallbackName: 'Education',
-    href: '/education',
     dropdown: [
       { title: 'Education Home', href: '/education' },
       { title: 'Training', href: '/education/training' },
@@ -53,7 +54,6 @@ export const NAV_ITEMS: NavItem[] = [
   {
     nameKey: 'services',
     fallbackName: 'Services',
-    href: '/services',
     dropdown: [
       { title: 'E-Stamping', href: '/services/e-stamping' },
       { title: 'Digital Intelligence', href: '/services/digital-intelligence' },
@@ -61,7 +61,19 @@ export const NAV_ITEMS: NavItem[] = [
       { title: 'CSC Services', href: '/services/csc' },
     ],
   },
-  { nameKey: 'court', fallbackName: 'Court', href: '/court' },
-  { nameKey: 'gallery', fallbackName: 'Gallery', href: '/gallery' },
-  { nameKey: 'connect', fallbackName: 'Connect', href: '/connect' },
+  { 
+    nameKey: 'court', 
+    fallbackName: 'Court', 
+    href: '/court' 
+  },
+  { 
+    nameKey: 'gallery', 
+    fallbackName: 'Gallery', 
+    href: '/gallery' 
+  },
+  { 
+    nameKey: 'connect', 
+    fallbackName: 'Connect', 
+    href: '/connect' 
+  },
 ];
