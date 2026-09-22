@@ -31,7 +31,7 @@ export default function TrainingPage() {
         badgeText="Co-operative Education Wing"
         title="Training & Development"
         subtitle="Empowering Cooperative Professionals with Knowledge and Skills"
-        imageSrc="/images/souharda/AllAboutKSSFCL.webp"
+        imageSrc="/images/souharda/AllAboutKSSFCL_Intro.webp"
       />
 
       {/* Training Calendar & Upcoming Events */}

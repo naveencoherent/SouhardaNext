@@ -70,7 +70,7 @@ export default function EStampingPage() {
             ? 'KSSFCL ಮತ್ತು SHCIL ಮೂಲಕ ರಾಜ್ಯ ಸರ್ಕಾರಕ್ಕೆ ನ್ಯಾಯೇತರ ಮುದ್ರಾಂಕ ಶುಲ್ಕವನ್ನು ಪಾವತಿಸುವ ಸುರಕ್ಷಿತ ಇಲೆಕ್ಟ್ರಾನಿಕ್ ವಿಧಾನ.'
             : 'Secured electronic way of paying non-judicial stamp duty to the State Government through KSSFCL and SHCIL.'
         }
-        imageSrc="/images/souharda/AllAboutKSSFCL.webp"
+        imageSrc="/images/souharda/AllAboutKSSFCL_Intro.webp"
       />
 
       {/* Main Content Section */}

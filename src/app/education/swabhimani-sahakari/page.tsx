@@ -49,7 +49,7 @@ const getAssetPath = (year: string, month: string, baseName: string) => {
   return `/images/Swabhimani_Sahakari/2021_25/${year}/${month}/${baseName}`;
 };
 
-// 3. Fallback Image Loader (Safe version to prevent infinite loop)
+// 3. Fallback Image Loader
 const AdaptiveImage = ({ basePath, alt, className }: { basePath: string; alt: string; className?: string }) => {
   const extensions = ['.webp', '.jpg', '.JPG', '.png'];
   const [extIndex, setExtIndex] = useState(0);

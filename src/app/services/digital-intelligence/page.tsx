@@ -49,7 +49,7 @@ export default function DigitalIntelligencePage() {
             ? 'ಸುರಕ್ಷಿತ ಡಿಜಿಟಲ್ ವಹಿವಾಟು ಉಪಕರಣಗಳು, ಮಾರ್ಗದರ್ಶಿಗಳು, ಸಾಫ್ಟ್‌ವೇರ್ ಮತ್ತು ವೀಡಿಯೊ ತರಬೇತಿಗಳ ಮೂಲಕ ಸಹಕಾರ ಸಂಘಗಳನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು.'
             : 'Empowering Cooperatives with secure digital transaction tools, guides, software, and training video tutorials.'
         }
-        imageSrc="/images/souharda/AllAboutKSSFCL.webp"
+        imageSrc="/images/souharda/AllAboutKSSFCL_Intro.webp"
       />
 
       {/* Main Content Layout */}

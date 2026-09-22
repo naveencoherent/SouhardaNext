@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import PageHero from '@/components/common/PageHero';
 import { 
   GraduationCap, 
@@ -30,6 +31,7 @@ interface DivisionalOffice {
   name: string;
   image: string;
   description: string;
+  slug: string;
 }
 
 // Animation variants
@@ -54,25 +56,28 @@ const staggerContainer = {
 export default function AllAboutKSSFCLPage() {
   const [activeTab, setActiveTab] = useState<TabType>('training');
 
-  // Divisional Offices Data
   const divisionalOffices: DivisionalOffice[] = [
     {
       name: 'Bengaluru',
+      slug: 'bengaluru',
       image: '/Divisional_Offices/Bengaluru_office.webp',
       description: 'Leading the digital cooperative wave in the capital region with expert regulatory oversight.'
     },
     {
       name: 'Belagavi',
+      slug: 'belagavi',
       image: '/Divisional_Offices/Belagavi_office.webp',
       description: "Nurturing the strong rural cooperative movement across North Karnataka's heartland."
     },
     {
       name: 'Mysuru',
+      slug: 'mysuru',
       image: '/Divisional_Offices/Mysuru_office.webp',
       description: 'Preserving cooperative integrity while promoting education in the Southern & Coastal belts.'
     },
     {
       name: 'Kalaburagi',
+      slug: 'kalaburagi',
       image: '/Divisional_Offices/Kalburgi_office.webp',
       description: 'Driving inclusive growth and social harmony through the Souharda model in East Karnataka.'
     }
@@ -109,10 +114,9 @@ export default function AllAboutKSSFCLPage() {
               <div className="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-100 group">
                 <Image 
                   src="/images/home/AllAboutKSSFCL_Intro.webp"
-                  alt="KSSFCL Intro" 
+                  alt="KSSFCL Introduction" 
                   width={600} 
                   height={450} 
-                  unoptimized
                   className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -178,8 +182,8 @@ export default function AllAboutKSSFCLPage() {
             </p>
           </motion.div>
 
-          {/* Navigation Tabs */}
-          <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-3">
+          {/* Navigation Tabs with ARIA support */}
+          <motion.div variants={fadeInUp} role="tablist" className="flex flex-wrap justify-center gap-3">
             {[
               { id: 'training' as const, label: 'ತರಬೇತಿ', icon: GraduationCap },
               { id: 'supervision' as const, label: 'ಮೇಲ್ವಿಚಾರಣೆ', icon: ShieldCheck },
@@ -191,6 +195,8 @@ export default function AllAboutKSSFCLPage() {
               return (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 border ${
                     isActive
@@ -310,7 +316,7 @@ export default function AllAboutKSSFCLPage() {
                   className="space-y-6"
                 >
                   <h3 className="text-xl font-bold text-[#C68A16] border-b border-slate-200 pb-3">
-                    ಸಂಪರ್ಕ ಮತ್ತು ನಿಧಿ ನಿರ್ವಹಣೆ (Liason & Fund Management)
+                    ಸಂಪರ್ಕ ಮತ್ತು ನಿಧಿ ನಿರ್ವಹಣೆ (Liaison & Fund Management)
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
@@ -502,9 +508,9 @@ export default function AllAboutKSSFCLPage() {
           </motion.div>
 
           <motion.div variants={staggerContainer} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {divisionalOffices.map((office, idx) => (
+            {divisionalOffices.map((office) => (
               <motion.div 
-                key={idx}
+                key={office.slug}
                 variants={fadeInUp}
                 whileHover={{ y: -6 }}
                 className="group bg-slate-50 rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
@@ -513,9 +519,9 @@ export default function AllAboutKSSFCLPage() {
                   <div className="relative h-44 w-full bg-slate-200 overflow-hidden">
                     <Image
                       src={office.image}
-                      alt={office.name}
+                      alt={`${office.name} Divisional Office`}
                       fill
-                      unoptimized
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
@@ -531,13 +537,13 @@ export default function AllAboutKSSFCLPage() {
                 </div>
 
                 <div className="p-5 pt-0">
-                  <a 
-                    href="#" 
+                  <Link 
+                    href={`/offices/${office.slug}`}
                     className="inline-flex items-center gap-2 text-xs font-bold text-[#2B3E6B] hover:text-[#C68A16] transition-colors group/link"
                   >
                     <span>View Details</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                  </a>
+                  </Link>
                 </div>
               </motion.div>
             ))}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,12 +18,10 @@ import { NAV_ITEMS } from '../../config/nav';
 
 export default function Topbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState<string | null>(null);
 
   const { locale, t, toggleLanguage } = useLanguage();
-  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ticking = false;
@@ -38,19 +36,11 @@ export default function Topbar() {
       }
     };
 
-    const handleClickOutside = (event: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setActiveDropdown(null);
-      }
-    };
-
     setIsScrolled(window.scrollY > 45);
     window.addEventListener('scroll', handleScroll, { passive: true });
-    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -59,16 +49,12 @@ export default function Topbar() {
     name: t?.nav?.[item.nameKey] || item.fallbackName,
   }));
 
-  const toggleDropdown = useCallback((key: string) => {
-    setActiveDropdown((prev) => (prev === key ? null : key));
-  }, []);
-
   const toggleMobileSubmenu = useCallback((key: string) => {
     setOpenMobileSubmenu((prev) => (prev === key ? null : key));
   }, []);
 
   return (
-    <header className="relative w-full z-50 font-sans antialiased" ref={navRef}>
+    <header className="relative w-full z-50 font-sans antialiased">
       {/* 1. TOP UTILITY BAR */}
       <div className="bg-[#00182E] text-white text-xs py-1.5 px-2 lg:px-6 border-b border-white/10">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
@@ -189,14 +175,14 @@ export default function Topbar() {
               </a>
             </div>
 
-            {/* Language Toggle */}
+            {/* Language Toggle Button */}
             <button
-              onClick={toggleLanguage}
               type="button"
-              className="flex items-center gap-1.5 text-white font-medium hover:bg-white/20 transition cursor-pointer bg-white/10 px-2.5 py-0.5 rounded border border-white/30 text-xs"
+              onClick={() => toggleLanguage()}
+              className="flex items-center gap-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-2.5 py-1 rounded transition text-[11px]"
             >
-              <Globe className="w-3.5 h-3.5 text-amber-400" aria-hidden="true" />
-              <span>{locale === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
+              <Globe className="w-3 h-3" />
+              <span>{locale === 'kn' ? 'English' : 'ಕನ್ನಡ'}</span>
             </button>
           </div>
         </div>
@@ -233,11 +219,10 @@ export default function Topbar() {
             </div>
           </Link>
 
-          {/* DESKTOP NAVIGATION */}
+          {/* DESKTOP NAVIGATION — Pure CSS Hover (Zero-JS Re-renders) */}
           <nav className="hidden lg:flex flex-wrap items-center justify-end gap-2.5 sm:gap-4 xl:gap-6 font-bold text-xs sm:text-sm xl:text-[15px] tracking-wide text-white">
             {navItems.map((item) => {
               const hasDropdown = Boolean(item.dropdown && item.dropdown.length > 0);
-              const isOpen = activeDropdown === item.nameKey;
 
               if (item.href && !hasDropdown) {
                 return (
@@ -253,58 +238,34 @@ export default function Topbar() {
               }
 
               return (
-                <div
-                  key={item.nameKey}
-                  className="relative py-2"
-                  onMouseEnter={() => setActiveDropdown(item.nameKey)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
+                <div key={item.nameKey} className="relative py-2 group">
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleDropdown(item.nameKey);
-                    }}
-                    aria-expanded={isOpen}
-                    className={`flex items-center gap-1 transition-all duration-200 drop-shadow-sm cursor-pointer select-none bg-transparent border-0 font-bold text-inherit p-0 ${
-                      isOpen ? 'text-amber-400 scale-105' : 'hover:text-amber-300 hover:scale-105'
-                    }`}
+                    className="flex items-center gap-1 transition-all duration-200 drop-shadow-sm cursor-pointer select-none bg-transparent border-0 font-bold text-inherit p-0 group-hover:text-amber-300 group-hover:scale-105"
                   >
                     <span>{item.name}</span>
                     <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                        isOpen ? 'rotate-180 text-amber-400' : ''
-                      }`}
+                      className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180 group-hover:text-amber-300"
                       aria-hidden="true"
                     />
                   </button>
 
-                  <AnimatePresence>
-                    {hasDropdown && isOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 pt-1 z-[100] min-w-[220px] sm:min-w-[240px] pointer-events-auto"
-                      >
-                        <div className="bg-[#001D38] border border-blue-400/30 rounded-xl shadow-2xl py-2 backdrop-blur-lg overflow-hidden divide-y divide-blue-800/40">
-                          {item.dropdown!.map((subItem) => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              onClick={() => {
-                                setTimeout(() => setActiveDropdown(null), 50);
-                              }}
-                              className="block px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-100 hover:bg-amber-400 hover:text-blue-950 transition-all duration-150 relative z-[101] pointer-events-auto"
-                            >
-                              {subItem.title}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Pure CSS Dropdown Menu */}
+                  {hasDropdown && (
+                    <div className="absolute top-full left-0 pt-2 z-[100] min-w-[240px] hidden group-hover:block">
+                      <div className="bg-[#001D38] border border-blue-400/30 rounded-xl shadow-2xl py-2 backdrop-blur-lg overflow-hidden divide-y divide-blue-800/40">
+                        {item.dropdown!.map((subItem) => (
+                          <Link
+                            key={subItem.href}
+                            href={subItem.href}
+                            className="block px-4 py-2.5 text-xs sm:text-sm font-semibold text-slate-100 hover:bg-amber-400 hover:text-blue-950 transition-all duration-150 cursor-pointer"
+                          >
+                            {subItem.title}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}

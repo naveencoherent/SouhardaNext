@@ -1,6 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { 
   TrendingUp, 
   Eye, 
@@ -10,26 +12,46 @@ import {
   Info 
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import RegulatoryHero from '@/components/common/RegulatoryHero';
-
-// Ensures compatibility with SSG static HTML export
-export const dynamic = 'force-static';
 
 export default function TaskforcePage() {
-  const { locale } = useLanguage();
+  // Safe language context resolution with fallback
+  const langContext = useLanguage();
+  const locale = langContext?.locale || 'en';
+
+  const [hasBannerError, setHasBannerError] = useState(false);
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Shared Regulatory Hero Component */}
-      <RegulatoryHero 
-        title={locale === 'kn' ? 'ಕಾರ್ಯಪಡೆ (ಟಾಸ್ಕ್ ಫೋರ್ಸ್)' : 'Taskforce'}
-        subtitle={
-          locale === 'kn'
-            ? 'ಸಹಕಾರಿಗಳನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು ಮತ್ತು ಪುನಶ್ಚೇತನಗೊಳಿಸುವುದು'
-            : 'Empowering Cooperatives from Vulnerability to Strength'
-        }
-        tag={locale === 'kn' ? 'ಪುನಶ್ಚೇತನ ಮತ್ತು ಸಲಹಾ ಸೇವೆಗಳು' : 'REVITALIZATION & CONSULTANCY'}
-      />
+      {/* Hero / Header Section */}
+      <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
+        {!hasBannerError && (
+          <Image
+            src="/souharda/AllAboutKSSFCL_Intro.webp"
+            alt="KSSFCL Taskforce Banner"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center opacity-40"
+            onError={() => setHasBannerError(true)}
+          />
+        )}
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
+          <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
+            {locale === 'kn' ? 'ಪುನಶ್ಚೇತನ ಮತ್ತು ಸಲಹಾ ಸೇವೆಗಳು' : 'REVITALIZATION & CONSULTANCY'}
+          </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            {locale === 'kn' ? 'ಕಾರ್ಯಪಡೆ (ಟಾಸ್ಕ್ ಫೋರ್ಸ್)' : 'Taskforce'}
+          </h1>
+          <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto">
+            {locale === 'kn'
+              ? 'ಸಹಕಾರಿಗಳನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು ಮತ್ತು ಪುನಶ್ಚೇತನಗೊಳಿಸುವುದು'
+              : 'Empowering Cooperatives from Vulnerability to Strength'}
+          </p>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
+      </header>
 
       {/* Objective & Transformation Path Section */}
       <section className="py-16 max-w-6xl mx-auto px-4">

@@ -1,6 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import RegulatoryHero from '@/components/common/RegulatoryHero';
 import { 
   Landmark, 
   ShieldCheck, 
@@ -68,7 +70,7 @@ const variantStyles = {
 function MilestoneCard({ year, title, description, tag, icon: Icon, variant }: MilestoneCardProps) {
   const styles = variantStyles[variant];
   return (
-    <div className={`bg-white p-6 rounded-2xl shadow-sm relative flex flex-col justify-between ${styles.border}`}>
+    <div className={`bg-white p-6 rounded-2xl shadow-xs relative flex flex-col justify-between ${styles.border}`}>
       <div className="flex items-center justify-between mb-4">
         <span className={`text-2xl font-black ${styles.text}`}>{year}</span>
         <div className={`p-3 rounded-xl ${styles.bg} ${styles.text}`}>
@@ -111,14 +113,38 @@ function ProcessStep({ icon: Icon, title, description, colorScheme }: ProcessSte
 // --- Main Page Component ---
 
 export default function SouhardaActPage() {
+  const [hasBannerError, setHasBannerError] = useState(false);
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Shared Regulatory Hero Component */}
-      <RegulatoryHero 
-        title="The Souharda Framework"
-        subtitle="Empowering Karnataka’s Cooperatives through Autonomy & Self-Regulation"
-        tag="STATUTORY & LEGAL FRAMEWORK"
-      />
+      {/* Standardized Inline Hero Section (No missing import dependency) */}
+      <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
+        {!hasBannerError ? (
+          <Image
+            src="/souharda/AllAboutKSSFCL_Intro.webp"
+            alt="The Souharda Framework Banner"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center opacity-40"
+            onError={() => setHasBannerError(true)}
+          />
+        ) : null}
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
+          <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
+            STATUTORY &amp; LEGAL FRAMEWORK
+          </span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
+            The Souharda Framework
+          </h1>
+          <p className="text-slate-300 text-xs sm:text-sm md:text-base max-w-xl mx-auto">
+            Empowering Karnataka’s Cooperatives through Autonomy &amp; Self-Regulation
+          </p>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
+      </header>
 
       {/* Timeline / Milestones Section */}
       <section className="max-w-6xl mx-auto px-4 py-16">
@@ -249,7 +275,7 @@ export default function SouhardaActPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-xs flex flex-col justify-between">
             <div>
               <Lock className="w-10 h-10 text-emerald-600 mb-4" />
               <h3 className="text-xl font-bold mb-2">Self-Regulatory</h3>
@@ -259,7 +285,7 @@ export default function SouhardaActPage() {
             </div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-xs flex flex-col justify-between">
             <div>
               <Users className="w-10 h-10 text-blue-600 mb-4" />
               <h3 className="text-xl font-bold mb-2">Member Driven</h3>
@@ -269,7 +295,7 @@ export default function SouhardaActPage() {
             </div>
           </div>
 
-          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
+          <div className="p-6 bg-white rounded-2xl border border-slate-100 shadow-xs flex flex-col justify-between">
             <div>
               <TrendingUp className="w-10 h-10 text-amber-600 mb-4" />
               <h3 className="text-xl font-bold mb-2">Business Freedom</h3>
@@ -293,7 +319,7 @@ export default function SouhardaActPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Formation Box */}
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+            <div className="bg-white p-8 rounded-3xl shadow-xs border border-slate-200">
               <h3 className="text-2xl font-bold text-blue-600 mb-6 flex items-center gap-3">
                 <PlusCircle className="w-7 h-7 shrink-0" /> Formation of New
               </h3>
@@ -320,7 +346,7 @@ export default function SouhardaActPage() {
             </div>
 
             {/* Conversion Box */}
-            <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
+            <div className="bg-white p-8 rounded-3xl shadow-xs border border-slate-200">
               <h3 className="text-2xl font-bold text-emerald-600 mb-6 flex items-center gap-3">
                 <ArrowLeftRight className="w-7 h-7 shrink-0" /> Conversion Process
               </h3>
@@ -382,14 +408,14 @@ export default function SouhardaActPage() {
 
           {/* Side Highlights */}
           <div className="space-y-4">
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-xs">
               <Users className="w-6 h-6 text-blue-600 mb-2" />
               <h4 className="font-bold">Federal Supervision</h4>
               <p className="text-xs text-slate-500 mt-1">
                 Statutory functions like Inquiry are performed by the Federal Body.
               </p>
             </div>
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm">
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-xs">
               <FileText className="w-6 h-6 text-emerald-600 mb-2" />
               <h4 className="font-bold">Independent Audit</h4>
               <p className="text-xs text-slate-500 mt-1">
@@ -418,14 +444,14 @@ export default function SouhardaActPage() {
             </div>
 
             {/* English PDF */}
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm text-center flex flex-col items-center">
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-xs text-center flex flex-col items-center">
               <FileText className="w-12 h-12 text-red-500 mb-2" />
               <h4 className="font-bold text-slate-800">Souharda Act 1997</h4>
               <span className="text-[10px] font-bold text-amber-600 tracking-wider my-1">
                 ENGLISH VERSION
               </span>
               <a
-                href="/assets/docs/souharda_act_1997_en.pdf"
+                href="/Assets/docs/Act/Souharda_Act_1997_EN.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download
@@ -437,14 +463,14 @@ export default function SouhardaActPage() {
             </div>
 
             {/* Kannada PDF */}
-            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm text-center flex flex-col items-center">
+            <div className="p-6 bg-white rounded-2xl border border-slate-200 shadow-xs text-center flex flex-col items-center">
               <FileText className="w-12 h-12 text-red-500 mb-2" />
               <h4 className="font-bold text-slate-800">ಸೌಹಾರ್ದ ಕಾಯ್ದೆ ೧೯೯೭</h4>
               <span className="text-[10px] font-bold text-amber-600 tracking-wider my-1">
                 KANNADA VERSION
               </span>
               <a
-                href="/assets/docs/souharda_act_1997_kn.pdf"
+                href="/Assets/docs/Act/Souharda_Act_1997_KN.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download

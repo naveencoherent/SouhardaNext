@@ -38,8 +38,8 @@ export default function HeroCarousel() {
               fill
               sizes="100vw"
               className="object-cover object-center"
-              priority={idx === 0} // Highest priority for initial active slide
-              loading={idx === 0 ? 'eager' : 'lazy'} // Resolves LCP warning
+              priority={idx === 0}
+              loading={idx === 0 ? 'eager' : undefined}
             />
             {/* Vignette Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/30 to-slate-950/80" />

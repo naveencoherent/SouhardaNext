@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import RegulatoryHero from '@/components/common/RegulatoryHero';
@@ -350,7 +352,7 @@ export default function SouhardaActPage() {
       {/* Blueprints & Downloads Section */}
       <section className="py-16 max-w-6xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          {/* Featured Card featuring ActBook.jpg */}
+          {/* Featured Card */}
           <div className="lg:col-span-2 bg-slate-900 text-white rounded-3xl p-8 flex flex-col md:flex-row gap-6 items-center justify-between">
             <div className="space-y-4 max-w-md">
               <span className="px-3 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full inline-block">
@@ -360,12 +362,12 @@ export default function SouhardaActPage() {
               <p className="text-slate-300 text-sm">
                 No government interference in management. The General Body is the supreme authority.
               </p>
-              <Link
-                href="#"
+              <a
+                href="#statutory-resources"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
               >
                 View Details <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </div>
             <div className="w-36 h-48 relative rounded-xl overflow-hidden shrink-0 border border-slate-700 bg-slate-800 flex items-center justify-center">
               <Image
@@ -397,7 +399,7 @@ export default function SouhardaActPage() {
         </div>
 
         {/* Statutory PDF Downloads */}
-        <div className="pt-8 border-t border-slate-200">
+        <div id="statutory-resources" className="pt-8 border-t border-slate-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div>
               <h3 className="text-2xl font-bold">
@@ -421,7 +423,10 @@ export default function SouhardaActPage() {
                 ENGLISH VERSION
               </span>
               <a
-                href="#"
+                href="/assets/docs/souharda_act_1997_en.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
                 aria-label="Download Souharda Act 1997 in English PDF"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-medium hover:bg-slate-800 transition-colors"
               >
@@ -436,7 +441,10 @@ export default function SouhardaActPage() {
                 KANNADA VERSION
               </span>
               <a
-                href="#"
+                href="/assets/docs/souharda_act_1997_kn.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                download
                 aria-label="Download Souharda Act 1997 in Kannada PDF"
                 className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-medium hover:bg-slate-800 transition-colors"
               >
