@@ -34,7 +34,7 @@ const fadeInUp = {
     filter: 'blur(0px)',
     transition: { 
       duration: 0.85, 
-      ease: [0.16, 1, 0.3, 1] 
+      ease: [0.16, 1, 0.3, 1] as const // 👈 Add `as const` right here
     } 
   }
 };

@@ -2,68 +2,110 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Mail, ChevronRight } from 'lucide-react';
 
-interface ConnectHeroProps {
-  activeTab?: string;
-  onTabChange?: (tab: string) => void;
+export interface Breadcrumb {
+  label: string;
+  href?: string;
 }
 
-export default function ConnectHero({ activeTab = 'general', onTabChange }: ConnectHeroProps) {
-  const tabs = [
-    { id: 'general', label: 'General Inquiry' },
-    { id: 'support', label: 'Support & Help' },
-    { id: 'offices', label: 'Office Locations' },
-  ];
+export interface ConnectHeroProps {
+  title?: string;
+  subtitle?: string;
+  breadcrumbs?: Breadcrumb[];
+  highlightTerm?: string;
+}
+
+export default function ConnectHero({
+  title = 'CONNECT WITH US',
+  subtitle = 'Have questions, feedback, or need assistance? Reach out to our team.',
+  breadcrumbs = [
+    { label: 'Home', href: '/' },
+    { label: 'Connect' }
+  ],
+  highlightTerm = 'CONNECT',
+}: ConnectHeroProps) {
+  const renderTitle = () => {
+    if (!highlightTerm || !title.includes(highlightTerm)) {
+      return title;
+    }
+
+    const escapedTerm = highlightTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escapedTerm})`, 'gi');
+    const parts = title.split(regex);
+
+    return parts.map((part, index) =>
+      part.toLowerCase() === highlightTerm.toLowerCase() ? (
+        <span key={index} className="text-amber-400">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
 
   return (
-    <section className="bg-slate-900 text-white border-b border-slate-800 py-10 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Top Bar: Breadcrumb + Tag */}
-        <div className="flex items-center justify-between gap-4 mb-4">
-          <nav className="flex items-center gap-2 text-sm text-slate-400">
-            <Link href="/" className="hover:text-amber-400 transition-colors">
-              Home
-            </Link>
-            <ChevronRight className="w-4 h-4 text-slate-600" />
-            <span className="text-amber-400 font-medium">Connect</span>
-          </nav>
+    <section 
+      className="relative w-full h-[180px] md:h-[220px] px-4 overflow-hidden border-b-2 border-amber-500 shadow-[0_15px_30px_rgba(0,0,0,0.35)] flex flex-col items-center justify-center text-white"
+      style={{
+        backgroundColor: '#050c14', // Deep Teal-Slate Base
+        backgroundImage: `
+          radial-gradient(circle at center, rgba(13, 29, 45, 0.95) 0%, rgba(5, 12, 20, 0.98) 85%)
+        `,
+      }}
+    >
+      {/* Communication & Network Pattern Overlay */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-20"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 40H60M40 20V60M25 25L55 55M25 55L55 25' stroke='%23F59E0B' stroke-width='1.2' stroke-dasharray='3 3'/%3E%3Ccircle cx='40' cy='40' r='6' stroke='%23F59E0B' stroke-width='1.5' fill='%23050c14'/%3E%3Ccircle cx='20' cy='40' r='3.5' fill='%23F59E0B'/%3E%3Ccircle cx='60' cy='40' r='3.5' fill='%23F59E0B'/%3E%3Ccircle cx='40' cy='20' r='3.5' fill='%23F59E0B'/%3E%3Ccircle cx='40' cy='60' r='3.5' fill='%23F59E0B'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '45px 45px',
+        }}
+      />
 
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-amber-400 text-xs font-semibold">
-            <Mail className="w-3.5 h-3.5" /> Contact Portal
-          </span>
-        </div>
+      {/* Main Content Container */}
+      <div className="max-w-4xl w-full mx-auto relative z-10 text-center flex flex-col items-center justify-center">
 
-        {/* Main Header Row */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-              Connect <span className="text-amber-400">With Us</span>
-            </h1>
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl leading-relaxed">
-              Have questions, feedback, or need assistance? Reach out to our team or select a specific service division.
-            </p>
-          </div>
-
-          {/* Action Tabs */}
-          <div className="flex flex-wrap gap-2">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => onTabChange && onTabChange(tab.id)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all border ${
-                  activeTab === tab.id
-                    ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-amber-500/10'
-                    : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700 hover:text-white'
-                }`}
-              >
-                {tab.label}
-              </button>
+        {/* Dark Breadcrumb Pill Navigation */}
+        {breadcrumbs.length > 0 && (
+          <nav 
+            aria-label="Breadcrumb"
+            className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 px-3 py-0.5 rounded-full text-[10px] font-semibold text-slate-300 mb-2 shadow-xs"
+          >
+            {breadcrumbs.map((crumb, idx) => (
+              <React.Fragment key={idx}>
+                {crumb.href ? (
+                  <Link href={crumb.href} className="hover:text-amber-400 transition-colors">
+                    {crumb.label}
+                  </Link>
+                ) : (
+                  <span className="text-amber-400 font-bold" aria-current="page">
+                    {crumb.label}
+                  </span>
+                )}
+                {idx < breadcrumbs.length - 1 && (
+                  <span className="text-slate-500 font-bold" aria-hidden="true">&gt;</span>
+                )}
+              </React.Fragment>
             ))}
-          </div>
-        </div>
+          </nav>
+        )}
 
+        {/* Title */}
+        <h1 className="text-xl sm:text-3xl md:text-4xl font-black tracking-wider text-white uppercase mb-1.5 leading-none overflow-hidden text-ellipsis w-full text-center">
+          {renderTitle()}
+        </h1>
+
+        {/* Gold Accent Line */}
+        <div className="w-10 h-0.5 bg-amber-400 rounded-full mb-2 shrink-0" />
+
+        {/* Subtitle */}
+        {subtitle && (
+          <p className="max-w-xl text-slate-300 text-xs font-normal leading-normal line-clamp-1 text-center">
+            {subtitle}
+          </p>
+        )}
       </div>
     </section>
   );

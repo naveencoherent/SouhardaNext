@@ -61,13 +61,13 @@ export default function Topbar() {
           {/* Left Utility Links */}
           <div className="flex items-center text-[12px] font-normal tracking-wide text-white/95 overflow-x-auto py-0.5 whitespace-nowrap">
             <a
-              href="https://easypay.axisbank.co.in/easyPay/makePayment?mid=MzQ4ODU%3D"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-amber-300 transition pr-3 border-r border-white/50"
-            >
-              {t?.topbar?.banking || 'Banking'}
-            </a>
+  href="https://easypay.axis.bank.in/easyPay/makePayment?mid=MzQ4ODU%3D"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-amber-300 transition-colors py-0.5 pr-3 border-r border-white/20"
+>
+  {t?.topbar?.banking || 'Banking'}
+</a>
             <a
               href="https://grosbeaksmartcms.com/customer/KSSF/"
               target="_blank"

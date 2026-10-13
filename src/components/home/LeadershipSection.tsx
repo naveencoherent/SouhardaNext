@@ -85,7 +85,7 @@ export default function LeadershipSection() {
             return (
               <Link
                 key={`director-${director.name}-${idx}`}
-                href={director.href || '/director'}
+                href={director.href || '/souharda/directors/'}
                 className="w-60 sm:w-64 bg-white rounded-2xl p-4 border border-slate-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center text-center group/card flex-shrink-0 hover:-translate-y-1.5"
               >
                 <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden mb-4 bg-blue-50 border border-slate-100">

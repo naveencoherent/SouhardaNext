@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Search, Download, FileText, FileX } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
+import RegulatoryHero, { Breadcrumb } from '@/components/common/RegulatoryHero';
+
+// --- Types & Data Definitions ---
 
 interface Tender {
   id: string;
@@ -30,7 +32,7 @@ const TENDERS_DATA: Tender[] = [
     id: '2',
     ref: 'KSSF/TND/2026/02',
     descriptionEn: 'Empanelment of Financial Auditors & Tax Consultants for FY 2026-27',
-    descriptionKn: '೨೦೨೬-೨೭ ಸಾಲಿಗೆ ಆರ್ಥಿಕ ಲೆಕ್ಕ ಪರಿಶೋಧಕರು ಮತ್ತು ತೆರಿಗೆ ಸಲಹೆಗಾರರ ನೋಂದಣಿ',
+    descriptionKn: '೨೦೨೬-೨೨೭ ಸಾಲಿಗೆ ಆರ್ಥಿಕ ಲೆಕ್ಕ ಪರಿಶೋಧಕರು ಮತ್ತು ತೆರಿಗೆ ಸಲಹೆಗಾರರ ನೋಂದಣಿ',
     lastDate: '05-Apr-2026',
     status: 'Under Review',
     documentUrl: '/assets/docs/RFP_Financial_Auditors_2026.pdf',
@@ -51,7 +53,22 @@ export default function TendersPage() {
   const locale = langContext?.locale || 'en';
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [hasBannerError, setHasBannerError] = useState(false);
+
+  const breadcrumbs: Breadcrumb[] = [
+    { label: 'Home', href: '/' },
+    { label: 'Regulatory', href: '/regulatory' },
+    { label: locale === 'kn' ? 'ಟೆಂಡರ್‌ಗಳು' : 'Tenders' },
+  ];
+
+  const pageTitle =
+    locale === 'kn'
+      ? 'ಟೆಂಡರ್‌ಗಳು ಮತ್ತು ಸಾರ್ವಜನಿಕ ಪ್ರಕಟಣೆಗಳು'
+      : 'Tenders & Public Notices';
+
+  const pageSubtitle =
+    locale === 'kn'
+      ? 'ಕರ್ನಾಟಕದ ಸೌಹಾರ್ದ ಸಹಕಾರಿಗಳಿಗಾಗಿ ಸಂಗ್ರಹಣೆ ಅವಕಾಶಗಳು, ವಿನಂತಿಗಳು (RFP) ಮತ್ತು ಮಾರಾಟಗಾರರ ಒಪ್ಪಂದಗಳು.'
+      : 'Procurement Opportunities, Requests for Proposals (RFPs), and Vendor Contracts for Souharda Cooperatives across Karnataka.';
 
   const filteredTenders = TENDERS_DATA.filter((tender) => {
     const query = searchTerm.toLowerCase();
@@ -65,43 +82,20 @@ export default function TendersPage() {
   });
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Hero Banner Section */}
-      <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
-        {!hasBannerError && (
-          <Image
-            src="/souharda/AllAboutKSSFCL_Intro.webp"
-            alt="KSSFCL Tenders Banner"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center opacity-40"
-            onError={() => setHasBannerError(true)}
-          />
-        )}
-
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
-          <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
-            {locale === 'kn' ? 'ಖರೀದಿ ಮತ್ತು ಸೂಚನೆಗಳು' : 'PROCUREMENT PORTAL'}
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-            {locale === 'kn' ? 'ಟೆಂಡರ್‌ಗಳು ಮತ್ತು ಸಾರ್ವಜನಿಕ ಪ್ರಕಟಣೆಗಳು' : 'Tenders & Public Notices'}
-          </h1>
-          <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto">
-            {locale === 'kn'
-              ? 'ಸೌಹಾರ್ದ ಸಹಕಾರಿಗಳಿಗಾಗಿ ಸಂಗ್ರಹಣೆ ಅವಕಾಶಗಳು ಮತ್ತು ಮಾರಾಟಗಾರರ ಒಪ್ಪಂದಗಳು'
-              : 'Procurement Opportunities & Vendor Contracts for Souharda Cooperatives'}
-          </p>
-        </div>
-
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
-      </header>
+    <main className="min-h-screen bg-slate-50 text-slate-800 font-sans">
+      {/* Standardized Regulatory Hero */}
+      <RegulatoryHero
+        title={pageTitle}
+        subtitle={pageSubtitle}
+        breadcrumbs={breadcrumbs}
+        highlightTerm={locale === 'kn' ? 'ಟೆಂಡರ್‌ಗಳು' : 'Tenders'}
+      />
 
       {/* Main Section */}
-      <section className="py-10 max-w-6xl mx-auto px-4">
+      <section className="py-12 max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
           
-          {/* Live Search Bar */}
+          {/* Live Search Bar & Summary */}
           <div className="p-4 sm:p-6 bg-white border-b border-slate-100 flex items-center justify-between gap-4">
             <div className="relative max-w-md w-full">
               <Search className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -125,7 +119,7 @@ export default function TendersPage() {
             </span>
           </div>
 
-          {/* Table Container */}
+          {/* Tenders Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -185,7 +179,7 @@ export default function TendersPage() {
                             download
                             aria-label={`Download PDF: ${description}`}
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-50 text-red-600 border border-red-200 hover:bg-red-600 hover:text-white rounded-lg text-xs font-semibold transition-all shadow-xs"
-                            title="Download PDF Document"
+                            title={locale === 'kn' ? 'PDF ದಾಖಲೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ' : 'Download PDF Document'}
                           >
                             <FileText className="w-3.5 h-3.5" />
                             <span>PDF</span>

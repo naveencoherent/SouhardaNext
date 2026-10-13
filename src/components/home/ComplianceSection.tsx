@@ -9,6 +9,7 @@ interface ComplianceCardProps {
   headerBg: string;
   headerBorder: string;
   hoverTextColor: string;
+  textColor: string;
   items: ComplianceItem[];
   viewAllLink: string;
   viewAllText: string;
@@ -22,6 +23,7 @@ function ComplianceCard({
   headerBg,
   headerBorder,
   hoverTextColor,
+  textColor,
   items = [],
   viewAllLink,
   viewAllText,
@@ -77,7 +79,7 @@ function ComplianceCard({
       <div className="p-4 pt-2 border-t border-slate-100 flex justify-center bg-slate-50/50">
         <Link
           href={viewAllLink}
-          className={`text-sm font-semibold ${hoverTextColor.replace('group-hover:', '')} hover:underline transition-all`}
+          className={`text-sm font-semibold ${textColor} hover:underline transition-all block w-full text-center py-1`}
         >
           {viewAllText} &rarr;
         </Link>
@@ -113,8 +115,9 @@ export default function ComplianceSection() {
             headerBg="bg-[#738276]"
             headerBorder="border-[#5f6d62]"
             hoverTextColor="group-hover:text-[#738276]"
+            textColor="text-[#738276]"
             items={circulars}
-            viewAllLink="/circulars"
+            viewAllLink="/regulatory/circulars/"
             viewAllText="View All Circulars"
             badgeColor="bg-red-600"
           />
@@ -126,8 +129,9 @@ export default function ComplianceSection() {
             headerBg="bg-[#6F8D75]"
             headerBorder="border-[#5c7761]"
             hoverTextColor="group-hover:text-[#6F8D75]"
+            textColor="text-[#6F8D75]"
             items={recruitment}
-            viewAllLink="/recruitment"
+            viewAllLink="/souharda/recruitment/"
             viewAllText="View All Vacancies"
             badgeColor="bg-blue-600"
           />
@@ -139,8 +143,9 @@ export default function ComplianceSection() {
             headerBg="bg-[#7E9082]"
             headerBorder="border-[#6a7a6e]"
             hoverTextColor="group-hover:text-[#7E9082]"
+            textColor="text-[#7E9082]"
             items={tenders}
-            viewAllLink="/tenders"
+            viewAllLink="/regulatory/tenders/"
             viewAllText="View Active Tenders"
             badgeColor="bg-emerald-600"
           />

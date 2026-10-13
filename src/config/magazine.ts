@@ -1,5 +1,54 @@
+export interface Issue {
+  year: string;
+  month: string;
+  baseName: string;
+  displayName: string;
+}
+
 export const SAHAKARI_MAGAZINE_DATA = {
-  imageUrl: '/images/home/Education.jpg', // Replace with your actual cover image path in public/
+  imageUrl: '/images/home/Education.jpg',
   title: 'Sahakari Magazine',
   downloadUrl: '#',
+  issues: [
+    // ADD THE LATEST EDITIONS HERE AT THE TOP
+    { year: '2026', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2026', displayName: 'October 2026' },
+    { year: '2026', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2026', displayName: 'September 2026' },
+    { year: '2026', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2026', displayName: 'August 2026' },
+    { year: '2026', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2026', displayName: 'July 2026' },
+    { year: '2026', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2026', displayName: 'April 2026' },
+    { year: '2026', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2026', displayName: 'March 2026' },
+    { year: '2026', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2026', displayName: 'February 2026' },
+    { year: '2026', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2026', displayName: 'January 2026' },
+    { year: '2025', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2025', displayName: 'Dec 2025' },
+    { year: '2025', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2025', displayName: 'Nov 2025' },
+    { year: '2025', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2025', displayName: 'Oct 2025' },
+    { year: '2025', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2025', displayName: 'Sep 2025' },
+    { year: '2025', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2025', displayName: 'Aug 2025' },
+    { year: '2025', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2025', displayName: 'Jul 2025' },
+    { year: '2025', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2025', displayName: 'Jun 2025' },
+    { year: '2025', month: 'May', baseName: 'Swabhimani_Sahakari_May_2025', displayName: 'May 2025' },
+    { year: '2025', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2025', displayName: 'Apr 2025' },
+    { year: '2025', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2025', displayName: 'Mar 2025' },
+    { year: '2025', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2025', displayName: 'Feb 2025' },
+    { year: '2025', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2025', displayName: 'Jan 2025' },
+    { year: '2024', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2024', displayName: 'Dec 2024' },
+    { year: '2024', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2024', displayName: 'Nov 2024' },
+    { year: '2024', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2024', displayName: 'Oct 2024' },
+    { year: '2024', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2024', displayName: 'Sep 2024' },
+    { year: '2024', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2024', displayName: 'Aug 2024' },
+    { year: '2024', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2024', displayName: 'Jul 2024' },
+    { year: '2024', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2024', displayName: 'Jun 2024' },
+    { year: '2024', month: 'May', baseName: 'Swabhimani_Sahakari_May_2024', displayName: 'May 2024' },
+    { year: '2024', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2024', displayName: 'Apr 2024' },
+    { year: '2024', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2024', displayName: 'Mar 2024' },
+    { year: '2024', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2024', displayName: 'Feb 2024' },
+    { year: '2024', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2024', displayName: 'Jan 2024' },
+  ] as Issue[],
+};
+
+export const getAssetPath = (year: string, month: string, baseName: string) => {
+  if (parseInt(year, 10) >= 2026) {
+    return `/images/Swabhimani_Sahakari/2026_30/2026/${month}/${baseName}`;
+  }
+  return `/images/Swabhimani_Sahakari/2021_25/${year}/${month}/${baseName}`;
 };

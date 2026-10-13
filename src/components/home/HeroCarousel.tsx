@@ -21,10 +21,10 @@ export default function HeroCarousel() {
   }, [bannerImages.length]);
 
   return (
-    <section className="relative w-full h-[580px] sm:h-[680px] bg-slate-900 mb-24 sm:mb-32 overflow-hidden">
+    <section className="relative w-full h-[580px] sm:h-[680px] bg-slate-900 mb-24 sm:mb-32 overflow-visible">
       
       {/* 1. BACKGROUND BANNER IMAGES */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 overflow-hidden">
         {bannerImages.map((src, idx) => (
           <div
             key={src}
@@ -39,7 +39,6 @@ export default function HeroCarousel() {
               sizes="100vw"
               className="object-cover object-center"
               priority={idx === 0}
-              loading={idx === 0 ? 'eager' : undefined}
             />
             {/* Vignette Overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/30 to-slate-950/80" />
@@ -55,7 +54,7 @@ export default function HeroCarousel() {
       </div>
 
       {/* 3. CATEGORY CARDS */}
-      <div className="absolute bottom-0 right-4 sm:right-8 lg:right-12 z-30 translate-y-1/3 max-w-full">
+      <div className="absolute bottom-0 right-4 sm:right-8 lg:right-12 z-40 translate-y-1/3 max-w-full">
         <div className="flex flex-wrap sm:flex-nowrap gap-3 sm:gap-4 justify-end">
           {categoryCards.map((card: CategoryCard, idx: number) => (
             <Link

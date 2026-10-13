@@ -1,0 +1,339 @@
+{
+  "title": "KSSFCL Liquidation Details - March 2026 (Updated)",
+  "divisions": [
+    {
+      "division_name": "Bengaluru",
+      "districts": [
+        {
+          "sl_no": 1,
+          "district": "Bengaluru Urban",
+          "not_working": 95,
+          "liquidation_pending": 89,
+          "liquidation_order": 17,
+          "closed_registration_cancelled": 5,
+          "total": 206
+        },
+        {
+          "sl_no": 2,
+          "district": "Bengaluru Rural",
+          "not_working": 5,
+          "liquidation_pending": 0,
+          "liquidation_order": 3,
+          "closed_registration_cancelled": 3,
+          "total": 11
+        },
+        {
+          "sl_no": 3,
+          "district": "Ramanagar",
+          "not_working": 3,
+          "liquidation_pending": 11,
+          "liquidation_order": 0,
+          "closed_registration_cancelled": 0,
+          "total": 14
+        },
+        {
+          "sl_no": 4,
+          "district": "Chikkaballapur",
+          "not_working": 9,
+          "liquidation_pending": 10,
+          "liquidation_order": 0,
+          "closed_registration_cancelled": 0,
+          "total": 19
+        },
+        {
+          "sl_no": 5,
+          "district": "Kolar",
+          "not_working": 7,
+          "liquidation_pending": 3,
+          "liquidation_order": 8,
+          "closed_registration_cancelled": 0,
+          "total": 18
+        },
+        {
+          "sl_no": 6,
+          "district": "Tumakuru",
+          "not_working": 25,
+          "liquidation_pending": 22,
+          "liquidation_order": 23,
+          "closed_registration_cancelled": 12,
+          "total": 82
+        },
+        {
+          "sl_no": 7,
+          "district": "Shivamogga",
+          "not_working": 14,
+          "liquidation_pending": 18,
+          "liquidation_order": 6,
+          "closed_registration_cancelled": 0,
+          "total": 38
+        },
+        {
+          "sl_no": 8,
+          "district": "Chitradurga",
+          "not_working": 13,
+          "liquidation_pending": 14,
+          "liquidation_order": 26,
+          "closed_registration_cancelled": 0,
+          "total": 53
+        },
+        {
+          "sl_no": 9,
+          "district": "Davanagere",
+          "not_working": 14,
+          "liquidation_pending": 2,
+          "liquidation_order": 9,
+          "closed_registration_cancelled": 0,
+          "total": 25
+        }
+      ],
+      "division_total": {
+        "not_working": 185,
+        "liquidation_pending": 169,
+        "liquidation_order": 92,
+        "closed_registration_cancelled": 20,
+        "total": 466
+      }
+    },
+    {
+      "division_name": "Mysuru",
+      "districts": [
+        {
+          "sl_no": 10,
+          "district": "Mysuru",
+          "not_working": 6,
+          "liquidation_pending": 4,
+          "liquidation_order": 7,
+          "closed_registration_cancelled": 5,
+          "total": 22
+        },
+        {
+          "sl_no": 11,
+          "district": "Mandya",
+          "not_working": 2,
+          "liquidation_pending": 1,
+          "liquidation_order": 1,
+          "closed_registration_cancelled": 0,
+          "total": 4
+        },
+        {
+          "sl_no": 12,
+          "district": "Hassan",
+          "not_working": 8,
+          "liquidation_pending": 0,
+          "liquidation_order": 7,
+          "closed_registration_cancelled": 3,
+          "total": 18
+        },
+        {
+          "sl_no": 13,
+          "district": "Chamarajanagar",
+          "not_working": 1,
+          "liquidation_pending": 0,
+          "liquidation_order": 2,
+          "closed_registration_cancelled": 0,
+          "total": 3
+        },
+        {
+          "sl_no": 14,
+          "district": "South Canara",
+          "not_working": 0,
+          "liquidation_pending": 1,
+          "liquidation_order": 4,
+          "closed_registration_cancelled": 2,
+          "total": 7
+        },
+        {
+          "sl_no": 15,
+          "district": "Kodagu",
+          "not_working": 1,
+          "liquidation_pending": 0,
+          "liquidation_order": 0,
+          "closed_registration_cancelled": 0,
+          "total": 1
+        },
+        {
+          "sl_no": 16,
+          "district": "Chikmagalur",
+          "not_working": 4,
+          "liquidation_pending": 0,
+          "liquidation_order": 5,
+          "closed_registration_cancelled": 3,
+          "total": 12
+        },
+        {
+          "sl_no": 17,
+          "district": "Udupi",
+          "not_working": 0,
+          "liquidation_pending": 0,
+          "liquidation_order": 3,
+          "closed_registration_cancelled": 4,
+          "total": 7
+        }
+      ],
+      "division_total": {
+        "not_working": 22,
+        "liquidation_pending": 6,
+        "liquidation_order": 29,
+        "closed_registration_cancelled": 17,
+        "total": 74
+      }
+    },
+    {
+      "division_name": "Belagavi",
+      "districts": [
+        {
+          "sl_no": 18,
+          "district": "Belagavi",
+          "not_working": 100,
+          "liquidation_pending": 124,
+          "liquidation_order": 71,
+          "closed_registration_cancelled": 24,
+          "total": 319
+        },
+        {
+          "sl_no": 19,
+          "district": "Vijayapura",
+          "not_working": 92,
+          "liquidation_pending": 37,
+          "liquidation_order": 50,
+          "closed_registration_cancelled": 5,
+          "total": 184
+        },
+        {
+          "sl_no": 20,
+          "district": "Bagalakot",
+          "not_working": 35,
+          "liquidation_pending": 15,
+          "liquidation_order": 22,
+          "closed_registration_cancelled": 5,
+          "total": 77
+        },
+        {
+          "sl_no": 21,
+          "district": "Dharawad",
+          "not_working": 19,
+          "liquidation_pending": 14,
+          "liquidation_order": 15,
+          "closed_registration_cancelled": 6,
+          "total": 54
+        },
+        {
+          "sl_no": 22,
+          "district": "Haveri",
+          "not_working": 16,
+          "liquidation_pending": 1,
+          "liquidation_order": 12,
+          "closed_registration_cancelled": 1,
+          "total": 30
+        },
+        {
+          "sl_no": 23,
+          "district": "Gadag",
+          "not_working": 10,
+          "liquidation_pending": 1,
+          "liquidation_order": 5,
+          "closed_registration_cancelled": 6,
+          "total": 22
+        },
+        {
+          "sl_no": 24,
+          "district": "North Canara",
+          "not_working": 19,
+          "liquidation_pending": 0,
+          "liquidation_order": 19,
+          "closed_registration_cancelled": 3,
+          "total": 41
+        }
+      ],
+      "division_total": {
+        "not_working": 291,
+        "liquidation_pending": 192,
+        "liquidation_order": 194,
+        "closed_registration_cancelled": 50,
+        "total": 727
+      }
+    },
+    {
+      "division_name": "Kalaburagi",
+      "districts": [
+        {
+          "sl_no": 25,
+          "district": "Kalaburagi",
+          "not_working": 43,
+          "liquidation_pending": 12,
+          "liquidation_order": 51,
+          "closed_registration_cancelled": 1,
+          "total": 107
+        },
+        {
+          "sl_no": 26,
+          "district": "Bidar",
+          "not_working": 28,
+          "liquidation_pending": 2,
+          "liquidation_order": 35,
+          "closed_registration_cancelled": 14,
+          "total": 79
+        },
+        {
+          "sl_no": 27,
+          "district": "Yadagiri",
+          "not_working": 20,
+          "liquidation_pending": 4,
+          "liquidation_order": 5,
+          "closed_registration_cancelled": 0,
+          "total": 29
+        },
+        {
+          "sl_no": 28,
+          "district": "Ballari",
+          "not_working": 9,
+          "liquidation_pending": 3,
+          "liquidation_order": 7,
+          "closed_registration_cancelled": 2,
+          "total": 21
+        },
+        {
+          "sl_no": 29,
+          "district": "Vijayanagara",
+          "not_working": 25,
+          "liquidation_pending": 0,
+          "liquidation_order": 9,
+          "closed_registration_cancelled": 33,
+          "total": 67
+        },
+        {
+          "sl_no": 30,
+          "district": "Raichur",
+          "not_working": 28,
+          "liquidation_pending": 0,
+          "liquidation_order": 32,
+          "closed_registration_cancelled": 5,
+          "total": 65
+        },
+        {
+          "sl_no": 31,
+          "district": "Koppal",
+          "not_working": 29,
+          "liquidation_pending": 8,
+          "liquidation_order": 29,
+          "closed_registration_cancelled": 3,
+          "total": 69
+        }
+      ],
+      "division_total": {
+        "not_working": 182,
+        "liquidation_pending": 29,
+        "liquidation_order": 168,
+        "closed_registration_cancelled": 58,
+        "total": 437
+      }
+    }
+  ],
+  "all_division_total": {
+    "not_working": 680,
+    "liquidation_pending": 396,
+    "liquidation_order": 483,
+    "closed_registration_cancelled": 145,
+    "total": 1704
+  }
+}

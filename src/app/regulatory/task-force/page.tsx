@@ -1,218 +1,222 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { 
-  TrendingUp, 
-  Eye, 
-  HelpingHand, 
-  FileText, 
-  Download, 
-  Info 
-} from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
+import { FileText, Download } from 'lucide-react';
+
+// Co-located sibling imports
+import CoreFocusRoadmap from './CoreFocusRoadmap';
+import RadialInfographic from './RadialInfographic';
+import CooperativeDirectory from './CooperativeDirectory';
+
+// 1. Direct relative import from the same task-force directory
+import taskforceData from './taskforce.json';
 
 export default function TaskforcePage() {
-  // Safe language context resolution with fallback
-  const langContext = useLanguage();
-  const locale = langContext?.locale || 'en';
+  const [locale, setLocale] = useState<'en' | 'kn'>('en');
+  const [activeLiquidationStatus, setActiveLiquidationStatus] = useState<string | null>(null);
 
-  const [hasBannerError, setHasBannerError] = useState(false);
+  // Liquidation Donut Stats
+  const liquidationStats = [
+    {
+      id: 'appointed',
+      label: locale === 'kn' ? 'ಲಿಕ್ವಿಡೇಟರ್‌ಗಳ ನೇಮಕ' : 'Liquidators Appointed',
+      count: 463,
+      hex: '#f59e0b',
+      percentage: '29.0%',
+      description: locale === 'kn' ? 'ಲಿಕ್ವಿಡೇಷನ್ ಪ್ರಕ್ರಿಯೆಗೆ ಸೂಚಿಸಲಾದ ಸಹಕಾರಿಗಳು' : 'Societies where liquidators have been officially appointed.',
+    },
+    {
+      id: 'under_liquidation',
+      label: locale === 'kn' ? 'ಲಿಕ್ವಿಡೇಷನ್ ಪ್ರಕ್ರಿಯೆಯಲ್ಲಿದೆ' : 'Under Liquidation',
+      count: 396,
+      hex: '#f43f5e',
+      percentage: '24.8%',
+      description: locale === 'kn' ? 'ಆಸ್ತಿಗಳ ವಿಲೇವಾರಿ ಹಂತದಲ್ಲಿರುವ ಸಂಘಗಳು' : 'Societies currently undergoing active asset liquidation.',
+    },
+    {
+      id: 'rejuvenated',
+      label: locale === 'kn' ? 'ಪುನರುಜ್ಜೀವನಗೊಂಡ ಸಂಘಗಳು' : 'Societies Rejuvenated',
+      count: 16,
+      hex: '#10b981',
+      percentage: '1.0%',
+      description: locale === 'kn' ? 'ಯಶಸ್ವಿಯಾಗಿ ಪುನಃಶ್ಚೇತನಗೊಳಿಸಲಾದ ಸಂಘಗಳು' : 'Societies successfully revitalized and restored to active operations.',
+    },
+    {
+      id: 'closed',
+      label: locale === 'kn' ? 'ಮುಚ್ಚಲ್ಪಟ್ಟ ಸಂಘಗಳು' : 'Closed Societies',
+      count: 580,
+      hex: '#475569',
+      percentage: '36.4%',
+      description: locale === 'kn' ? 'ಪ್ರಕ್ರಿಯೆ ಪೂರ್ಣಗೊಂಡು ಮುಚ್ಚಲ್ಪಟ್ಟ ಸಹಕಾರಿಗಳು' : 'Societies whose liquidation proceedings have been fully concluded.',
+    },
+    {
+      id: 'cancelled',
+      label: locale === 'kn' ? 'ರದ್ದುಗೊಳಿಸಿದ ಸಂಘಗಳು' : 'Cancelled Societies',
+      count: 145,
+      hex: '#7c3aed',
+      percentage: '9.1%',
+      description: locale === 'kn' ? 'ನಂದಣಿ ರದ್ದುಗೊಂಡ ಸೌಹಾರ್ದ ಸಹಕಾರಿಗಳು' : 'Souharda societies whose registration status has been cancelled.',
+    },
+  ];
+
+  const totalLiquidationCases = liquidationStats.reduce((sum, item) => sum + item.count, 0);
+
+  const renderLiquidationDonut = () => {
+    let currentPercent = 0;
+    const radius = 38;
+    const circumference = 2 * Math.PI * radius;
+
+    return liquidationStats.map((item) => {
+      const fraction = item.count / totalLiquidationCases;
+      const strokeDasharray = `${fraction * circumference} ${circumference * (1 - fraction)}`;
+      const strokeDashoffset = -currentPercent * circumference;
+      currentPercent += fraction;
+
+      const isHovered = activeLiquidationStatus === item.id;
+
+      return (
+        <circle
+          key={item.id}
+          cx="50"
+          cy="50"
+          r={radius}
+          stroke={item.hex}
+          strokeWidth={isHovered ? '14' : '11'}
+          fill="transparent"
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={strokeDashoffset}
+          className="transition-all duration-300 cursor-pointer origin-center"
+          onMouseEnter={() => setActiveLiquidationStatus(item.id)}
+          onMouseLeave={() => setActiveLiquidationStatus(null)}
+          style={{ opacity: activeLiquidationStatus && !isHovered ? 0.35 : 1 }}
+        />
+      );
+    });
+  };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-800">
-      {/* Hero / Header Section */}
-      <header className="w-full relative h-[240px] sm:h-[300px] md:h-[340px] bg-slate-900 overflow-hidden flex items-center justify-center">
-        {!hasBannerError && (
-          <Image
-            src="/souharda/AllAboutKSSFCL_Intro.webp"
-            alt="KSSFCL Taskforce Banner"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center opacity-40"
-            onError={() => setHasBannerError(true)}
-          />
-        )}
+    <div className="min-h-screen bg-slate-50 text-slate-800 font-sans">
+      
+      {/* HERO BANNER */}
+      <div className="relative bg-[#0a192f] py-14 px-4 sm:px-6 lg:px-8 text-center text-white overflow-hidden">
+        <div className="absolute top-4 right-4 z-20 flex gap-2 bg-slate-800/80 p-1 rounded-lg border border-slate-700">
+          <button
+            onClick={() => setLocale('en')}
+            className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${
+              locale === 'en' ? 'bg-amber-500 text-slate-950' : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            EN
+          </button>
+          <button
+            onClick={() => setLocale('kn')}
+            className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${
+              locale === 'kn' ? 'bg-amber-500 text-slate-950' : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            ಕನ್ನಡ
+          </button>
+        </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center space-y-3">
-          <span className="inline-block px-3.5 py-1 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold rounded-full uppercase tracking-wider">
-            {locale === 'kn' ? 'ಪುನಶ್ಚೇತನ ಮತ್ತು ಸಲಹಾ ಸೇವೆಗಳು' : 'REVITALIZATION & CONSULTANCY'}
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-            {locale === 'kn' ? 'ಕಾರ್ಯಪಡೆ (ಟಾಸ್ಕ್ ಫೋರ್ಸ್)' : 'Taskforce'}
+        <div className="relative max-w-4xl mx-auto">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-wider uppercase text-amber-400">
+            TASKFORCE <span className="text-white">PORTAL</span>
           </h1>
-          <p className="text-slate-300 text-sm md:text-base max-w-2xl mx-auto">
-            {locale === 'kn'
-              ? 'ಸಹಕಾರಿಗಳನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು ಮತ್ತು ಪುನಶ್ಚೇತನಗೊಳಿಸುವುದು'
-              : 'Empowering Cooperatives from Vulnerability to Strength'}
+          <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-2xl mx-auto font-light leading-relaxed">
+            {locale === 'kn' 
+              ? 'ಸಹಕಾರ ಸಂಘಗಳ ಕಾರ್ಯಾಚರಣೆಯ ಅಪಾಯಗಳನ್ನು ತಡೆಗಟ್ಟಿ, ಆರ್ಥಿಕ ಸ್ಥಿರತೆ ಮತ್ತು ಬೆಳವಣಿಗೆಗೆ ಬೆಂಬಲ ನೀಡುವ ವಿಶೇಷ ಸಲಹಾ ಚೌಕಟ್ಟು.'
+              : 'A dedicated advisory framework designed to audit, monitor, and empower cooperatives from operational vulnerability to financial strength.'}
           </p>
         </div>
+      </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-slate-950/80 pointer-events-none" />
-      </header>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
 
-      {/* Objective & Transformation Path Section */}
-      <section className="py-16 max-w-6xl mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-slate-900">
-              {locale === 'kn' ? 'ನಮ್ಮ ಉದ್ದೇಶ' : 'Our Objective'}
+        {/* ROADMAP SECTION */}
+        <section className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-xs space-y-8">
+          <div className="max-w-3xl space-y-3">
+            <span className="inline-block px-3 py-1 text-xs font-semibold bg-amber-100 text-amber-800 rounded-full uppercase tracking-wide">
+              {locale === 'kn' ? 'ಟಾಸ್ಕ್‌ಫೋರ್ಸ್ ಕುರಿತು' : 'ABOUT TASKFORCE'}
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight">
+              {locale === 'kn' ? (
+                <>ಸದಸ್ಯ ಸಹಕಾರಿಗಳ ರಕ್ಷಣೆ: <br /><span className="text-amber-600">ಸ್ಥಿರತೆ ಮತ್ತು ಸಾಮರ್ಥ್ಯವರ್ಧನೆ.</span></>
+              ) : (
+                <>Safeguarding Member Cooperatives: <br /><span className="text-amber-600">Empowering Stability & Resilience.</span></>
+              )}
             </h2>
-            <p className="text-slate-600 leading-relaxed">
-              {locale === 'kn'
-                ? 'ಟಾಸ್ಕ್ ಫೋರ್ಸ್ ಸಂಸ್ಥೆಯು ನಮ್ಮ ಸದಸ್ಯ ಸಹಕಾರ ಸಂಘಗಳಿಗೆ ಆಂತರಿಕ ಸಲಹೆಗಾರರಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ. ಸಹಕಾರ ಸಂಘಗಳು ನಷ್ಟ ಅಥವಾ ವಿಸರ್ಜನೆಗೆ ಒಳಗಾಗದಂತೆ ತಡೆಯಲು ಅವುಗಳ ಆರ್ಥಿಕ ಸ್ಥಿತಿಯನ್ನು ಮರುಸಂಘಟಿಸುವುದು ಮತ್ತು ಕಾರ್ಯಕ್ಷಮತೆಯನ್ನು ಕಾಲಕಾಲಕ್ಕೆ ಪರಿಶೀಲಿಸುವುದು ನಮ್ಮ ಮುಖ್ಯ ಗುರಿಯಾಗಿದೆ.'
-                : 'The Taskforce is designed to be the "Internal Consultant" for our member cooperatives. Our goal is to restructure entire financial statuses and monitor performance time-to-time to prevent cooperatives from slipping into liquidation or loss.'}
-            </p>
           </div>
+          <CoreFocusRoadmap locale={locale} />
+        </section>
 
-          <div className="text-center">
-            <div className="bg-white p-8 border border-slate-200 rounded-2xl shadow-sm">
-              <h3 className="text-2xl font-black text-blue-600 mb-2">
-                {locale === 'kn' ? 'ದುರ್ಬಲ → ಸಾಮಾನ್ಯ → ಸಕ್ರಿಯ' : 'Weak → Normal → Vibrant'}
-              </h3>
-              <p className="text-slate-500 font-medium text-sm">
-                {locale === 'kn' ? 'ರೂಪಾಂತರದ ಹಾದಿ' : 'The Path of Transformation'}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* RADIAL INFOGRAPHIC SECTION */}
+        <section className="space-y-6">
+          <RadialInfographic />
+        </section>
 
-      {/* Core Services Section */}
-      <section className="bg-slate-100 py-16 border-y border-slate-200">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            
-            {/* Financial Stabilizing */}
-            <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
-              <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl mb-4">
-                <TrendingUp className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">
-                {locale === 'kn' ? 'ಆರ್ಥಿಕ ಸ್ಥಿರೀಕರಣ' : 'Financial Stabilizing'}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {locale === 'kn'
-                  ? 'ದ್ರವ್ಯತೆಯನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ಸಂಪೂರ್ಣ ಆಡಿಟ್ ಮತ್ತು ಆರ್ಥಿಕ ಸ್ವತ್ತುಗಳ ಮರುಸಂಘಟನೆ.'
-                  : 'Deep audit and restructuring of financial assets to restore liquidity.'}
-              </p>
-            </div>
-
-            {/* Periodic Monitoring */}
-            <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
-              <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl mb-4">
-                <Eye className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">
-                {locale === 'kn' ? 'ಕಾಲಕಾಲಕ್ಕೆ ಮೇಲ್ವಿಚಾರಣೆ' : 'Periodic Monitoring'}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {locale === 'kn'
-                  ? 'ಪ್ರಗತಿಯನ್ನು ಕಾಯ್ದುಕೊಳ್ಳಲು ಸ್ಥಳದಲ್ಲೇ ತಪಾಸಣೆ ಮತ್ತು ದತ್ತಾಂಶ ಮೇಲ್ವಿಚಾರಣೆ.'
-                  : 'On-ground inspections and data tracking to ensure progress is maintained.'}
-              </p>
-            </div>
-
-            {/* Handholding Support */}
-            <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center">
-              <div className="p-4 bg-blue-50 text-blue-600 rounded-2xl mb-4">
-                <HelpingHand className="w-10 h-10" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">
-                {locale === 'kn' ? 'ಮಾರ್ಗದರ್ಶನ ಮತ್ತು ಬೆಂಬಲ' : 'Handholding Support'}
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                {locale === 'kn'
-                  ? 'ಆಧುನಿಕ ಸಹಕಾರಿ ವಿಧಾನಗಳನ್ನು ಅಳವಡಿಸಿಕೊಳ್ಳಲು ನಿರ್ದೇಶಕರ ಮಂಡಳಿಗೆ ಸೂಕ್ತ ತರಬೇತಿ.'
-                  : 'Mentoring the board of directors to adopt modern cooperative practices.'}
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Statutory Resources Section */}
-      <section id="downloads" className="py-16 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Info Side */}
-            <div className="lg:col-span-5 space-y-4">
-              <h2 className="text-3xl font-bold text-slate-900">
-                {locale === 'kn' ? 'ಶಾಸನಬದ್ಧ ಸಂಪನ್ಮೂಲಗಳು' : 'Statutory Resources'}
+        {/* LIQUIDATION DONUT SECTION */}
+        <section className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200/80 shadow-xs space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-5">
+            <div>
+              <span className="text-[11px] font-black tracking-widest text-amber-600 uppercase">
+                {locale === 'kn' ? 'ಪ್ರಸ್ತುತ ಮಾಹಿತಿ' : 'LIVE DATA'}
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-0.5">
+                {locale === 'kn' ? 'ಸೌಹಾರ್ದ ಸಹಕಾರಿಗಳ ಪ್ರಸ್ತುತ ಸ್ಥಿತಿ.' : 'Current Status of Souharda Cooperatives.'}
               </h2>
-              <p className="text-slate-600">
-                {locale === 'kn'
-                  ? 'ಕರ್ನಾಟಕ ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಕಾಯ್ದೆ, ೧೯೯೭ ಮತ್ತು ಅದರ ತಿದ್ದುಪಡಿಗಳ ನಿಯಮಾವಳಿಗಳನ್ನು ಪಡೆಯಿರಿ.'
-                  : 'Access the complete legal framework of the Karnataka Souharda Sahakari Act, 1997 and its subsequent amendments.'}
-              </p>
-              <div className="flex items-start gap-3 pt-2">
-                <Info className="w-6 h-6 text-blue-600 shrink-0 mt-0.5" />
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  {locale === 'kn'
-                    ? 'ಈ ದಾಖಲೆಗಳನ್ನು ಅಧಿಕೃತ ಉಲ್ಲೇಖ ಮತ್ತು ಶಾಸನಬದ್ಧ ಅನುಸರಣೆಗಾಗಿ PDF ಮಾದರಿಯಲ್ಲಿ ನೀಡಲಾಗಿದೆ.'
-                    : 'These documents are provided in PDF format for official reference and compliance purposes.'}
-                </p>
-              </div>
             </div>
-
-            {/* Downloads Cards */}
-            <div className="lg:col-span-7">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                {/* English Version */}
-                <div className="p-6 border border-slate-200 rounded-2xl bg-slate-50 hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <FileText className="w-8 h-8 text-red-600 shrink-0" />
-                    <div>
-                      <h3 className="font-bold text-slate-900">Souharda Act 1997</h3>
-                      <span className="text-[10px] uppercase font-semibold text-slate-500">
-                        English Version
-                      </span>
-                    </div>
-                  </div>
-                  <a
-                    href="/assets/docs/souharda_act_english.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="inline-flex items-center justify-center gap-2 w-full py-2 px-4 border border-slate-900 text-slate-900 font-medium text-xs rounded-full hover:bg-slate-900 hover:text-white transition-colors"
-                  >
-                    <Download className="w-4 h-4" /> Download PDF
-                  </a>
-                </div>
-
-                {/* Kannada Version */}
-                <div className="p-6 border border-slate-200 rounded-2xl bg-slate-50 hover:shadow-md transition-shadow">
-                  <div className="flex items-center gap-4 mb-4">
-                    <FileText className="w-8 h-8 text-red-600 shrink-0" />
-                    <div>
-                      <h3 className="font-bold text-slate-900">ಸೌಹಾರ್ದ ಕಾಯ್ದೆ ೧೯೯೭</h3>
-                      <span className="text-[10px] uppercase font-semibold text-slate-500">
-                        Kannada Version
-                      </span>
-                    </div>
-                  </div>
-                  <a
-                    href="/assets/docs/souharda_act_kannada.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download
-                    className="inline-flex items-center justify-center gap-2 w-full py-2 px-4 border border-slate-900 text-slate-900 font-medium text-xs rounded-full hover:bg-slate-900 hover:text-white transition-colors"
-                  >
-                    <Download className="w-4 h-4" /> ಡೌನ್‌ಲೋಡ್ PDF
-                  </a>
-                </div>
-
-              </div>
-            </div>
-
+            <span className="text-xs font-medium text-slate-400">As on Q3 2026</span>
           </div>
-        </div>
-      </section>
-    </main>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-5 flex justify-center items-center relative py-4">
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90 drop-shadow-xs" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="38" stroke="#f8fafc" strokeWidth="11" fill="transparent" />
+                  {renderLiquidationDonut()}
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                  <span className="text-3xl sm:text-4xl font-extrabold text-slate-900">
+                    {activeLiquidationStatus
+                      ? liquidationStats.find((item) => item.id === activeLiquidationStatus)?.count.toLocaleString()
+                      : totalLiquidationCases.toLocaleString()}
+                  </span>
+                  <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-widest mt-1">
+                    {activeLiquidationStatus
+                      ? liquidationStats.find((item) => item.id === activeLiquidationStatus)?.label
+                      : (locale === 'kn' ? 'ಒಟ್ಟು ದಾಖಲಾದ ಪ್ರಕರಣಗಳು' : 'TOTAL CASES')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {liquidationStats.map((item) => (
+                <div
+                  key={item.id}
+                  onMouseEnter={() => setActiveLiquidationStatus(item.id)}
+                  onMouseLeave={() => setActiveLiquidationStatus(null)}
+                  className="p-5 rounded-2xl border border-slate-200/60 bg-slate-50/70 hover:bg-white flex items-center justify-between transition-all"
+                >
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-slate-800">{item.label}</span>
+                    <div className="text-2xl font-black text-slate-900">{item.count.toLocaleString()}</div>
+                  </div>
+                  <div className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">
+                    {item.percentage}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 2. DIRECTORY COMPONENT RECEIVING taskforce.json DATA */}
+        <CooperativeDirectory locale={locale} data={taskforceData} />
+
+    
+
+      </div>
+    </div>
   );
 }

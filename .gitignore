@@ -45,3 +45,6 @@ public/souharda/
 *.zip
 public/images/
 public/souharda/
+
+*.tar.gz
+*.zip

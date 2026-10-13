@@ -144,21 +144,22 @@ export default function GovernanceSection() {
             <span className="inline-block bg-blue-100 text-blue-800 text-xs sm:text-sm font-semibold px-4 py-1.5 rounded-full border border-blue-200 shadow-sm">
               Karnataka State Souharda Federal Co-operative Ltd.
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
-              Empowering Cooperatives with <span className="text-blue-600">Digital Governance</span>
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 leading-tight">
+              Empowering Cooperatives with{' '}
+              <span className="text-blue-600">Digital Governance</span>
             </h1>
             <p className="text-slate-600 text-base sm:text-lg max-w-xl">
               Driving sustainable growth, self-regulation, and transparent services across Karnataka through modern technology and collective governance.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              <Link 
-                href="/services" 
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl transition flex items-center gap-2 shadow-lg shadow-blue-600/20"
+              <Link
+                href="/services/digital-intelligence/"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm transition-all duration-200 shadow-md hover:shadow-lg"
               >
                 Explore Services <ArrowRight className="w-5 h-5" />
               </Link>
               <Link 
-                href="/circulars" 
+                href="/regulatory/circulars/" 
                 className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-6 py-3 rounded-xl border border-slate-300 transition"
               >
                 Regulatory Circulars

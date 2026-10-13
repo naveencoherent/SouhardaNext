@@ -2,57 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-
-interface Issue {
-  year: string;
-  month: string;
-  baseName: string;
-  displayName: string;
-}
-
-// Imported or directly embedded JSON dataset
-const magazineData: { issues: Issue[] } = {
-  issues: [
-    { year: '2026', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2026', displayName: 'August 2026' },
-    { year: '2026', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2026', displayName: 'July 2026' },
-    { year: '2026', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2026', displayName: 'April 2026' },
-    { year: '2026', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2026', displayName: 'March 2026' },
-    { year: '2026', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2026', displayName: 'February 2026' },
-    { year: '2026', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2026', displayName: 'January 2026' },
-    { year: '2025', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2025', displayName: 'Dec 2025' },
-    { year: '2025', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2025', displayName: 'Nov 2025' },
-    { year: '2025', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2025', displayName: 'Oct 2025' },
-    { year: '2025', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2025', displayName: 'Sep 2025' },
-    { year: '2025', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2025', displayName: 'Aug 2025' },
-    { year: '2025', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2025', displayName: 'Jul 2025' },
-    { year: '2025', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2025', displayName: 'Jun 2025' },
-    { year: '2025', month: 'May', baseName: 'Swabhimani_Sahakari_May_2025', displayName: 'May 2025' },
-    { year: '2025', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2025', displayName: 'Apr 2025' },
-    { year: '2025', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2025', displayName: 'Mar 2025' },
-    { year: '2025', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2025', displayName: 'Feb 2025' },
-    { year: '2025', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2025', displayName: 'Jan 2025' },
-    { year: '2024', month: 'Dec', baseName: 'Swabhimani_Sahakari_Dec_2024', displayName: 'Dec 2024' },
-    { year: '2024', month: 'Nov', baseName: 'Swabhimani_Sahakari_Nov_2024', displayName: 'Nov 2024' },
-    { year: '2024', month: 'Oct', baseName: 'Swabhimani_Sahakari_Oct_2024', displayName: 'Oct 2024' },
-    { year: '2024', month: 'Sep', baseName: 'Swabhimani_Sahakari_Sep_2024', displayName: 'Sep 2024' },
-    { year: '2024', month: 'Aug', baseName: 'Swabhimani_Sahakari_Aug_2024', displayName: 'Aug 2024' },
-    { year: '2024', month: 'Jul', baseName: 'Swabhimani_Sahakari_Jul_2024', displayName: 'Jul 2024' },
-    { year: '2024', month: 'Jun', baseName: 'Swabhimani_Sahakari_Jun_2024', displayName: 'Jun 2024' },
-    { year: '2024', month: 'May', baseName: 'Swabhimani_Sahakari_May_2024', displayName: 'May 2024' },
-    { year: '2024', month: 'Apr', baseName: 'Swabhimani_Sahakari_Apr_2024', displayName: 'Apr 2024' },
-    { year: '2024', month: 'Mar', baseName: 'Swabhimani_Sahakari_Mar_2024', displayName: 'Mar 2024' },
-    { year: '2024', month: 'Feb', baseName: 'Swabhimani_Sahakari_Feb_2024', displayName: 'Feb 2024' },
-    { year: '2024', month: 'Jan', baseName: 'Swabhimani_Sahakari_Jan_2024', displayName: 'Jan 2024' },
-  ],
-};
-
-// Asset path constructor
-const getAssetPath = (year: string, month: string, baseName: string) => {
-  if (parseInt(year, 10) >= 2026) {
-    return `/images/Swabhimani_Sahakari/2026_30/2026/${month}/${baseName}`;
-  }
-  return `/images/Swabhimani_Sahakari/2021_25/${year}/${month}/${baseName}`;
-};
+import { SAHAKARI_MAGAZINE_DATA, getAssetPath, Issue } from '@/config/magazine';
 
 interface AdaptiveImageProps {
   basePath: string;
@@ -84,7 +34,9 @@ const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ basePath, alt, className 
 };
 
 export default function MagazineSection() {
-  const processedIssues = magazineData.issues.map((issue) => {
+  const issuesList = (SAHAKARI_MAGAZINE_DATA.issues || []) as Issue[];
+
+  const processedIssues = issuesList.map((issue) => {
     const basePath = getAssetPath(issue.year, issue.month, issue.baseName);
     return {
       ...issue,
@@ -144,7 +96,7 @@ export default function MagazineSection() {
 
             <div className="p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
               <Link
-                href="/education/swabhimani-sahakari"
+                href="/education/swabhimani-sahakari/"
                 className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
               >
                 Click here for Archives
@@ -165,7 +117,7 @@ export default function MagazineSection() {
             <div className="pt-2">
               <div className="inline-block p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
                 <Link
-                  href="/education/swabhimani-sahakari"
+                  href="/education/swabhimani-sahakari/"
                   className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
                 >
                   Read more
