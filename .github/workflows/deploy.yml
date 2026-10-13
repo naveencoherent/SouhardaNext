@@ -23,16 +23,15 @@ jobs:
         run: |
           npm ci
           npm run build
-          rm -rf .next/cache
 
-      - name: 4. Deploy Application Files over SSH
+      - name: 4. Deploy build and public assets over SSH
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
-          source: ".next,public,package.json,package-lock.json,next.config.ts"
+          source: ".next,public"
           target: ${{ secrets.TARGET_PATH }}
           overwrite: true
 
@@ -45,5 +44,4 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.TARGET_PATH }}
-            npm install --production
             npx pm2 restart venus-app
