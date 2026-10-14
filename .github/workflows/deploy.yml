@@ -1,48 +1,23 @@
-name: Deploy Next.js to cPanel
+name: Deploy to cPanel via SSH
 
 on:
   push:
     branches:
-      - main
+      - main # Change to master if your primary branch is master
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 1. Checkout Code
+      - name: 🚚 Checkout Code
         uses: actions/checkout@v4
 
-      - name: 2. Setup Node.js
-        uses: actions/setup-node@v4
+      - name: 📂 Sync Files via SSH/rsync
+        uses: easingthemes/ssh-deploy@v5.0.0
         with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: 3. Install Dependencies & Build
-        run: |
-          npm ci
-          npm run build
-
-      - name: 4. Deploy Files over SSH
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          source: ".next,public,package.json,package-lock.json,next.config.ts"
-          target: ${{ secrets.TARGET_PATH }}
-          overwrite: true
-
-      - name: 5. Restart PM2 Application
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          script: |
-            cd ${{ secrets.TARGET_PATH }}
-            npm install --omit=dev
-            npx pm2 restart venus-app || npx pm2 start npm --name "venus-app" -- start
+          SSH_PRIVATE_KEY: "" # Left empty as you use password auth
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          TARGET: ${{ secrets.TARGET_PATH }}
+          EXCLUDE: "/node_modules/, /.next/, /.git/"
