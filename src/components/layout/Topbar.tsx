@@ -54,20 +54,20 @@ export default function Topbar() {
   }, []);
 
   return (
-    <header className="relative w-full z-50 font-sans antialiased">
+    <header className="relative w-full max-w-full overflow-x-hidden z-50 font-sans antialiased">
       {/* 1. TOP UTILITY BAR */}
       <div className="bg-[#00182E] text-white text-xs py-1.5 px-2 lg:px-6 border-b border-white/10">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
           {/* Left Utility Links */}
-          <div className="flex items-center text-[12px] font-normal tracking-wide text-white/95 overflow-x-auto py-0.5 whitespace-nowrap">
+          <div className="flex items-center text-[12px] font-normal tracking-wide text-white/95 overflow-x-auto py-0.5 whitespace-nowrap max-w-full no-scrollbar">
             <a
-  href="https://easypay.axis.bank.in/easyPay/makePayment?mid=MzQ4ODU%3D"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="hover:text-amber-300 transition-colors py-0.5 pr-3 border-r border-white/20"
->
-  {t?.topbar?.banking || 'Banking'}
-</a>
+              href="https://easypay.axis.bank.in/easyPay/makePayment?mid=MzQ4ODU%3D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-amber-300 transition-colors py-0.5 pr-3 border-r border-white/20"
+            >
+              {t?.topbar?.banking || 'Banking'}
+            </a>
             <a
               href="https://grosbeaksmartcms.com/customer/KSSF/"
               target="_blank"
@@ -92,14 +92,17 @@ export default function Topbar() {
             >
               {t?.topbar?.news || 'News'}
             </a>
+            
+            {/* Useful Links: Hidden on mobile (default), shown on medium+ screens */}
             <a
               href="https://souharda.coop/links.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-amber-300 transition px-3 border-r border-white/50"
+              className="hidden md:inline-block hover:text-amber-300 transition px-3 border-r border-white/50"
             >
               {t?.topbar?.usefullinks || 'Useful Links'}
             </a>
+
             <a
               href="https://venusconsultancy.in/souharda/Souharda_family.html"
               target="_blank"
@@ -219,7 +222,7 @@ export default function Topbar() {
             </div>
           </Link>
 
-          {/* DESKTOP NAVIGATION — Pure CSS Hover (Zero-JS Re-renders) */}
+          {/* DESKTOP NAVIGATION — Pure CSS Hover */}
           <nav className="hidden lg:flex flex-wrap items-center justify-end gap-2.5 sm:gap-4 xl:gap-6 font-bold text-xs sm:text-sm xl:text-[15px] tracking-wide text-white">
             {navItems.map((item) => {
               const hasDropdown = Boolean(item.dropdown && item.dropdown.length > 0);
