@@ -1,23 +1,27 @@
-name: Deploy to cPanel via SSH
+name: Deploy to cPanel via FTP
 
 on:
   push:
     branches:
-      - main # Change to master if your primary branch is master
+      - main
 
 jobs:
-  deploy:
+  web-deploy:
+    name: 🎉 Deploy project to cPanel
     runs-on: ubuntu-latest
     steps:
-      - name: 🚚 Checkout Code
+      - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: 📂 Sync Files via SSH/rsync
-        uses: easingthemes/ssh-deploy@v5.0.0
+      - name: 📂 Sync files via FTP
+        uses: SamKirsch/ftp-deploy-action@v4.3.5
         with:
-          SSH_PRIVATE_KEY: "" # Left empty as you use password auth
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USER }}
-          PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          TARGET: ${{ secrets.TARGET_PATH }}
-          EXCLUDE: "/node_modules/, /.next/, /.git/"
+          server: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          server-dir: /public_html/venusconsultancy.in/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.next/**
