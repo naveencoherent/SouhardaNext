@@ -54,9 +54,9 @@ export default function Topbar() {
   }, []);
 
   return (
-    <header className="relative w-full max-w-full overflow-x-hidden z-50 font-sans antialiased">
+    <header className="relative z-[9999] w-full max-w-full font-sans antialiased">
       {/* 1. TOP UTILITY BAR */}
-      <div className="bg-[#00182E] text-white text-xs py-1.5 px-2 lg:px-6 border-b border-white/10">
+      <div className="bg-[#00182E] text-white text-xs py-1.5 px-2 lg:px-6 border-b border-white/10 relative z-[9999]">
         <div className="w-full flex flex-wrap justify-between items-center gap-2">
           {/* Left Utility Links */}
           <div className="flex items-center text-[12px] font-normal tracking-wide text-white/95 overflow-x-auto py-0.5 whitespace-nowrap max-w-full no-scrollbar">
@@ -93,24 +93,19 @@ export default function Topbar() {
               {t?.topbar?.news || 'News'}
             </a>
             
-            {/* Useful Links: Hidden on mobile (default), shown on medium+ screens */}
-            <a
-              href="https://souharda.coop/links.html"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/links"
               className="hidden md:inline-block hover:text-amber-300 transition px-3 border-r border-white/50"
             >
               {t?.topbar?.usefullinks || 'Useful Links'}
-            </a>
+            </Link>
 
-            <a
-              href="https://venusconsultancy.in/souharda/Souharda_family.html"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/family"
               className="hover:text-amber-300 transition pl-3"
             >
               {t?.topbar?.family || 'Family'}
-            </a>
+            </Link>
           </div>
 
           {/* Right Utility Area */}
@@ -191,11 +186,11 @@ export default function Topbar() {
         </div>
       </div>
 
-      {/* 2. MAIN NAVBAR */}
+      {/* 2. MAIN NAVBAR - ELEVATED Z-INDEX TO OVERLAY HERO SLIDER */}
       <div
-        className={`w-full transition-all duration-300 ease-in-out border-b border-white/10 px-2 lg:px-6 ${
+        className={`w-full transition-all duration-300 ease-in-out border-b border-white/10 px-2 lg:px-6 relative z-[9999] ${
           isScrolled
-            ? 'fixed top-0 left-0 bg-[#001D38]/95 backdrop-blur-md shadow-lg border-white/20 z-50 py-3'
+            ? 'fixed top-0 left-0 bg-[#001D38]/95 backdrop-blur-md shadow-2xl border-white/20 py-3'
             : 'relative bg-gradient-to-b from-[#001D38] via-[#0A2E52] to-[#1C3E68] backdrop-blur-sm shadow-sm py-3.5'
         }`}
       >
@@ -222,8 +217,8 @@ export default function Topbar() {
             </div>
           </Link>
 
-          {/* DESKTOP NAVIGATION — Pure CSS Hover */}
-          <nav className="hidden lg:flex flex-wrap items-center justify-end gap-2.5 sm:gap-4 xl:gap-6 font-bold text-xs sm:text-sm xl:text-[15px] tracking-wide text-white">
+          {/* DESKTOP NAVIGATION */}
+          <nav className="hidden lg:flex flex-wrap items-center justify-end gap-2.5 sm:gap-4 xl:gap-6 font-bold text-xs sm:text-sm xl:text-[15px] tracking-wide text-white relative z-[9999]">
             {navItems.map((item) => {
               const hasDropdown = Boolean(item.dropdown && item.dropdown.length > 0);
 
@@ -253,9 +248,9 @@ export default function Topbar() {
                     />
                   </button>
 
-                  {/* Pure CSS Dropdown Menu */}
+                  {/* Dropdown Menu - Max Z-Index overlaying all page elements */}
                   {hasDropdown && (
-                    <div className="absolute top-full left-0 pt-2 z-[100] min-w-[240px] hidden group-hover:block">
+                    <div className="absolute top-full left-0 pt-2 z-[10000] min-w-[240px] hidden group-hover:block">
                       <div className="bg-[#001D38] border border-blue-400/30 rounded-xl shadow-2xl py-2 backdrop-blur-lg overflow-hidden divide-y divide-blue-800/40">
                         {item.dropdown!.map((subItem) => (
                           <Link
@@ -294,7 +289,7 @@ export default function Topbar() {
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="lg:hidden overflow-hidden bg-[#00182E] border-t border-white/10 mt-3 rounded-b-xl"
+              className="lg:hidden overflow-hidden bg-[#00182E] border-t border-white/10 mt-3 rounded-b-xl relative z-[10000]"
             >
               <div className="flex flex-col p-4 gap-3 text-white text-sm font-bold">
                 {navItems.map((item) => {
