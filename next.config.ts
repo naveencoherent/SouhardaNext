@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // Keeps heavy native node modules out of serverless bundle limits
+  serverExternalPackages: [
+    "@sparticuz/chromium",
+    "puppeteer-core",
+    "sharp",
+    "@prisma/client",
+    "prisma",
+    "pdfkit",
+    "canvas",
+  ],
 };
 
 export default nextConfig;

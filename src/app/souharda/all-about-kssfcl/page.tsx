@@ -20,21 +20,15 @@ import {
   RefreshCw, 
   Building2, 
   Info,
-  FileText,
-  Download,
   ExternalLink,
   AlertCircle,
   Search,
   Eye,
   X,
   Calendar,
-  MapPin,
-  Phone,
-  Mail,
-  ChevronRight,
   FolderOpen
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 type TabType = 'training' | 'supervision' | 'contact' | 'law';
 
@@ -204,22 +198,21 @@ const GBM_GROUPS: GBMGroup[] = [
   }
 ];
 
-// Animation variants
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    filter: 'blur(0px)',
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
-  }
-};
-
-const staggerContainer = {
+// Typed Animation Variants (Defined outside the component)
+const staggerContainer: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: { staggerChildren: 0.12, delayChildren: 0.05 }
+  }
+};
+
+const fadeInUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } 
   }
 };
 
@@ -230,41 +223,6 @@ export default function AllAboutKSSFCLPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeGroupModal, setActiveGroupModal] = useState<GBMGroup | null>(null);
   const [activePdfModal, setActivePdfModal] = useState<{ title: string; url: string } | null>(null);
-
-  const divisionalOffices: DivisionalOffice[] = [
-    {
-      name: 'Bengaluru',
-      slug: 'bengaluru',
-      image: '/images/divOffice/bangaluru.webp',
-      address: '“Souharda Sahakari Soudha”, No.68, Ground Floor, Between 17th & 18th Cross, Margosa Road, Malleswaram, Bengaluru - 560 055',
-      phone: '080-23525546',
-      email: 'bgudo@souharda.coop'
-    },
-    {
-      name: 'Belagavi',
-      slug: 'belagavi',
-      image: '/images/divOffice/belagaavi.webp',
-      address: '#1119/B, Industrial Area, Autonagar, Belagavi - 590016',
-      phone: '0831-2401551',
-      email: 'dobgm@souharda.coop'
-    },
-    {
-      name: 'Mysuru',
-      slug: 'mysuru',
-      image: '/images/divOffice/mysuru.webp',
-      address: 'F-13, Shankara Matha Road, Khille Mohalla, Mysuru - 570004',
-      phone: '0821-2332299',
-      email: 'domysuru@souharda.coop'
-    },
-    {
-      name: 'Kalaburagi',
-      slug: 'kalaburagi',
-      image: '/images/divOffice/Kalburgi.webp',
-      address: 'Site No: 2284, Near CADA, Dhariyapur Kotanur, Kalaburagi - 585102',
-      phone: '08472-270222',
-      email: 'doklb@souharda.coop'
-    }
-  ];
 
   // Filtered Groups
   const filteredGroups = useMemo(() => {
@@ -286,7 +244,6 @@ export default function AllAboutKSSFCLPage() {
         backgroundPosition: '0 0'
       }}
     >
-      
       {/* ---------------- 1. HERO HEADER ---------------- */}
       <PageHero 
         themeColor="blue"
@@ -687,7 +644,8 @@ export default function AllAboutKSSFCLPage() {
 
         </div>
       </motion.section>
-{/* ---------------- 5. GENERAL BODY MEETING (GBM) REPOSITORY ---------------- */}
+
+      {/* ---------------- 5. GENERAL BODY MEETING (GBM) REPOSITORY ---------------- */}
       <motion.section 
         initial="hidden"
         whileInView="visible"
@@ -750,7 +708,7 @@ export default function AllAboutKSSFCLPage() {
             />
           </motion.div>
 
-          {/* Meeting Cards Grid - Dark Blue Folder Icon on Hover */}
+          {/* Meeting Cards Grid */}
           <motion.div variants={fadeInUp} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredGroups.length > 0 ? (
               filteredGroups.map((group) => (
@@ -760,40 +718,33 @@ export default function AllAboutKSSFCLPage() {
                   className="bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200/80 p-5 hover:border-[#C68A16] hover:shadow-lg transition cursor-pointer flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-3.5">
-                    {/* Folder Icon Container - Dark Blue (#001D38) on Hover */}
                     <div className="p-3 rounded-xl bg-amber-50 text-[#C68A16] group-hover:bg-[#001D38] group-hover:text-white transition shrink-0">
                       <FolderOpen className="w-6 h-6" />
                     </div>
 
                     <div className="space-y-0.5">
-                      {/* Year Badge */}
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[#C68A16] bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 mb-1">
                         <Calendar className="w-3 h-3 text-[#C68A16]" /> {group.year}
                       </span>
 
-                      {/* Card Title - Electric Blue */}
                       <h3 className="text-sm sm:text-base font-bold text-[#1D61FF] group-hover:text-blue-700 transition leading-snug">
                         {group.title}
                       </h3>
 
-                      {/* Subtitle */}
                       <p className="text-[11px] text-slate-500 font-medium mt-0.5">
                         {group.subDocs.length} Related Statutory Documents
                       </p>
                     </div>
                   </div>
 
-                  {/* Right Arrow - Gold Hover Box */}
-                  <div className="p-2 rounded-lg bg-slate-100 group-hover:bg-amber-100 text-slate-400 group-hover:text-[#C68A16] transition shrink-0 ml-2">
-                    <ChevronRight className="w-5 h-5" />
+                  <div className="p-2 text-slate-400 group-hover:text-[#C68A16] transition shrink-0">
+                    <Eye className="w-5 h-5" />
                   </div>
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center py-12 bg-white/80 rounded-2xl border border-slate-200">
-                <p className="text-slate-500 text-sm font-semibold">
-                  No matching General Body Meeting found for &quot;{searchQuery}&quot;.
-                </p>
+              <div className="col-span-2 text-center py-10 bg-slate-50 rounded-2xl border border-slate-200">
+                <p className="text-sm text-slate-500 font-medium">No General Body Meetings found matching &quot;{searchQuery}&quot;</p>
               </div>
             )}
           </motion.div>
@@ -801,405 +752,97 @@ export default function AllAboutKSSFCLPage() {
         </div>
       </motion.section>
 
-      {/* ---------------- 6. DIVISIONAL OFFICES ---------------- */}
-      <motion.section 
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
-        variants={staggerContainer}
-        className="py-20 border-t border-slate-200/80 bg-white/70 backdrop-blur-sm"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
-          <motion.div variants={fadeInUp} className="text-center space-y-2">
-            <span className="text-[11px] font-bold text-[#2B3E6B] uppercase tracking-widest block">
-              STATEWIDE REGIONAL NETWORK
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#C68A16] uppercase tracking-tight">
-              Our Divisional Offices
-            </h2>
-            <div className="w-16 h-1 bg-[#C68A16] mx-auto rounded-full" />
-          </motion.div>
-
-          <motion.div variants={staggerContainer} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {divisionalOffices.map((office) => (
-              <motion.div 
-                key={office.slug}
-                variants={fadeInUp}
-                whileHover={{ y: -6 }}
-                className="group bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="relative h-44 w-full bg-slate-200 overflow-hidden">
-                    <Image
-                      src={office.image}
-                      alt={`${office.name} Divisional Office`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-
-                  <div className="p-5 space-y-4">
-                    <h3 className="text-xl font-extrabold text-[#001D38] group-hover:text-[#C68A16] transition-colors border-b border-slate-100 pb-2">
-                      {office.name}
-                    </h3>
-
-                    <div className="space-y-3 text-xs sm:text-sm text-slate-800">
-                      <div className="flex items-start gap-2.5">
-                        <MapPin className="w-4 h-4 text-[#C68A16] shrink-0 mt-0.5" />
-                        <span className="font-semibold text-slate-800 leading-snug">
-                          {office.address}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2.5">
-                        <Phone className="w-4 h-4 text-[#2B3E6B] shrink-0" />
-                        <span className="font-bold text-[#001D38]">
-                          {office.phone}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2.5">
-                        <Mail className="w-4 h-4 text-[#2B3E6B] shrink-0" />
-                        <a 
-                          href={`mailto:${office.email}`} 
-                          className="font-semibold text-[#2B3E6B] hover:text-[#C68A16] transition-colors truncate"
-                        >
-                          {office.email}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-        </div>
-      </motion.section>
-
-{/* ---------------- SUB-DOCUMENT SELECTION MODAL ---------------- */}
+      {/* ---------------- 6. MODALS ---------------- */}
       <AnimatePresence>
+        {/* Document Group Modal */}
         {activeGroupModal && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-5 border border-slate-200 relative"
             >
-              <div className="bg-[#001D38] text-white px-6 py-4 flex items-center justify-between">
+              <div className="flex items-start justify-between pr-6">
                 <div>
-                  <h3 className="text-base sm:text-lg font-bold text-amber-400">
-                    {activeGroupModal.title}
-                  </h3>
-                  <p className="text-xs text-slate-300">
-                    Select a document or paper notification scan to view
-                  </p>
+                  <span className="text-[10px] font-bold text-[#C68A16] uppercase tracking-wider bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
+                    {activeGroupModal.year} Repository
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900 mt-2">{activeGroupModal.title}</h3>
                 </div>
                 <button
                   onClick={() => setActiveGroupModal(null)}
-                  className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition"
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition absolute top-5 right-5"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="p-6 space-y-3 max-h-[60vh] overflow-y-auto">
-                {activeGroupModal.subDocs.map((doc, idx) => {
-                  const isImage = /\.(jpg|jpeg|png|webp)$/i.test(doc.url);
-                  return (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-amber-50/50 hover:border-amber-300 transition flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <FileText className={`w-5 h-5 shrink-0 ${isImage ? 'text-amber-600' : 'text-red-600'}`} />
-                        <span className="text-xs sm:text-sm font-bold text-slate-800">
-                          {doc.label}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2 self-end sm:self-auto">
-                        <button
-                          onClick={() => {
-                            setActivePdfModal({ title: doc.label, url: doc.url });
-                            setActiveGroupModal(null);
-                          }}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#2B3E6B] text-white hover:bg-blue-900 transition text-xs font-bold shadow-sm"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                          <span>{isImage ? 'View Scan' : 'Read Online'}</span>
-                        </button>
-
-                        <a
-                          href={doc.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-[#C68A16] hover:bg-amber-500/20 transition text-xs font-bold border border-amber-300/60"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          <span>Open File</span>
-                        </a>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                {activeGroupModal.subDocs.map((doc, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setActiveGroupModal(null);
+                      setActivePdfModal({ title: doc.label, url: doc.url });
+                    }}
+                    className="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-300 transition flex items-center justify-between group"
+                  >
+                    <span className="text-xs sm:text-sm font-semibold text-slate-700 group-hover:text-slate-900">{doc.label}</span>
+                    <Eye className="w-4 h-4 text-slate-400 group-hover:text-[#C68A16] shrink-0" />
+                  </button>
+                ))}
               </div>
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
 
-      {/* ---------------- HYBRID IN-PAGE VIEWER MODAL (PDF + IMAGE SUPPORT) ---------------- */}
-      <AnimatePresence>
+        {/* PDF Viewer Modal */}
         {activePdfModal && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 lg:p-10 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md"
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-2xl max-w-5xl w-full h-[85vh] shadow-2xl flex flex-col overflow-hidden relative"
             >
-              {/* Header */}
-              <div className="bg-[#001D38] text-white px-6 py-4 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/20 text-red-400">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-amber-400">
-                      {activePdfModal.title}
-                    </h3>
-                  </div>
-                </div>
-
+              <div className="p-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+                <h3 className="text-sm sm:text-base font-bold truncate pr-4">{activePdfModal.title}</h3>
                 <div className="flex items-center gap-2">
                   <a
                     href={activePdfModal.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#C68A16] hover:bg-amber-600 text-slate-950 px-3.5 py-1.5 rounded-lg transition"
+                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition text-xs flex items-center gap-1.5"
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Open File Direct</span>
+                    <ExternalLink className="w-4 h-4" />
+                    <span className="hidden sm:inline">Open in Tab</span>
                   </a>
-
                   <button
                     onClick={() => setActivePdfModal(null)}
-                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition ml-2"
+                    className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
               </div>
 
-              {/* Dynamic Frame: Render Image Scan or PDF Frame */}
-              <div className="flex-1 bg-slate-900 overflow-auto p-4 flex items-center justify-center relative">
-                {/\.(jpg|jpeg|png|webp)$/i.test(activePdfModal.url) ? (
-                  /* Image Scan Render */
-                  <div className="max-w-full max-h-full flex flex-col items-center justify-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={activePdfModal.url}
-                      alt={activePdfModal.title}
-                      className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-lg border border-slate-700"
-                      onError={(e) => {
-                        // Fallback UI if live URL is missing on remote server
-                        e.currentTarget.style.display = 'none';
-                        const parent = e.currentTarget.parentElement;
-                        if (parent) {
-                          parent.innerHTML = `
-                            <div class="text-center p-8 bg-slate-800 rounded-xl border border-slate-700 text-slate-300 max-w-md">
-                              <p class="text-amber-400 font-bold mb-2">Notice Scan Pending Upload</p>
-                              <p class="text-xs text-slate-400">The remote image path is not available on souharda.coop. This file will render automatically once placed in your local <code>public/documents/gbm/</code> directory.</p>
-                            </div>
-                          `;
-                        }
-                      }}
-                    />
-                  </div>
-                ) : (
-                  /* PDF Document Frame */
-                  <iframe
-                    src={
-                      activePdfModal.url.startsWith('http')
-                        ? `https://docs.google.com/gview?url=${encodeURIComponent(activePdfModal.url)}&embedded=true`
-                        : activePdfModal.url
-                    }
-                    className="w-full h-full border-none bg-white"
-                    title={activePdfModal.title}
-                  />
-                )}
-              </div>
-
-              {/* Footer */}
-              <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-xs text-slate-500 shrink-0">
-                <span>Karnataka State Souharda Federal Co-operative Ltd.</span>
-                <button
-                  onClick={() => setActivePdfModal(null)}
-                  className="font-bold text-slate-700 hover:text-slate-900"
-                >
-                  Close Viewer
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {/* ---------------- IN-PAGE PDF VIEWER MODAL ---------------- */}
-      <AnimatePresence>
-        {activePdfModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 lg:p-10 flex items-center justify-center"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden"
-            >
-              <div className="bg-[#001D38] text-white px-6 py-4 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/20 text-red-400">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-amber-400">
-                      {activePdfModal.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <a
-                    href={activePdfModal.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#C68A16] hover:bg-amber-600 text-slate-950 px-3.5 py-1.5 rounded-lg transition"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Open in New Tab</span>
-                  </a>
-
-                  <button
-                    onClick={() => setActivePdfModal(null)}
-                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition ml-2"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* PDF Frame */}
-              <div className="flex-1 bg-slate-100 relative">
+              <div className="flex-1 bg-slate-100">
                 <iframe
-                  src={
-                    activePdfModal.url.startsWith('http')
-                      ? `https://docs.google.com/gview?url=${encodeURIComponent(activePdfModal.url)}&embedded=true`
-                      : activePdfModal.url
-                  }
+                  src={activePdfModal.url}
                   className="w-full h-full border-none"
                   title={activePdfModal.title}
                 />
-              </div>
-
-              <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-xs text-slate-500 shrink-0">
-                <span>Karnataka State Souharda Federal Co-operative Ltd.</span>
-                <button
-                  onClick={() => setActivePdfModal(null)}
-                  className="font-bold text-slate-700 hover:text-slate-900"
-                >
-                  Close Viewer
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ---------------- IN-PAGE PDF VIEWER MODAL ---------------- */}
-      <AnimatePresence>
-        {activePdfModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm p-4 sm:p-6 lg:p-10 flex items-center justify-center"
-          >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden"
-            >
-              <div className="bg-[#001D38] text-white px-6 py-4 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/20 text-red-400">
-                    <FileText className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-amber-400">
-                      {activePdfModal.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <a
-                    href={activePdfModal.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#C68A16] hover:bg-amber-600 text-slate-950 px-3.5 py-1.5 rounded-lg transition"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Open in New Tab</span>
-                  </a>
-
-                  <button
-                    onClick={() => setActivePdfModal(null)}
-                    className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition ml-2"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Hybrid Embed Frame */}
-              <div className="flex-1 bg-slate-100 relative">
-                <iframe
-                  src={
-                    activePdfModal.url.startsWith('http')
-                      ? `https://docs.google.com/gview?url=${encodeURIComponent(activePdfModal.url)}&embedded=true`
-                      : activePdfModal.url
-                  }
-                  className="w-full h-full border-none"
-                  title={activePdfModal.title}
-                />
-              </div>
-
-              <div className="bg-slate-50 border-t border-slate-200 px-6 py-3 flex items-center justify-between text-xs text-slate-500 shrink-0">
-                <span>Karnataka State Souharda Federal Co-operative Ltd.</span>
-                <button
-                  onClick={() => setActivePdfModal(null)}
-                  className="font-bold text-slate-700 hover:text-slate-900"
-                >
-                  Close Viewer
-                </button>
               </div>
             </motion.div>
           </motion.div>

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DIRECTORS_DATA } from '@/data/souhardaKnowledge';
 
+// Explicitly mark route as dynamic for serverless deployment
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const query = searchParams.get('q')?.toLowerCase().trim() || '';
