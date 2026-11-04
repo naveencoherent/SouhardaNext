@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { X, Send, Bot } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import directorsData from '@/data/directorsData';
+import { directorsData } from '@/data/directorsData';
 
 interface DirectorItem {
   name: string;
@@ -26,7 +26,6 @@ export default function SouhardaBot() {
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
     setLoading(true);
 
-    // Local search in directorsData
     const query = userMsg.toLowerCase().trim();
     const matchedDirector = (directorsData as DirectorItem[]).find(
       (d: DirectorItem) =>

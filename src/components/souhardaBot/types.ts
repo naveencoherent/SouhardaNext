@@ -1,10 +1,13 @@
 export interface IntentItem {
-  keywords: string[];
-  response: string;
+  keywords?: string[];
+  response?: string;
   name?: string;
   region?: string;
   designation?: string;
   districts?: string[] | string;
+  aliases?: string[];
+  phone?: string;
+  email?: string;
   link?: string;
   category?: string;
   [key: string]: unknown;
