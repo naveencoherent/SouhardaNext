@@ -10,6 +10,11 @@ import { regulatoryIntents } from './regulatory';
 import { servicesIntents } from './services';
 import { souhardaIntents } from './souharda';
 
+export interface IntentItem {
+  keywords: string[];
+  response: string;
+}
+
 export function getSouhardaBotResponse(userQuery: string): string {
   if (!userQuery || !userQuery.trim()) return '';
 
@@ -28,7 +33,7 @@ export function getSouhardaBotResponse(userQuery: string): string {
   }
 
   // 2. Keyword/Intent Matching across all modules
-  const allIntentGroups = [
+  const allIntentGroups: IntentItem[][] = [
     greetingsIntents,
     workforceIntents,
     courtIntents,
@@ -46,8 +51,8 @@ export function getSouhardaBotResponse(userQuery: string): string {
 
   for (const group of allIntentGroups) {
     if (!group) continue;
-    const match = group.find((item) =>
-      item.keywords.some((kw) => lowerQuery.includes(kw.toLowerCase()))
+    const match = group.find((item: IntentItem) =>
+      item.keywords.some((kw: string) => lowerQuery.includes(kw.toLowerCase()))
     );
     if (match) {
       return match.response;
