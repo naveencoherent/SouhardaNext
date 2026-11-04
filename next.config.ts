@@ -1,24 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    unoptimized: true,
-  },
-  serverExternalPackages: [
-    "@sparticuz/chromium",
-    "puppeteer-core",
-    "sharp",
-    "@prisma/client",
-    "prisma",
-    "pdfkit",
-    "canvas",
-  ],
+  output: "standalone",
+  // keep your other existing config options below (e.g. serverExternalPackages)
 };
 
 export default nextConfig;
