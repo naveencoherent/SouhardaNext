@@ -3,8 +3,13 @@
   publish = ".next"
 
 [build.environment]
-  NODE_VERSION = "20.18.0"
-  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+  NODE_VERSION = "20"
+  NEXT_USE_NETLIFY_EDGE = "false"
+
+[functions]
+  # Exclude heavy static assets or node_modules from being included inside the Netlify serverless function zip
+  node_bundler = "esbuild"
+  included_files = ["!public/uploads/**", "!public/images/**"]
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
