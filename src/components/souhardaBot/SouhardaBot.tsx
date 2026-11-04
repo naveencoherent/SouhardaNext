@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { X, Send, Bot } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { directorsData } from '@/data/directorsData';
+import directorsData from '@/data/directorsData';
 
 interface DirectorItem {
   name: string;
@@ -27,7 +27,8 @@ export default function SouhardaBot() {
     setLoading(true);
 
     const query = userMsg.toLowerCase().trim();
-    const matchedDirector = (directorsData as DirectorItem[]).find(
+    const dataList = Array.isArray(directorsData) ? directorsData : [];
+    const matchedDirector = (dataList as DirectorItem[]).find(
       (d: DirectorItem) =>
         d.name?.toLowerCase().includes(query) ||
         (d.region && d.region.toLowerCase().includes(query))
