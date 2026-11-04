@@ -62,7 +62,7 @@ export default function SouhardaBot() {
         ...prev,
         { sender: 'bot', text: 'Error connecting to assistant. Please try again.' },
       ]);
-    } font-sans
+    } finally {
       setLoading(false);
     }
   };
