@@ -8,4 +8,4 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@sparticuz/chromium", "puppeteer-core", "@prisma/client", "sharp"]
+  external_node_modules = ["@prisma/client", "prisma", "sharp"]
