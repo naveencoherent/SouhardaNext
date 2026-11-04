@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import { X, Send, Bot } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-// Import ALL_DIRECTORS from directorsData instead of page component to prevent build & export errors
-import ALL_DIRECTORS from "@/data/directorsData";
+import directorsData from '@/data/directorsData';
 
 interface DirectorItem {
   name: string;
@@ -27,9 +26,9 @@ export default function SouhardaBot() {
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
     setLoading(true);
 
-    // 1. Direct local search in directorsData
     const query = userMsg.toLowerCase().trim();
-    const matchedDirector = (directorsData as DirectorItem[]).find(
+    const dataList = Array.isArray(directorsData) ? directorsData : [];
+    const matchedDirector = (dataList as DirectorItem[]).find(
       (d: DirectorItem) =>
         d.name?.toLowerCase().includes(query) ||
         (d.region && d.region.toLowerCase().includes(query))
@@ -50,7 +49,6 @@ export default function SouhardaBot() {
       return;
     }
 
-    // 2. Fallback to API endpoint
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -85,7 +83,6 @@ export default function SouhardaBot() {
 
       {isOpen && (
         <div className="w-80 sm:w-96 bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[520px]">
-          {/* Header */}
           <div className="bg-[#1e1435] text-white p-4 flex items-center justify-between border-b border-purple-900/40">
             <div className="flex items-center gap-2.5">
               <div className="p-2 bg-amber-500/20 rounded-xl border border-amber-500/30">
@@ -106,7 +103,6 @@ export default function SouhardaBot() {
             </button>
           </div>
 
-          {/* Chat Messages Area */}
           <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 text-xs">
             {messages.length === 0 && (
               <div className="text-center pt-8 px-4 space-y-2">
@@ -137,7 +133,6 @@ export default function SouhardaBot() {
             )}
           </div>
 
-          {/* Input Box */}
           <div className="p-3 bg-white border-t border-slate-200 flex gap-2">
             <input
               type="text"
