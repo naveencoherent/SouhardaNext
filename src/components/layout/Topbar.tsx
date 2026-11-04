@@ -44,10 +44,14 @@ export default function Topbar() {
     };
   }, []);
 
-  const navItems = NAV_ITEMS.map((item) => ({
-    ...item,
-    name: t?.nav?.[item.nameKey] || item.fallbackName,
-  }));
+  const navItems = NAV_ITEMS.map((item) => {
+    const navTranslation = t?.nav as Record<string, string> | undefined;
+    const name = navTranslation?.[item.nameKey] || item.fallbackName;
+    return {
+      ...item,
+      name,
+    };
+  });
 
   const toggleMobileSubmenu = useCallback((key: string) => {
     setOpenMobileSubmenu((prev) => (prev === key ? null : key));
