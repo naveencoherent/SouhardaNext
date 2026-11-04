@@ -1,27 +1,59 @@
+import { NextRequest, NextResponse } from "next/server";
 
-// Inside src/app/api/chat/route.ts
-
-async function searchDirectory(query: string) {
-  // Pass the user's search query directly to your existing internal search API
-  const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(query)}`);
-  if (!res.ok) return null;
-  return await res.json();
+export interface Director {
+  id: number | string;
+  name: string;
+  designation: string;
+  region?: string;
+  phone?: string;
+  email?: string;
+  photo?: string;
+  [key: string]: unknown;
 }
 
-export async function POST(req: NextRequest) {
-  const { message, locale } = await req.json();
-  const query = message.toLowerCase().trim();
+export const directorsData: Director[] = [
+  {
+    id: 1,
+    name: "Sri G. H. Amin",
+    designation: "President / Director",
+    region: "Bengaluru",
+    email: "info@souharda.coop",
+  },
+  {
+    id: 2,
+    name: "Sri B. H. Krishna Reddy",
+    designation: "Vice President / Director",
+    region: "Bengaluru",
+    email: "info@souharda.coop",
+  },
+  {
+    id: 3,
+    name: "Sri Sharad G. Bhat",
+    designation: "Managing Director",
+    region: "Bengaluru",
+    email: "md@souharda.coop",
+  },
+  {
+    id: 4,
+    name: "Sri K. R. Jayadev",
+    designation: "Director",
+    region: "Mysuru",
+    email: "info@souharda.coop",
+  },
+  {
+    id: 5,
+    name: "Sri Gurupadappa Nagamarapalli",
+    designation: "Director",
+    region: "Kalaburagi",
+    email: "info@souharda.coop",
+  },
+  {
+    id: 6,
+    name: "Sri Ramesh Vaidya",
+    designation: "Director",
+    region: "Belagavi",
+    email: "info@souharda.coop",
+  },
+];
 
-  // Dynamically fetch matching records from your backend
-  const searchResults = await searchDirectory(query);
-
-  if (searchResults && searchResults.length > 0) {
-    // Return formatted result dynamically
-    return NextResponse.json({
-      reply: `Found ${searchResults.length} matching entries: ${searchResults.map((item: any) => item.name).join(', ')}. Visit /souharda/directors/ for full details.`
-    });
-  }
-
-  // Fallback to static knowledge base...
-
-}
+export default directorsData;

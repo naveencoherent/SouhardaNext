@@ -1,112 +1,83 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-
-export interface Breadcrumb {
-  label: string;
-  href?: string;
-}
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 export interface ServicesHeroProps {
   title?: string;
   subtitle?: string;
-  breadcrumbs?: Breadcrumb[];
-  highlightTerm?: string;
+  badgeText?: string;
+  imageSrc?: string;
+  theme?: string;
+  locale?: 'en' | 'kn';
 }
 
 export default function ServicesHero({
-  title = 'SERVICES & SUPPORT',
-  subtitle = 'Empowering Souharda Co-operatives across Karnataka through statutory and legal excellence.',
-  breadcrumbs = [
-    { label: 'Home', href: '/' },
-    { label: 'Services' }
-  ],
-  highlightTerm = 'SERVICES',
+  title = 'Our Services',
+  subtitle = 'Empowering co-operatives across Karnataka with comprehensive support and regulatory services.',
+  badgeText = 'KSSFCL Services',
+  imageSrc,
+  theme,
+  locale = 'en',
 }: ServicesHeroProps) {
-  const renderTitle = () => {
-    if (!highlightTerm || !title.includes(highlightTerm)) {
-      return title;
-    }
-
-    const escapedTerm = highlightTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(${escapedTerm})`, 'gi');
-    const parts = title.split(regex);
-
-    return parts.map((part, index) =>
-      part.toLowerCase() === highlightTerm.toLowerCase() ? (
-        <span key={index} className="text-amber-400">
-          {part}
-        </span>
-      ) : (
-        part
-      )
-    );
-  };
-
   return (
-    <section 
-      className="relative w-full h-[180px] md:h-[220px] px-4 overflow-hidden border-b-2 border-amber-500 shadow-[0_15px_30px_rgba(0,0,0,0.35)] flex flex-col items-center justify-center text-white"
-      style={{
-        backgroundColor: '#1A0B2E',
-        backgroundImage: `
-          radial-gradient(circle at center, #3B1560 0%, #1A0B2E 85%)
-        `,
-      }}
-    >
-      {/* Services Watermark / Gear Pattern Overlay */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 20V26M40 54V60M20 40H26M54 40H60M25.8 25.8L30 30M50 50L54.2 54.2M25.8 54.2L30 50M50 30L54.2 25.8' stroke='%23F59E0B' stroke-width='1.5' stroke-linecap='round'/%3E%3Ccircle cx='40' cy='40' r='10' stroke='%23F59E0B' stroke-width='1.5'/%3E%3Ccircle cx='40' cy='40' r='4' stroke='%23F59E0B' stroke-width='1.5'/%3E%3C/svg%3E")`,
-          backgroundRepeat: 'repeat',
-          backgroundSize: '45px 45px',
-        }}
-      />
+    <div className="relative bg-gradient-to-b from-[#001D38] via-[#0A2E52] to-[#1C3E68] text-white pt-12 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden shadow-md">
+      {/* Background Glow */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-amber-400 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-blue-400 blur-3xl" />
+      </div>
 
-      {/* Main Content Container */}
-      <div className="max-w-4xl w-full mx-auto relative z-10 text-center flex flex-col items-center justify-center">
-
-        {/* Original Dark Breadcrumb Pill Navigation */}
-        {breadcrumbs.length > 0 && (
-          <nav 
-            aria-label="Breadcrumb"
-            className="inline-flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/80 px-3 py-0.5 rounded-full text-[10px] font-semibold text-slate-300 mb-2 shadow-xs"
+      <div className="max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="flex-1 text-center md:text-left space-y-4">
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 text-xs font-bold uppercase tracking-wider"
           >
-            {breadcrumbs.map((crumb, idx) => (
-              <React.Fragment key={idx}>
-                {crumb.href ? (
-                  <Link href={crumb.href} className="hover:text-amber-400 transition-colors">
-                    {crumb.label}
-                  </Link>
-                ) : (
-                  <span className="text-amber-400 font-bold" aria-current="page">
-                    {crumb.label}
-                  </span>
-                )}
-                {idx < breadcrumbs.length - 1 && (
-                  <span className="text-slate-500 font-bold" aria-hidden="true">&gt;</span>
-                )}
-              </React.Fragment>
-            ))}
-          </nav>
-        )}
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{badgeText}</span>
+          </motion.div>
 
-        {/* Center Title */}
-        <h1 className="text-xl sm:text-3xl md:text-4xl font-black tracking-wider text-white uppercase mb-1.5 leading-none overflow-hidden text-ellipsis w-full text-center">
-          {renderTitle()}
-        </h1>
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-kannada"
+          >
+            {title}
+          </motion.h1>
 
-        {/* Gold Accent Line */}
-        <div className="w-10 h-0.5 bg-amber-400 rounded-full mb-2 shrink-0" />
-
-        {/* Subtitle */}
-        {subtitle && (
-          <p className="max-w-xl text-purple-100/90 text-xs font-normal leading-normal line-clamp-1 text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="max-w-2xl text-sm sm:text-base text-slate-200 leading-relaxed font-medium"
+          >
             {subtitle}
-          </p>
+          </motion.p>
+        </div>
+
+        {imageSrc && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="relative w-48 h-48 sm:w-64 sm:h-64 shrink-0 rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
+          >
+            <Image
+              src={imageSrc}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </motion.div>
         )}
       </div>
-    </section>
+    </div>
   );
 }

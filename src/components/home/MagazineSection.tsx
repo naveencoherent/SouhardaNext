@@ -1,172 +1,55 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { SAHAKARI_MAGAZINE_DATA, getAssetPath, Issue } from '@/config/magazine';
+import Image from 'next/image';
+import { BookOpen, Download } from 'lucide-react';
 
-interface AdaptiveImageProps {
-  basePath: string;
-  alt: string;
-  className?: string;
-}
-
-// Auto-fallback image handling (.webp -> .jpg -> .JPG -> .png)
-const AdaptiveImage: React.FC<AdaptiveImageProps> = ({ basePath, alt, className }) => {
-  const extensions = ['.webp', '.jpg', '.JPG', '.png'];
-
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>, index: number) => {
+export default function MagazineSection() {
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     const target = e.currentTarget;
-    if (index + 1 < extensions.length) {
-      target.src = `${basePath}${extensions[index + 1]}`;
-      target.onerror = (newEvt) => handleError(newEvt, index + 1);
-    }
+    target.style.display = 'none';
   };
 
   return (
-    /* eslint-disable-next-line @next/next/no-img-element */
-    <img
-      src={`${basePath}${extensions[0]}`}
-      alt={alt}
-      className={className}
-      onError={(e) => handleError(e, 0)}
-    />
-  );
-};
-
-export default function MagazineSection() {
-  const issuesList = (SAHAKARI_MAGAZINE_DATA.issues || []) as Issue[];
-
-  const processedIssues = issuesList.map((issue) => {
-    const basePath = getAssetPath(issue.year, issue.month, issue.baseName);
-    return {
-      ...issue,
-      basePath,
-      pdf: `${basePath}.pdf`,
-    };
-  });
-
-  const latestTwoIssues = processedIssues.slice(0, 2);
-  const infiniteIssues = [...processedIssues, ...processedIssues];
-
-  return (
-    <section
-      id="sahakari"
-      className="relative bg-cover bg-center bg-no-repeat text-white py-12 px-4 sm:px-6 lg:px-8 overflow-hidden"
-      style={{ backgroundImage: `url('/images/Swabhimani_Sahakari/sahakari.jpg')` }}
-    >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto space-y-10">
-        <p className="text-center text-sm sm:text-base text-emerald-100 max-w-4xl mx-auto font-medium leading-relaxed drop-shadow">
-          Welcome to the official offline magazine of KSSFCL — your go-to source for everything happening within our organization. Our magazine aims to keep you informed and engaged, showcasing the exceptional work of our employees, sharing important updates, and fostering a sense of community among our members.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          {/* Main Top 2 Latest Issues Container */}
-          <div className="md:col-span-6 flex flex-col items-center space-y-6">
-            <div className="grid grid-cols-2 gap-4 max-w-md sm:max-w-lg w-full">
-              {latestTwoIssues.map((issue, idx) => (
-                <div key={issue.baseName} className="flex flex-col items-center space-y-2">
-                  <a
-                    href={issue.pdf}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full rounded-2xl shadow-xl overflow-hidden border border-white/20 hover:scale-105 transition-transform duration-300 relative group"
-                  >
-                    <AdaptiveImage
-                      basePath={issue.basePath}
-                      alt={`Swabhimani Sahakari ${issue.displayName}`}
-                      className="w-full h-auto object-cover rounded-2xl"
-                    />
-
-                    {idx === 0 && (
-                      <span className="absolute top-2 left-2 bg-amber-400 text-black text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md">
-                        Latest
-                      </span>
-                    )}
-                  </a>
-
-                  {/* Dynamic Tag Line */}
-                  <span className="text-xs sm:text-sm font-semibold text-amber-300 bg-black/40 px-3 py-1 rounded-full border border-amber-400/30 backdrop-blur-sm shadow-sm text-center">
-                    {issue.displayName} Edition
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
-              <Link
-                href="/education/swabhimani-sahakari/"
-                className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
-              >
-                Click here for Archives
-              </Link>
-            </div>
+    <section className="py-12 bg-white border-t border-slate-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
+            <BookOpen className="w-5 h-5" />
           </div>
-
-          <div className="md:col-span-6 text-center md:text-left space-y-4">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight drop-shadow-md">
-              <span className="text-white">ಸ್ವಾಭಿಮಾನಿ </span>
-              <span className="text-amber-400">ಸಹಕಾರಿ</span>
-            </h2>
-
-            <p className="text-emerald-100 text-sm sm:text-base leading-relaxed max-w-lg font-medium drop-shadow">
-              ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಚಳುವಳಿಯ ಅಭಿವೃದ್ಧಿಗೆ ಮೀಸಲಾಗಿರುವ ಏಕೈಕ ಮಾಸಪತ್ರಿಕೆ.
-            </p>
-
-            <div className="pt-2">
-              <div className="inline-block p-2 rounded-2xl bg-black/25 backdrop-blur-md border border-white/10 shadow-lg">
-                <Link
-                  href="/education/swabhimani-sahakari/"
-                  className="inline-block border border-amber-400 text-amber-300 hover:bg-amber-400 hover:text-black font-semibold px-6 py-2 rounded-lg transition-all duration-200 text-sm"
-                >
-                  Read more
-                </Link>
-              </div>
-            </div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-900">Sahakari Belaku Magazine</h2>
+            <p className="text-xs text-slate-500">Monthly publication of KSSFCL</p>
           </div>
         </div>
 
-        {/* Marquee Slider driven by JSON */}
-        <div className="pt-6 border-t border-white/20 overflow-hidden group">
-          <div className="flex gap-6 animate-marquee group-hover:[animation-play-state:paused] w-max">
-            {infiniteIssues.map((item, index) => (
-              <a
-                key={`${item.baseName}-${index}`}
-                href={item.pdf}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 w-36 text-center group/card space-y-2"
-              >
-                <div className="rounded-2xl overflow-hidden shadow-lg border border-white/20 group-hover/card:border-amber-400 group-hover/card:scale-105 transition-all duration-300 bg-black/20">
-                  <AdaptiveImage
-                    basePath={item.basePath}
-                    alt={`Swabhimani Sahakari ${item.displayName}`}
-                    className="w-full h-44 object-cover rounded-2xl"
-                  />
-                </div>
-                <p className="text-xs font-semibold text-emerald-100 group-hover/card:text-amber-300 transition-colors drop-shadow">
-                  {item.displayName}
-                </p>
-              </a>
-            ))}
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <h3 className="text-base font-bold text-slate-900">Latest Edition - November 2026</h3>
+            <p className="text-xs text-slate-600 max-w-xl">
+              Read comprehensive reports, policy analysis, and legal updates concerning Karnataka Souharda Sahakari Act.
+            </p>
           </div>
+
+          <div className="relative w-32 h-44 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-200">
+            <Image
+              src="/images/magazine-cover.jpg"
+              alt="Sahakari Belaku Magazine"
+              fill
+              className="object-cover"
+              onError={handleImageError}
+            />
+          </div>
+
+          <a
+            href="/downloads/magazine-latest.pdf"
+            download
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs transition-all shadow-sm"
+          >
+            <Download className="w-4 h-4" /> Download PDF
+          </a>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes marquee {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee 50s linear infinite;
-        }
-      `}</style>
     </section>
   );
 }

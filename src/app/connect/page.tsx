@@ -5,13 +5,13 @@ import ConnectHero from '@/components/common/ConnectHero';
 import { Mail, Phone, MapPin, Send, MessageSquare, Clock } from 'lucide-react';
 
 export default function ConnectPage() {
-  const [activeTab, setActiveTab] = useState('general');
+  const [activeTab, setActiveTab] = useState<string>('general');
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-800">
       <ConnectHero 
         activeTab={activeTab} 
-        onTabChange={(tab) => setActiveTab(tab)} 
+        onTabChange={(tab: string) => setActiveTab(tab)} 
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">

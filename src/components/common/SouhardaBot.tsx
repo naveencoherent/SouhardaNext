@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { X, Send, Bot } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 // Import ALL_DIRECTORS from directorsData instead of page component to prevent build & export errors
-import { directorsData } from '@/data/directorsData';
+import ALL_DIRECTORS from "@/data/directorsData";
 
 interface DirectorItem {
   name: string;
