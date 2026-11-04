@@ -1,3 +1,4 @@
+
 // Inside src/app/api/chat/route.ts
 
 async function searchDirectory(query: string) {
@@ -22,4 +23,5 @@ export async function POST(req: NextRequest) {
   }
 
   // Fallback to static knowledge base...
+
 }

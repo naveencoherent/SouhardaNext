@@ -1,9 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MessageSquare, X, Send, Bot } from 'lucide-react';
+import { X, Send, Bot } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { ALL_DIRECTORS } from '@/app/souharda/directors/page';
+// Import ALL_DIRECTORS from directorsData instead of page component to prevent build & export errors
+import { directorsData } from '@/data/directorsData';
+
+interface DirectorItem {
+  name: string;
+  designation?: string;
+  region?: string;
+  [key: string]: unknown;
+}
 
 export default function SouhardaBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,24 +27,30 @@ export default function SouhardaBot() {
     setMessages((prev) => [...prev, { sender: 'user', text: userMsg }]);
     setLoading(true);
 
-    // 1. Direct local search in ALL_DIRECTORS first
+    // 1. Direct local search in directorsData
     const query = userMsg.toLowerCase().trim();
-    const matchedDirector = ALL_DIRECTORS.find((d) =>
-      d.name.toLowerCase().includes(query) ||
-      (d.region && d.region.toLowerCase().includes(query))
+    const matchedDirector = (directorsData as DirectorItem[]).find(
+      (d: DirectorItem) =>
+        d.name?.toLowerCase().includes(query) ||
+        (d.region && d.region.toLowerCase().includes(query))
     );
 
     if (matchedDirector) {
-      const reply = locale === 'kn'
-        ? `${matchedDirector.name} ಅವರು ${matchedDirector.designation} (${matchedDirector.region || 'KSSFCL'}) ಆಗಿ ಸೇವೆ ಸಲ್ಲಿಸುತ್ತಿದ್ದಾರೆ. ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ /souharda/directors/ ಗೆ ಭೇಟಿ ನೀಡಿ.`
-        : `${matchedDirector.name} serves as ${matchedDirector.designation} (${matchedDirector.region || 'KSSFCL'} Region). Visit /souharda/directors/ for full details.`;
+      const reply =
+        locale === 'kn'
+          ? `${matchedDirector.name} ಅವರು ${matchedDirector.designation || 'ನಿರ್ದೇಶಕರು'} (${
+              matchedDirector.region || 'KSSFCL'
+            }) ಆಗಿ ಸೇವೆ ಸಲ್ಲಿಸುತ್ತಿದ್ದಾರೆ. ಹೆಚ್ಚಿನ ವಿವರಗಳಿಗಾಗಿ /souharda/directors/ ಗೆ ಭೇಟಿ ನೀಡಿ.`
+          : `${matchedDirector.name} serves as ${matchedDirector.designation || 'Director'} (${
+              matchedDirector.region || 'KSSFCL'
+            } Region). Visit /souharda/directors/ for full details.`;
 
       setMessages((prev) => [...prev, { sender: 'bot', text: reply }]);
       setLoading(false);
       return;
     }
 
-    // 2. Fallback to API endpoint if not a direct match
+    // 2. Fallback to API endpoint
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
@@ -84,8 +98,8 @@ export default function SouhardaBot() {
                 <p className="text-[10px] text-slate-300">Directors, Court, Gallery & Services</p>
               </div>
             </div>
-            <button 
-              onClick={() => setIsOpen(false)} 
+            <button
+              onClick={() => setIsOpen(false)}
               className="text-slate-300 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
             >
               <X className="w-5 h-5" />
