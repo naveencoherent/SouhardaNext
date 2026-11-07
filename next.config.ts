@@ -1,11 +1,12 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'export',
-  images: {
-    unoptimized: true, // Required for static export
-  },
+  // DO NOT use output: 'export' or output: 'standalone' here.
+  // Netlify's Next.js runtime automatically handles deployment output.
   productionBrowserSourceMaps: false,
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
