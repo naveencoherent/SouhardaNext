@@ -4,6 +4,13 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  # Opt into Netlify's modern function splitting
+  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+
+[functions]
+  node_bundler = "esbuild"
+  # Exclude public assets & maps from serverless zips
+  included_files = ["!public/**", "!**/*.map"]
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
