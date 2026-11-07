@@ -1,8 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
-  // Disable source maps in production to shrink bundle sizes drastically
+  // Do NOT set output: 'standalone' here when deploying on Netlify plugin
   productionBrowserSourceMaps: false,
   images: {
     unoptimized: true,

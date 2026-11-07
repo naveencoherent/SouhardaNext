@@ -4,12 +4,14 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  NEXT_USE_NETLIFY_EDGE = "false"
+  NETLIFY_NEXT_PLUGIN_SKIP = "false"
+  # Disables generation of giant monolithic serverless handler
+  NEXT_PRIVATE_STANDALONE = "true"
 
 [functions]
-  # Exclude heavy static assets or node_modules from being included inside the Netlify serverless function zip
+  # Force esbuild and exclude map/media files from serverless functions
   node_bundler = "esbuild"
-  included_files = ["!public/uploads/**", "!public/images/**"]
+  included_files = ["!public/**", "!**/*.map"]
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
