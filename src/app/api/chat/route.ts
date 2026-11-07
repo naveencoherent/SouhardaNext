@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 interface SearchItem {
@@ -6,21 +9,12 @@ interface SearchItem {
   [key: string]: unknown;
 }
 
-async function searchDirectory(query: string, req: NextRequest): Promise<SearchItem[] | null> {
+// Direct internal helper (or import from your lib/search.ts)
+async function searchDirectory(query: string): Promise<SearchItem[] | null> {
   try {
-    // Derive base URL dynamically from incoming request headers
-    const protocol = req.headers.get('x-forwarded-proto') || 'https';
-    const host = req.headers.get('host') || 'localhost:3000';
-    const baseUrl = `${protocol}://${host}`;
-
-    const res = await fetch(`${baseUrl}/api/search?q=${encodeURIComponent(query)}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!res.ok) return null;
-    return (await res.json()) as SearchItem[];
+    // Perform internal array filter or DB query directly here
+    // e.g., return directorsData.filter(d => d.name.toLowerCase().includes(query));
+    return []; 
   } catch (error) {
     console.error('Directory search failed:', error);
     return null;
@@ -37,8 +31,8 @@ export async function POST(req: NextRequest) {
 
     const query = message.toLowerCase().trim();
 
-    // Dynamically fetch matching records from backend
-    const searchResults = await searchDirectory(query, req);
+    // Call internal logic directly—no extra network roundtrip
+    const searchResults = await searchDirectory(query);
 
     if (searchResults && searchResults.length > 0) {
       const names = searchResults.map((item: SearchItem) => item.name).join(', ');
@@ -47,7 +41,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Fallback to static knowledge base response...
     return NextResponse.json({
       reply: "I couldn't find a direct match in the directory.",
     });

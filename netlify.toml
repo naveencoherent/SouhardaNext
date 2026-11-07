@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = ".next/standalone"
 
 [build.environment]
   NODE_VERSION = "20"
@@ -8,5 +8,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  # Exclude trace maps and public assets from the serverless zip payload
   included_files = ["!public/**", "!**/*.map", "!node_modules/**/*.md"]
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
