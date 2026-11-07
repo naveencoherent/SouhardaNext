@@ -1,17 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
   NODE_VERSION = "20"
-  NETLIFY_NEXT_PLUGIN_SKIP = "false"
-  # Disables generation of giant monolithic serverless handler
-  NEXT_PRIVATE_STANDALONE = "true"
-
-[functions]
-  # Force esbuild and exclude map/media files from serverless functions
-  node_bundler = "esbuild"
-  included_files = ["!public/**", "!**/*.map"]
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"

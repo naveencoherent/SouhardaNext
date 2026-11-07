@@ -1,11 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Do NOT set output: 'standalone' here when deploying on Netlify plugin
-  productionBrowserSourceMaps: false,
+  output: 'export',
   images: {
-    unoptimized: true,
+    unoptimized: true, // Required for static export
   },
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;
