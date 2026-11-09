@@ -1,6 +1,6 @@
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-static';
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import Papa from 'papaparse';
 
 const SHEET_URLS: Record<string, string> = {
@@ -16,17 +16,15 @@ const SHEET_URLS: Record<string, string> = {
   '2017-18': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRCRsDRHD6nBfXwnp_4d0476nq17OHH7-2_fbvUY3Lk0EVHtXfS3yrDq4s6ZKjVD8Tt-IBiL6y_iMqj/pub?output=csv',
 };
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const selectedYear = searchParams.get('year') || '2026-27';
+    const selectedYear = '2026-27';
+    const targetUrl = SHEET_URLS[selectedYear];
 
-    const targetUrl = SHEET_URLS[selectedYear] || SHEET_URLS['2026-27'];
-
-    const res = await fetch(targetUrl, { cache: 'no-store' });
+    const res = await fetch(targetUrl);
 
     if (!res.ok) {
-      throw new Error(`Failed to fetch published CSV for ${selectedYear}. Status: ${res.status}`);
+      return NextResponse.json([]);
     }
 
     const csvText = await res.text();
@@ -54,13 +52,11 @@ export async function GET(request: NextRequest) {
       let rawLink = '#';
       for (const col of row) {
         let cleaned = (col || '').replace(/^"|"$/g, '').trim();
-        
-        // Ensure local public paths start with a leading slash (e.g., /pdf/filename.pdf)
+
         if (cleaned.toLowerCase().endsWith('.pdf') && !cleaned.startsWith('http') && !cleaned.startsWith('/')) {
           cleaned = `/${cleaned}`;
         }
 
-        // Match Google Photos links OR PDF document links
         if (
           cleaned.includes('photos.app.goo.gl') || 
           cleaned.includes('photos.google.com') ||
@@ -83,6 +79,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(items);
   } catch (error) {
     console.error('Published Gallery Fetch Error:', error);
-    return NextResponse.json({ error: 'Failed to fetch gallery records' }, { status: 500 });
+    return NextResponse.json([], { status: 200 });
   }
 }
