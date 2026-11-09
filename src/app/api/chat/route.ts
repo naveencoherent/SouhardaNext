@@ -3,5 +3,5 @@ import { NextResponse } from 'next/server';
 export const dynamic = 'force-static';
 
 export async function GET() {
-  return NextResponse.json({ status: 'Gallery API static placeholder' });
+  return NextResponse.json({ reply: 'Chat API static placeholder' });
 }
