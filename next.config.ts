@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // Top-level property in Next.js 16 for pruning serverless function tracing
   outputFileTracingExcludes: {
     '*': [
       'node_modules/@swc/core-win32-x64-msvc',
