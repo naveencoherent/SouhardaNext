@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  ExternalLink,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { NAV_ITEMS } from '../../config/nav';
@@ -177,6 +178,17 @@ export default function Topbar() {
               </a>
             </div>
 
+            {/* --- OLD WEBSITE LINK --- */}
+            <a
+              href="/legacy/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 font-bold px-2.5 py-1 rounded transition text-[11px]"
+            >
+              <span>Old Website</span>
+              <ExternalLink className="w-3 h-3" />
+            </a>
+
             {/* Language Toggle Button */}
             <button
               type="button"
@@ -190,7 +202,7 @@ export default function Topbar() {
         </div>
       </div>
 
-      {/* 2. MAIN NAVBAR - ELEVATED Z-INDEX TO OVERLAY HERO SLIDER */}
+      {/* 2. MAIN NAVBAR */}
       <div
         className={`w-full transition-all duration-300 ease-in-out border-b border-white/10 px-2 lg:px-6 relative z-[9999] ${
           isScrolled
@@ -252,7 +264,7 @@ export default function Topbar() {
                     />
                   </button>
 
-                  {/* Dropdown Menu - Max Z-Index overlaying all page elements */}
+                  {/* Dropdown Menu */}
                   {hasDropdown && (
                     <div className="absolute top-full left-0 pt-2 z-[10000] min-w-[240px] hidden group-hover:block">
                       <div className="bg-[#001D38] border border-blue-400/30 rounded-xl shadow-2xl py-2 backdrop-blur-lg overflow-hidden divide-y divide-blue-800/40">
@@ -296,6 +308,17 @@ export default function Topbar() {
               className="lg:hidden overflow-hidden bg-[#00182E] border-t border-white/10 mt-3 rounded-b-xl relative z-[10000]"
             >
               <div className="flex flex-col p-4 gap-3 text-white text-sm font-bold">
+                {/* Mobile Direct Old Website Link */}
+                <a
+                  href="/legacy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between py-2 px-3 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/30 text-xs font-bold"
+                >
+                  <span>Visit Old Website Portal</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+
                 {navItems.map((item) => {
                   const hasDropdown = Boolean(item.dropdown && item.dropdown.length > 0);
                   const isSubmenuOpen = openMobileSubmenu === item.nameKey;
