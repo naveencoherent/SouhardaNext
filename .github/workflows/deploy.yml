@@ -1,4 +1,4 @@
-name: Deploy Next.js to cPanel
+name: Deploy Next.js via SSH
 
 on:
   push:
@@ -16,34 +16,21 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build Next.js App
+      - name: Build Static Export
         run: npm run build
 
-      - name: Deploy files via SCP
-        uses: appleboy/scp-action@v0.1.7
+      - name: Sync Files to Server via SSH
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          host: ${{ secrets.SSH_HOST }}
+          server: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          source: "./"
-          target: ${{ secrets.TARGET_PATH }}
-
-      - name: Restart Application via PM2
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: 22
-          script: |
-            cd ${{ secrets.TARGET_PATH }}
-            npm install --production
-            npx pm2 restart venus-app || PORT=3000 npx pm2 start npm --name "venus-app" -- start
-            npx pm2 save
+          local-dir: ./out/
+          server-dir: ${{ secrets.TARGET_PATH }}
+          dangerous-clean-slate: false
