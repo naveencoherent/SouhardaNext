@@ -2,71 +2,162 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { BookOpen, Download } from 'lucide-react';
+import Link from 'next/link';
 
-const LATEST_MAGAZINE = {
-  title: 'Swabhimani Sahakari',
-  subtitle: 'Monthly publication of KSSFCL',
-  editionTitle: 'Latest Edition - November 2026',
-  description:
-    'Read comprehensive reports, policy analysis, and legal updates concerning Karnataka Souharda Sahakari Act.',
-  coverImage: '/images/Swabhimani_Sahakari/2026_30/2026/Nov/Swabhimani_Sahakari_Nov_2026.webp',
-  fallbackCover: '/images/Swabhimani_Sahakari/sahakari.jpg',
-  pdfUrl: '/images/Swabhimani_Sahakari/2026_30/2026/Nov/Swabhimani_Sahakari_Nov_2026.pdf',
+type EditionConfig = {
+  year: string;
+  month: 'Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec';
+  fullTitle: string;
 };
 
-export default function MagazineSection() {
-  const [imgSrc, setImgSrc] = useState(LATEST_MAGAZINE.coverImage);
+// ============================================================================
+// MONTHLY UPDATE: Only update these two entries each month!
+// 1. LATEST_EDITION   -> Appears on the LEFT & opens on "Read more"
+// 2. PREVIOUS_EDITION -> Appears on the RIGHT (one month older)
+// ============================================================================
+const LATEST_EDITION: EditionConfig = {
+  year: '2026',
+  month: 'Nov',
+  fullTitle: 'November 2026',
+};
+
+const PREVIOUS_EDITION: EditionConfig = {
+  year: '2026',
+  month: 'Oct',
+  fullTitle: 'October 2026',
+};
+
+function getEditionPaths({ year, month, fullTitle }: EditionConfig) {
+  const basePath = `/images/Swabhimani_Sahakari/2026_30/${year}/${month}/Swabhimani_Sahakari_${month}_${year}`;
+  return {
+    id: `${month}-${year}`,
+    label: fullTitle,
+    coverImage: `${basePath}.webp`,
+    pdfUrl: `${basePath}.pdf`,
+  };
+}
+
+const MAGAZINE_DATA = {
+  topTagline:
+    'Welcome to the official magazine of KSSFCL — your go-to source for everything happening within our organization.',
+  bgImage: '/images/Swabhimani_Sahakari/sahakari.jpg',
+  fallbackCover: '/images/Swabhimani_Sahakari/sahakari.jpg',
+  kannadaTitleFirst: 'ಸ್ವಾಭಿಮಾನಿ',
+  kannadaTitleSecond: 'ಸಹಕಾರಿ',
+  kannadaSubtitle:
+    'ಸೌಹಾರ್ದ ಸಹಕಾರಿ ಚಳುವಳಿಯ ಅಭಿವೃದ್ಧಿಗೆ ಮೀಸಲಾಗಿರುವ ಏಕೈಕ ಮಾಸಪತ್ರಿಕೆ.',
+  archiveUrl: '/education/swabhimani-sahakari/',
+};
+
+function MagazineCoverCard({
+  label,
+  coverImage,
+  pdfUrl,
+  fallbackCover,
+}: {
+  label: string;
+  coverImage: string;
+  pdfUrl: string;
+  fallbackCover: string;
+}) {
+  const [imgSrc, setImgSrc] = useState(coverImage);
 
   return (
-    <section className="py-12 bg-white border-t border-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-amber-500/10 text-amber-600">
-            <BookOpen className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-slate-900">{LATEST_MAGAZINE.title}</h2>
-            <p className="text-xs text-slate-500">{LATEST_MAGAZINE.subtitle}</p>
-          </div>
-        </div>
+    <a
+      href={pdfUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={`Read Swabhimani Sahakari - ${label}`}
+      className="group relative w-36 sm:w-44 md:w-48 aspect-[3/4] rounded-md overflow-hidden shadow-xl border border-white/20 bg-[#1f290e] transition-transform duration-300 hover:scale-[1.03]"
+    >
+      <Image
+        src={imgSrc}
+        alt={`Swabhimani Sahakari ${label}`}
+        fill
+        unoptimized
+        className="object-cover"
+        onError={() => {
+          if (imgSrc !== fallbackCover) {
+            setImgSrc(fallbackCover);
+          }
+        }}
+      />
+    </a>
+  );
+}
 
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2 text-center md:text-left">
-            <h3 className="text-base font-bold text-slate-900">{LATEST_MAGAZINE.editionTitle}</h3>
-            <p className="text-xs text-slate-600 max-w-xl">
-              {LATEST_MAGAZINE.description}
+export default function MagazineSection() {
+  const latest = getEditionPaths(LATEST_EDITION);
+  const previous = getEditionPaths(PREVIOUS_EDITION);
+  const displayedEditions = [latest, previous];
+
+  return (
+    <section
+      className="relative overflow-hidden bg-[#2b3814] bg-cover bg-center my-8"
+      style={{ backgroundImage: `url('${MAGAZINE_DATA.bgImage}')` }}
+    >
+      {/* Olive-green translucent overlay matching original banner */}
+      <div
+        className="absolute inset-0 bg-[#283612]/80 pointer-events-none"
+        aria-hidden="true"
+      />
+
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        {/* Top Centered Tagline */}
+        <p className="text-center text-white text-sm sm:text-base md:text-lg font-normal tracking-wide mb-10">
+          {MAGAZINE_DATA.topTagline}
+        </p>
+
+        {/* Two-Column Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 lg:gap-12">
+          {/* Left Column: Latest Edition (Left) + Previous Edition (Right) + Archives Button */}
+          <div className="lg:col-span-6 flex flex-col items-center space-y-6">
+            <div className="flex items-center justify-center gap-5 sm:gap-7">
+              {displayedEditions.map((edition) => (
+                <MagazineCoverCard
+                  key={edition.id}
+                  label={edition.label}
+                  coverImage={edition.coverImage}
+                  pdfUrl={edition.pdfUrl}
+                  fallbackCover={MAGAZINE_DATA.fallbackCover}
+                />
+              ))}
+            </div>
+
+            <Link
+              href={MAGAZINE_DATA.archiveUrl}
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-md border border-[#b59d3c] bg-black/15 hover:bg-[#b59d3c]/20 text-[#e8d56b] hover:text-white text-sm font-medium transition-colors"
+            >
+              Click here for Archives
+            </Link>
+          </div>
+
+          {/* Right Column: Kannada Heading, Caption & Read More Button */}
+          <div className="lg:col-span-6 flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+              <span className="text-[#1a2b3c] drop-shadow-[0_1px_1px_rgba(255,255,255,0.25)]">
+                {MAGAZINE_DATA.kannadaTitleFirst}{' '}
+              </span>
+              <span className="text-[#f4c430]">
+                {MAGAZINE_DATA.kannadaTitleSecond}
+              </span>
+            </h2>
+
+            <p className="text-sm sm:text-base text-slate-100/90 leading-relaxed max-w-md lg:pl-3">
+              {MAGAZINE_DATA.kannadaSubtitle}
             </p>
+
+            <div className="pt-2 lg:pl-3">
+              <a
+                href={latest.pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-6 py-2.5 rounded-md border border-[#b59d3c] bg-black/15 hover:bg-[#b59d3c]/20 text-[#e8d56b] hover:text-white text-sm font-medium transition-colors"
+              >
+                Read more
+              </a>
+            </div>
           </div>
-
-          <a
-            href={LATEST_MAGAZINE.pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="relative w-32 h-44 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-200"
-            title="Click to read Swabhimani Sahakari"
-          >
-            <Image
-              src={imgSrc}
-              alt={LATEST_MAGAZINE.title}
-              fill
-              unoptimized
-              className="object-cover"
-              onError={() => {
-                if (imgSrc !== LATEST_MAGAZINE.fallbackCover) {
-                  setImgSrc(LATEST_MAGAZINE.fallbackCover);
-                }
-              }}
-            />
-          </a>
-
-          <a
-            href={LATEST_MAGAZINE.pdfUrl}
-            download
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs transition-all shadow-sm"
-          >
-            <Download className="w-4 h-4" /> Download PDF
-          </a>
         </div>
       </div>
     </section>
