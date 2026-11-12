@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import PageHero from '@/components/common/PageHero';
 import { Search, Phone, MessageCircle, Mail, ArrowLeft, Briefcase, Building, MapPin, X } from 'lucide-react';
@@ -24,15 +25,28 @@ const ALL_DIRECTORS: Director[] = directorsData as Director[];
 export default function DirectorsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDirector, setSelectedDirector] = useState<Director | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Sync modal with browser/phone Back button
   useEffect(() => {
+    setMounted(true);
     const handlePopState = () => {
       setSelectedDirector(null);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
+
+  // Lock background page scroll while modal is open
+  useEffect(() => {
+    if (selectedDirector) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedDirector]);
 
   const filteredDirectors = useMemo(() => {
     return ALL_DIRECTORS.filter(
@@ -55,144 +69,156 @@ export default function DirectorsPage() {
     }
   };
 
-  return (
-    <div className="relative min-h-screen bg-white text-slate-800 pb-16">
-      
-      {/* FULL-SCREEN MODAL LAYER WHEN DIRECTOR IS CLICKED */}
-      {selectedDirector && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-          
-          {/* Dark Grey Overlay Backdrop */}
-          <div 
-            onClick={handleCloseDetail}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
-          />
+  const modalContent = selectedDirector ? (
+    <div
+      style={{ zIndex: 99999 }}
+      className="fixed inset-0 flex items-center justify-center p-3 sm:p-6"
+    >
+      {/* Dark Grey Overlay Backdrop */}
+      <div
+        onClick={handleCloseDetail}
+        className="fixed inset-0 bg-slate-950/80 backdrop-blur-md transition-opacity duration-300"
+      />
 
-          {/* Clean Light Card Modal */}
-          <div className="relative z-10 w-full max-w-4xl bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 my-auto">
+      {/* Clean Light Card Modal with Fixed Header & Internal Scroll */}
+      <div className="relative z-10 w-full max-w-4xl max-h-[92vh] bg-white rounded-3xl border border-slate-200 shadow-2xl flex flex-col overflow-hidden">
+        
+        {/* Pinned Top Close Bar - Always Visible Above Navbar */}
+        <div className="shrink-0 bg-slate-50 px-6 py-3.5 border-b border-slate-200 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={handleCloseDetail}
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-800 hover:text-sky-700 transition cursor-pointer"
+          >
+            <ArrowLeft size={16} /> Back to Directors
+          </button>
+          <button
+            type="button"
+            onClick={handleCloseDetail}
+            className="text-slate-500 hover:text-slate-800 transition p-1.5 rounded-full hover:bg-slate-200 cursor-pointer"
+            title="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Scrollable Content Area Inside Modal */}
+        <div className="overflow-y-auto flex-1">
+          {/* Dark Blue Header Banner */}
+          <div className="bg-[#102A45] text-white pt-8 pb-6 px-6 text-center flex flex-col items-center">
+            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">
+              {selectedDirector.name}
+            </h1>
+            <p className="text-slate-300 text-sm sm:text-base font-normal mt-2 mb-6">
+              {selectedDirector.designation} {selectedDirector.region ? `| ${selectedDirector.region}` : ''}
+            </p>
+
+            {/* Profile Image */}
+            <div className="relative w-36 h-40 sm:w-44 sm:h-48 rounded-2xl border-4 border-white bg-slate-200 shadow-xl overflow-hidden shrink-0">
+              <Image
+                src={selectedDirector.image}
+                alt={selectedDirector.name}
+                fill
+                unoptimized
+                className="object-cover object-top"
+              />
+            </div>
+          </div>
+
+          {/* Modal Body */}
+          <div className="pt-8 pb-10 px-6 sm:px-12 max-w-3xl mx-auto space-y-6">
             
-            {/* Sticky Top Close Bar */}
-            <div className="sticky top-0 z-20 bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={handleCloseDetail}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-700 transition cursor-pointer"
-              >
-                <ArrowLeft size={15} /> Back to Directors
-              </button>
-              <button 
-                type="button"
-                onClick={handleCloseDetail}
-                className="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-full hover:bg-slate-200 cursor-pointer"
-                title="Close"
-              >
-                <X size={18} />
-              </button>
+            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-600">
+              {selectedDirector.region && (
+                <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
+                  <MapPin size={14} className="text-amber-600" />
+                  <span>{selectedDirector.region} Region</span>
+                </div>
+              )}
+              <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
+                <Briefcase size={14} className="text-amber-600" />
+                <span>Board Member (KSSFCL)</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
+                <Building size={14} className="text-amber-600" />
+                <span>Karnataka State Souharda Federal Cooperative Ltd.</span>
+              </div>
             </div>
 
-            {/* Dark Blue Header Banner */}
-            <div className="bg-[#102A45] text-white pt-8 pb-6 px-6 text-center flex flex-col items-center">
-              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">
-                {selectedDirector.name}
-              </h1>
-              <p className="text-slate-300 text-sm sm:text-base font-normal mt-2 mb-6">
-                {selectedDirector.designation} {selectedDirector.region ? `| ${selectedDirector.region}` : ''}
-              </p>
+            {/* Dynamic Professional Journey Section */}
+            <div className="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed border-t border-slate-100 pt-6">
+              <h3 className="font-extrabold text-slate-900 text-base">Professional Journey:</h3>
+              
+              {/* Kannada Bio with HTML Line Breaks */}
+              {selectedDirector.bioKn && (
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-slate-800 text-sm leading-relaxed">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">ಕನ್ನಡ ವಿವರ</h4>
+                  <div dangerouslySetInnerHTML={{ __html: selectedDirector.bioKn }} />
+                </div>
+              )}
 
-              {/* Profile Image */}
-              <div className="relative w-36 h-40 sm:w-44 sm:h-48 rounded-2xl border-4 border-white bg-slate-200 shadow-xl overflow-hidden shrink-0">
-                <Image
-                  src={selectedDirector.image}
-                  alt={selectedDirector.name}
-                  fill
-                  unoptimized
-                  className="object-cover object-top"
+              {/* English Bio with HTML Line Breaks */}
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-slate-700 text-sm leading-relaxed">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-sky-700 mb-1">English Biography</h4>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      selectedDirector.bio ||
+                      `${selectedDirector.name} serves as ${
+                        selectedDirector.designation === 'President' || selectedDirector.designation === 'Vice - President'
+                          ? 'the'
+                          : 'a'
+                      } ${selectedDirector.designation} representing the ${
+                        selectedDirector.region || 'Karnataka'
+                      } region at Karnataka State Souharda Federal Cooperative Ltd. With dedicated leadership in cooperative governance, ${
+                        selectedDirector.name.replace(/^(Sri\.|Sri|Smt\.)\s*/, '').split(' ')[0]
+                      } plays a vital role in strengthening local cooperative institutions and driving socio-economic growth.`
+                  }}
                 />
               </div>
             </div>
 
-            {/* Modal Body */}
-            <div className="pt-8 pb-10 px-6 sm:px-12 max-w-3xl mx-auto space-y-6">
-              
-              <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-600">
-                {selectedDirector.region && (
-                  <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
-                    <MapPin size={14} className="text-amber-600" />
-                    <span>{selectedDirector.region} Region</span>
-                  </div>
-                )}
-                <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
-                  <Briefcase size={14} className="text-amber-600" />
-                  <span>Board Member (KSSFCL)</span>
-                </div>
-                <div className="flex items-center gap-1.5 bg-slate-100 px-3.5 py-1.5 rounded-full font-medium">
-                  <Building size={14} className="text-amber-600" />
-                  <span>Karnataka State Souharda Federal Cooperative Ltd.</span>
-                </div>
-              </div>
-
-              {/* Dynamic Professional Journey Section */}
-              <div className="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed border-t border-slate-100 pt-6">
-                <h3 className="font-extrabold text-slate-900 text-base">Professional Journey:</h3>
-                
-                {/* Parses <br> HTML breaks directly */}
-                {selectedDirector.bioKn && (
-                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-slate-800 text-sm leading-relaxed">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 mb-1">ಕನ್ನಡ ವಿವರ</h4>
-                    <div dangerouslySetInnerHTML={{ __html: selectedDirector.bioKn }} />
-                  </div>
-                )}
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 text-slate-700 text-sm leading-relaxed">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-sky-700 mb-1">English Biography</h4>
-                  {selectedDirector.bio || 
-                    `${selectedDirector.name} serves as ${
-                      selectedDirector.designation === 'President' || selectedDirector.designation === 'Vice - President' 
-                        ? 'the' 
-                        : 'a'
-                    } ${selectedDirector.designation} representing the ${
-                      selectedDirector.region || 'Karnataka'
-                    } region at Karnataka State Souharda Federal Cooperative Ltd. With dedicated leadership in cooperative governance, ${
-                      selectedDirector.name.replace(/^(Sri\.|Sri|Smt\.)\s*/, '').split(' ')[0]
-                    } plays a vital role in strengthening local cooperative institutions and driving socio-economic growth.`
-                  }
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center justify-center gap-4 pt-4 border-t border-slate-100">
-                {selectedDirector.phone && (
-                  <a
-                    href={`tel:${selectedDirector.phone}`}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-700 transition shadow-sm"
-                  >
-                    <Phone size={14} /> Call Director
-                  </a>
-                )}
-                {selectedDirector.whatsapp && (
-                  <a
-                    href={`https://wa.me/${selectedDirector.whatsapp}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition shadow-sm"
-                  >
-                    <MessageCircle size={14} /> WhatsApp
-                  </a>
-                )}
-                {selectedDirector.email && (
-                  <a
-                    href={`mailto:${selectedDirector.email}`}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition shadow-sm"
-                  >
-                    <Mail size={14} /> Send Email
-                  </a>
-                )}
-              </div>
-
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4 border-t border-slate-100">
+              {selectedDirector.phone && (
+                <a
+                  href={`tel:${selectedDirector.phone}`}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-700 transition shadow-sm"
+                >
+                  <Phone size={14} /> Call Director
+                </a>
+              )}
+              {selectedDirector.whatsapp && (
+                <a
+                  href={`https://wa.me/${selectedDirector.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 transition shadow-sm"
+                >
+                  <MessageCircle size={14} /> WhatsApp
+                </a>
+              )}
+              {selectedDirector.email && (
+                <a
+                  href={`mailto:${selectedDirector.email}`}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition shadow-sm"
+                >
+                  <Mail size={14} /> Send Email
+                </a>
+              )}
             </div>
+
           </div>
         </div>
-      )}
+      </div>
+    </div>
+  ) : null;
+
+  return (
+    <div className="relative min-h-screen bg-white text-slate-800 pb-16">
+      
+      {/* Render Modal via Portal so it ALWAYS sits above the site header */}
+      {mounted && modalContent ? createPortal(modalContent, document.body) : null}
 
       {/* BASE PAGE CONTENT */}
       <div 
