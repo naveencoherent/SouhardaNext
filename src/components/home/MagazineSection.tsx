@@ -1,14 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { BookOpen, Download } from 'lucide-react';
 
+const LATEST_MAGAZINE = {
+  title: 'Swabhimani Sahakari',
+  subtitle: 'Monthly publication of KSSFCL',
+  editionTitle: 'Latest Edition - November 2026',
+  description:
+    'Read comprehensive reports, policy analysis, and legal updates concerning Karnataka Souharda Sahakari Act.',
+  coverImage: '/images/Swabhimani_Sahakari/2026_30/2026/Nov/Swabhimani_Sahakari_Nov_2026.webp',
+  fallbackCover: '/images/Swabhimani_Sahakari/sahakari.jpg',
+  pdfUrl: '/images/Swabhimani_Sahakari/2026_30/2026/Nov/Swabhimani_Sahakari_Nov_2026.pdf',
+};
+
 export default function MagazineSection() {
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    const target = e.currentTarget;
-    target.style.display = 'none';
-  };
+  const [imgSrc, setImgSrc] = useState(LATEST_MAGAZINE.coverImage);
 
   return (
     <section className="py-12 bg-white border-t border-slate-100">
@@ -18,31 +26,42 @@ export default function MagazineSection() {
             <BookOpen className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Sahakari Belaku Magazine</h2>
-            <p className="text-xs text-slate-500">Monthly publication of KSSFCL</p>
+            <h2 className="text-xl font-bold text-slate-900">{LATEST_MAGAZINE.title}</h2>
+            <p className="text-xs text-slate-500">{LATEST_MAGAZINE.subtitle}</p>
           </div>
         </div>
 
         <div className="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-left">
-            <h3 className="text-base font-bold text-slate-900">Latest Edition - November 2026</h3>
+            <h3 className="text-base font-bold text-slate-900">{LATEST_MAGAZINE.editionTitle}</h3>
             <p className="text-xs text-slate-600 max-w-xl">
-              Read comprehensive reports, policy analysis, and legal updates concerning Karnataka Souharda Sahakari Act.
+              {LATEST_MAGAZINE.description}
             </p>
           </div>
 
-          <div className="relative w-32 h-44 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-200">
+          <a
+            href={LATEST_MAGAZINE.pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative w-32 h-44 shrink-0 rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-200"
+            title="Click to read Swabhimani Sahakari"
+          >
             <Image
-              src="/images/magazine-cover.jpg"
-              alt="Sahakari Belaku Magazine"
+              src={imgSrc}
+              alt={LATEST_MAGAZINE.title}
               fill
+              unoptimized
               className="object-cover"
-              onError={handleImageError}
+              onError={() => {
+                if (imgSrc !== LATEST_MAGAZINE.fallbackCover) {
+                  setImgSrc(LATEST_MAGAZINE.fallbackCover);
+                }
+              }}
             />
-          </div>
+          </a>
 
           <a
-            href="/downloads/magazine-latest.pdf"
+            href={LATEST_MAGAZINE.pdfUrl}
             download
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl font-bold text-xs transition-all shadow-sm"
           >
