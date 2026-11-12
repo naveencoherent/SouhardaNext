@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import PageHero from '@/components/common/PageHero';
 import { Search, Phone, MessageCircle, Mail, ArrowLeft, Briefcase, Building, MapPin, X } from 'lucide-react';
@@ -25,6 +25,15 @@ export default function DirectorsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDirector, setSelectedDirector] = useState<Director | null>(null);
 
+  // Sync modal with browser/phone Back button
+  useEffect(() => {
+    const handlePopState = () => {
+      setSelectedDirector(null);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const filteredDirectors = useMemo(() => {
     return ALL_DIRECTORS.filter(
       (d) =>
@@ -36,10 +45,14 @@ export default function DirectorsPage() {
 
   const handleSelectDirector = (director: Director) => {
     setSelectedDirector(director);
+    window.history.pushState({ directorId: director.id }, '', `#director-${director.id}`);
   };
 
   const handleCloseDetail = () => {
     setSelectedDirector(null);
+    if (window.location.hash.startsWith('#director-')) {
+      window.history.back();
+    }
   };
 
   return (
@@ -58,17 +71,19 @@ export default function DirectorsPage() {
           {/* Clean Light Card Modal */}
           <div className="relative z-10 w-full max-w-4xl bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 my-auto">
             
-            {/* Top Close Bar */}
-            <div className="bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
+            {/* Sticky Top Close Bar */}
+            <div className="sticky top-0 z-20 bg-slate-50 px-6 py-3 border-b border-slate-100 flex items-center justify-between">
               <button
+                type="button"
                 onClick={handleCloseDetail}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-700 transition"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-700 transition cursor-pointer"
               >
-                <ArrowLeft size={15} /> ← Back to Directors
+                <ArrowLeft size={15} /> Back to Directors
               </button>
               <button 
+                type="button"
                 onClick={handleCloseDetail}
-                className="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-full hover:bg-slate-200"
+                className="text-slate-400 hover:text-slate-700 transition p-1.5 rounded-full hover:bg-slate-200 cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
