@@ -1,31 +1,4 @@
-name: Build and Deploy to cPanel
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build static site
-        run: npm run build
-
-      - name: Deploy to Server via SSH
+- name: Deploy to Server via SSH
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -33,4 +6,5 @@ jobs:
           TARGET_PATH: ${{ secrets.TARGET_PATH }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
+          sshpass -e ssh -o StrictHostKeyChecking=no "$SSH_USER@$SSH_HOST" "pwd && ls -ld ${TARGET_PATH%/}"
           sshpass -e rsync -avz --exclude='/legacy' -e "ssh -o StrictHostKeyChecking=no" out/ "$SSH_USER@$SSH_HOST:${TARGET_PATH%/}/"
