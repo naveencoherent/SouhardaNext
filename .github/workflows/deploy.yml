@@ -33,4 +33,4 @@ jobs:
           TARGET_PATH: ${{ secrets.TARGET_PATH }}
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
-          sshpass -e rsync -avz --exclude='/legacy' -e "ssh -o StrictHostKeyChecking=no" out/ "$SSH_USER@$SSH_HOST:$TARGET_PATH"
+          sshpassshpass -e rsync -avz --exclude='/legacy' -e "ssh -o StrictHostKeyChecking=no" out/ "$SSH_USER@$SSH_HOST:${TARGET_PATH%/}/"
