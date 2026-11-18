@@ -65,7 +65,7 @@ export default function DetailedListSection() {
 
   useEffect(() => {
     let isMounted = true;
-    fetch('/souharda/Members/Database/members.json')
+    fetch('/souharda/members/Database/members.json')
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to load members database (${res.status})`);
         return res.json();
@@ -183,7 +183,7 @@ export default function DetailedListSection() {
 
         <div className="flex flex-wrap items-center gap-2.5">
           <a
-            href="/souharda/Members/Database/English.xlsx"
+            href="/souharda/members/Database/English.xlsx"
             download
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs transition-colors"
           >
@@ -191,7 +191,7 @@ export default function DetailedListSection() {
             <span>District-wise List (English Excel)</span>
           </a>
           <a
-            href="/souharda/Members/Database/Kannada.xlsx"
+            href="/souharda/members/Database/Kannada.xlsx"
             download
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#003366] hover:bg-[#002244] text-white text-xs font-bold shadow-2xs transition-colors"
           >
