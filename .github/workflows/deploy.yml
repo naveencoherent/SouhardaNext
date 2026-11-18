@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -25,11 +26,20 @@ jobs:
       - name: Build static site
         run: npm run build
 
-      - name: Deploy to Server via SSH
-        env:
-          SSHPASS: ${{ secrets.SSH_PASSWORD }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-        run: |
-          sudo apt-get update -qq && sudo apt-get install -y -qq sshpass
-          sshpass -e rsync -avz --exclude='/legacy' -e "ssh -o StrictHostKeyChecking=no" out/ "$SSH_USER@$SSH_HOST:public_html/"
+      - name: Deploy to cPanel via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./out/
+          server-dir: /public_html/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            legacy/**
+            .htaccess
+            .well-known/**
+            cgi-bin/**

@@ -5,7 +5,8 @@
   "scripts": {
     "predev": "npx --yes kill-port 3000",
     "dev": "next dev",
-    "build": "cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
+    "check:casing": "node scripts/check-casing.mjs",
+    "build": "node scripts/check-casing.mjs && cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
     "start": "next start",
     "lint": "eslint"
   },
