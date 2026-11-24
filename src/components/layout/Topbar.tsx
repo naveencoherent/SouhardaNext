@@ -81,14 +81,14 @@ export default function Topbar() {
             >
               {t?.topbar?.egrievance || 'e-Grievance'}
             </a>
-            <a
-              href="https://kssfcpl.greythr.com/uas/portal/auth/login"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-amber-300 transition px-3 border-r border-white/50"
-            >
-              {t?.topbar?.greyhr || 'Grey HR'}
-            </a>
+       <a
+  href="https://kssfcpl.greythr.com/uas/portal/auth/login"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:text-amber-300 transition px-3 border-r border-white/50"
+>
+  Greyt HR
+</a>
             <a
               href="https://souharda.coop/news.html"
               target="_blank"
