@@ -5,36 +5,74 @@ import PageHero from '@/components/common/PageHero';
 import { Search, Phone, Mail, Loader2, XCircle } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
-const getVal = (emp: any, keys: string[]): string => {
-  if (!emp) return '';
-  for (const key of keys) {
-    if (emp[key] !== undefined && emp[key] !== null) {
-      const val = String(emp[key])
-        .replace(/[\r\n]+/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
+interface StaffMember {
+  'Sl No': string;
+  Office: string;
+  Office_en: string;
+  Name: string;
+  Name_en: string;
+  Designation: string;
+  Designation_en: string;
+  Department: string;
+  Department_en: string;
+  Mobile: string;
+  Email: string;
+}
 
-      if (val !== '') return val;
-    }
-  }
-  return '';
-};
-
-// Fixed Advisors Data
-const ADVISORS_DATA = [
+const SECTION_CONFIG = [
   {
-    'ಸಿಬ್ಬಂದಿಯ ಹೆಸರು': 'ವಿ.ಜಿ. ಕಾರ್‌ಕೂನ್',
-    'ಹುದ್ದೆ': 'ಕನ್ಸಲ್ಟೆಂಟ್',
-    'ವಿಭಾಗ': 'ಶಿಕ್ಷಣ ವಿಭಾಗ',
-    'ಸಿಯುಜಿ ಮೊಬೈಲ್': '88844 66710',
-    'ಕಛೇರಿ ಇ-ಮೇಲ್': 'vjkarkoon@souharda.coop',
+    officeEn: 'Head Office',
+    titleKn: 'ಮುಖ್ಯ ಕಛೇರಿ',
+    titleEn: 'HEAD OFFICE',
+    subtitle: null,
   },
   {
-    'ಸಿಬ್ಬಂದಿಯ ಹೆಸರು': 'ಕೆ.ವಿ ಹರ್ಷಿತ್‌ರಾಜ್',
-    'ಹುದ್ದೆ': 'ಕನ್ಸಲ್ಟೆಂಟ್',
-    'ವಿಭಾಗ': 'ಕಾನೂನು ಹಾಗೂ ಟಾಸ್ಕ್ ಫೋರ್ಸ್',
-    'ಸಿಯುಜಿ ಮೊಬೈಲ್': '-',
-    'ಕಛೇರಿ ಇ-ಮೇಲ್': 'harshitaraj@souharda.coop',
+    officeEn: 'Task Force Division',
+    titleKn: 'ಟಾಸ್ಕ್ ಫೋರ್ಸ್ ವಿಭಾಗ',
+    titleEn: 'TASK FORCE DIVISION',
+    subtitle: null,
+  },
+  {
+    officeEn: 'Bengaluru Arbitration Court',
+    titleKn: '441 ನ್ಯಾಯಾಲಯ (ಬೆಂಗಳೂರು ದಾವಾ ಪಂಚಾಯಿತಿ ನ್ಯಾಯಾಲಯ)',
+    titleEn: 'COURT DIVISION (441 ARBITRATION COURT)',
+    subtitle: '080-23449933-34 | 441court@souharda.coop',
+  },
+  {
+    officeEn: 'Belagavi Regional Office',
+    titleKn: 'ಬೆಳಗಾವಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ',
+    titleEn: 'BELAGAVI REGIONAL OFFICE',
+    subtitle: '0831-2401551 | dobgm@souharda.coop',
+  },
+  {
+    officeEn: 'Belagavi Arbitration Court',
+    titleKn: 'ಬೆಳಗಾವಿ ದಾವಾ ಪಂಚಾಯಿತಿ ನ್ಯಾಯಾಲಯ',
+    titleEn: 'BELAGAVI DISPUTE ARBITRATION COURT',
+    subtitle: null,
+  },
+  {
+    officeEn: 'Kalaburagi Regional Office',
+    titleKn: 'ಕಲಬುರಗಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ',
+    titleEn: 'KALABURAGI REGIONAL OFFICE',
+    subtitle: '08472-270222 | glbdo@souharda.coop',
+  },
+  {
+    officeEn: 'Bengaluru Regional Office',
+    titleKn: 'ಬೆಂಗಳೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ',
+    titleEn: 'BENGALURU REGIONAL OFFICE',
+    subtitle: '080-23525546 | bgudo@souharda.coop',
+  },
+  {
+    officeEn: 'Mysuru Regional Office',
+    titleKn: 'ಮೈಸೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ',
+    titleEn: 'MYSURU REGIONAL OFFICE',
+    subtitle: '0821-2332299 | mysdo@souharda.coop',
+  },
+  {
+    officeEn: 'Consultants',
+    titleKn: 'ಸಲಹೆಗಾರರು',
+    titleEn: 'ADVISORS & CONSULTANTS',
+    subtitle: null,
   },
 ];
 
@@ -49,184 +87,37 @@ const ROW_COLORS = [
 
 export default function WorkforcePage() {
   const { locale } = useLanguage();
-  const [employeesList, setEmployeesList] = useState<any[]>([]);
+  const [employeesList, setEmployeesList] = useState<StaffMember[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/souharda/workforce.json')
+    fetch('/souharda/workforce/staff.json')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
       })
       .then((data) => {
-        let list: any[] = [];
         if (Array.isArray(data)) {
-          list = data;
-        } else if (typeof data === 'object' && data !== null) {
-          const possibleArray = Object.values(data).find((val) => Array.isArray(val));
-          if (possibleArray) list = possibleArray as any[];
+          setEmployeesList(data);
         }
-
-        setEmployeesList(list);
         setLoading(false);
       })
       .catch((err) => {
-        console.error('Failed to load workforce JSON:', err);
+        console.error('Failed to load staff.json:', err);
         setLoading(false);
       });
   }, []);
 
   const sections = useMemo(() => {
-    // Filter out heading text rows
-    const cleanList = employeesList.filter((emp) => {
-      const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-      return (
-        name &&
-        name !== 'ಸಿಬ್ಬಂದಿಯ ಹೆಸರು' &&
-        name !== 'Staff Member' &&
-        !name.includes('ಬೆಂಗಳೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ') &&
-        !name.includes('ಬೆಳಗಾವಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ') &&
-        !name.includes('ಕಲಬುರಗಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ') &&
-        !name.includes('ಮೈಸೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ')
-      );
-    });
-
-    const headOffice = cleanList.slice(0, 38);
-    const taskforce = cleanList.slice(38, 38 + 17);
-    const remaining = cleanList.slice(38 + 17);
-
-    // Regional Offices
-    const bengaluruOffice = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        dept.includes('ಬೆಂಗಳೂರು') ||
-        dept.includes('Bengaluru') ||
-        email.includes('bgudo') ||
-        name.includes('ಬೆಂಗಳೂರು')
-      );
-    });
-
-    const courtOffice = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        (dept.includes('ನ್ಯಾಯಾಲಯ') || dept.toLowerCase().includes('court') || email.includes('court') || name.includes('ನ್ಯಾಯಾಲಯ')) &&
-        !dept.includes('ಬೆಳಗಾವಿ') &&
-        !name.includes('ಬೆಳಗಾವಿ')
-      );
-    });
-
-    const belagaviOffice = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        (dept.includes('ಬೆಳಗಾವಿ') || dept.toLowerCase().includes('belagavi') || email.includes('dobgm')) &&
-        !dept.includes('ದಾವಾ') &&
-        !dept.includes('ನ್ಯಾಯಾಲಯ')
-      );
-    });
-
-    const belagaviCourt = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        (dept.includes('ಬೆಳಗಾವಿ') && (dept.includes('ದಾವಾ') || dept.includes('ನ್ಯಾಯಾಲಯ') || dept.includes('ಪಂಚಾಯಿತಿ'))) ||
-        (name.includes('ಬೆಳಗಾವಿ') && (name.includes('ದಾವಾ') || name.includes('ನ್ಯಾಯಾಲಯ'))) ||
-        email.includes('belagavi.court')
-      );
-    });
-
-    const kalaburagiOffice = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        dept.includes('ಕಲಬುರಗಿ') ||
-        dept.includes('ಗುಲ್ಬರ್ಗಾ') ||
-        dept.toLowerCase().includes('kalaburagi') ||
-        dept.toLowerCase().includes('gulbarga') ||
-        email.includes('glbdo')
-      );
-    });
-
-    const mysuruOffice = remaining.filter((emp) => {
-      const dept = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-      const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']);
-
-      return (
-        dept.includes('ಮೈಸೂರು') ||
-        dept.toLowerCase().includes('mysuru') ||
-        dept.toLowerCase().includes('mysore') ||
-        email.includes('mysdo')
-      );
-    });
-
-    const finalBengaluru = bengaluruOffice.length > 0 ? bengaluruOffice : cleanList.slice(55, 60);
-    const finalCourt = courtOffice.length > 0 ? courtOffice : cleanList.slice(60, 64);
-    const finalBelagavi = belagaviOffice.length > 0 ? belagaviOffice : cleanList.slice(64, 68);
-    const finalBelagaviCourt = belagaviCourt.length > 0 ? belagaviCourt : cleanList.slice(68, 71);
-    const finalKalaburagi = kalaburagiOffice.length >= 18 ? kalaburagiOffice : cleanList.slice(71, 71 + 18);
-    const finalMysuru = mysuruOffice.length >= 13 ? mysuruOffice : cleanList.slice(71 + 18, 71 + 18 + 13);
-
-    return [
-      {
-        title: locale === 'kn' ? 'ಮುಖ್ಯ ಕಛೇರಿ' : 'HEAD OFFICE',
-        subtitle: null,
-        members: headOffice,
-      },
-      {
-        title: locale === 'kn' ? 'ಟಾಸ್ಕ್ ಫೋರ್ಸ್ ವಿಭಾಗ' : 'TASK FORCE DIVISION',
-        subtitle: null,
-        members: taskforce,
-      },
-      {
-        title: locale === 'kn' ? 'ಬೆಂಗಳೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ' : 'BENGALURU REGIONAL OFFICE',
-        subtitle: '080-23525546 | bgudo@souharda.coop',
-        members: finalBengaluru,
-      },
-      {
-        title: locale === 'kn' ? 'ನ್ಯಾಯಾಲಯ ವಿಭಾಗ' : 'COURT DIVISION',
-        subtitle: '080-23449933-34 | court@souharda.coop',
-        members: finalCourt,
-      },
-      {
-        title: locale === 'kn' ? 'ಬೆಳಗಾವಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ' : 'BELAGAVI REGIONAL OFFICE',
-        subtitle: '08312401551 | dobgm@souharda.coop',
-        members: finalBelagavi,
-      },
-      {
-        title: locale === 'kn' ? 'ಬೆಳಗಾವಿ ದಾವಾ ಪಂಚಾಯಿತಿ ನ್ಯಾಯಾಲಯ' : 'BELAGAVI DISPUTE ARBITRATION COURT',
-        subtitle: null,
-        members: finalBelagaviCourt,
-      },
-      {
-        title: locale === 'kn' ? 'ಕಲಬುರಗಿ ಪ್ರಾಂತೀಯ ಕಛೇರಿ' : 'KALABURAGI REGIONAL OFFICE',
-        subtitle: '08472-270222 | glbdo@souharda.coop',
-        members: finalKalaburagi,
-      },
-      {
-        title: locale === 'kn' ? 'ಮೈಸೂರು ಪ್ರಾಂತೀಯ ಕಛೇರಿ' : 'MYSURU REGIONAL OFFICE',
-        subtitle: '0821-2332299 | mysdo@souharda.coop',
-        members: finalMysuru,
-      },
-      {
-        title: locale === 'kn' ? 'ಸಲಹೆಗಾರರು' : 'ADVISORS',
-        subtitle: null,
-        members: ADVISORS_DATA,
-      },
-    ];
+    return SECTION_CONFIG.map((cfg) => ({
+      title: locale === 'kn' ? cfg.titleKn : cfg.titleEn,
+      subtitle: cfg.subtitle,
+      members: employeesList.filter((emp) => emp.Office_en === cfg.officeEn),
+    })).filter((sec) => sec.members.length > 0);
   }, [employeesList, locale]);
 
-  // Apply search query across all sections
+  // Apply search query across both Kannada and English fields
   const filteredSections = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
     if (!term) return sections;
@@ -234,16 +125,17 @@ export default function WorkforcePage() {
     return sections
       .map((sec) => {
         const filtered = sec.members.filter((emp) => {
-          const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']).toLowerCase();
-          const designation = getVal(emp, ['ಹುದ್ದೆ', 'designation']).toLowerCase();
-          const dept = getVal(emp, ['ವಿಭಾಗ', 'department']).toLowerCase();
-          const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'email']).toLowerCase();
-
           return (
-            name.includes(term) ||
-            designation.includes(term) ||
-            dept.includes(term) ||
-            email.includes(term)
+            emp.Name?.toLowerCase().includes(term) ||
+            emp.Name_en?.toLowerCase().includes(term) ||
+            emp.Designation?.toLowerCase().includes(term) ||
+            emp.Designation_en?.toLowerCase().includes(term) ||
+            emp.Department?.toLowerCase().includes(term) ||
+            emp.Department_en?.toLowerCase().includes(term) ||
+            emp.Office?.toLowerCase().includes(term) ||
+            emp.Office_en?.toLowerCase().includes(term) ||
+            emp.Mobile?.toLowerCase().includes(term) ||
+            emp.Email?.toLowerCase().includes(term)
           );
         });
 
@@ -255,7 +147,7 @@ export default function WorkforcePage() {
           members: filtered,
         };
       })
-      .filter(Boolean) as { title: string; subtitle: string | null; members: any[] }[];
+      .filter(Boolean) as { title: string; subtitle: string | null; members: StaffMember[] }[];
   }, [sections, searchTerm]);
 
   const totalCount = useMemo(() => {
@@ -291,6 +183,7 @@ export default function WorkforcePage() {
             />
             {searchTerm && (
               <button
+                type="button"
                 onClick={() => setSearchTerm('')}
                 className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
               >
@@ -363,17 +256,19 @@ export default function WorkforcePage() {
                         <tbody className="text-xs sm:text-sm text-slate-900">
                           {sec.members.map((emp, index) => {
                             const slNo = String(index + 1).padStart(2, '0');
-                            const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-                            const designation = getVal(emp, ['ಹುದ್ದೆ', 'designation']);
-                            const department = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-                            const cugNumber = getVal(emp, ['ಸಿಯುಜಿ ಮೊಬೈಲ್', 'ಮೊಬೈಲ್', 'cug', 'mobile', 'phone']);
-                            const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'ಕಛೇರಿ ಇ ಮೇಲ್', 'ಇ-ಮೇಲ್', 'email', 'mail']);
+                            const name = locale === 'kn' ? emp.Name : emp.Name_en;
+                            const designation =
+                              locale === 'kn' ? emp.Designation : emp.Designation_en;
+                            const department =
+                              locale === 'kn' ? emp.Department : emp.Department_en;
+                            const cugNumber = emp.Mobile;
+                            const email = emp.Email;
 
                             const rowTheme = ROW_COLORS[index % ROW_COLORS.length];
 
                             return (
                               <tr
-                                key={index}
+                                key={`${emp['Sl No']}-${emp.Email}-${index}`}
                                 className={`${rowTheme.bg} ${rowTheme.hover} transition-colors border-b border-slate-200/80 last:border-b-0`}
                               >
                                 <td className="py-3 px-3 text-center font-bold text-slate-700 align-middle whitespace-nowrap">
@@ -423,17 +318,19 @@ export default function WorkforcePage() {
                     <div className="grid grid-cols-1 gap-3 p-3 md:hidden">
                       {sec.members.map((emp, index) => {
                         const slNo = String(index + 1).padStart(2, '0');
-                        const name = getVal(emp, ['ಸಿಬ್ಬಂದಿಯ ಹೆಸರು', 'ಹೆಸರು', 'name']);
-                        const designation = getVal(emp, ['ಹುದ್ದೆ', 'designation']);
-                        const department = getVal(emp, ['ವಿಭಾಗ', 'department', 'section']);
-                        const cugNumber = getVal(emp, ['ಸಿಯುಜಿ ಮೊಬೈಲ್', 'ಮೊಬೈಲ್', 'cug', 'mobile', 'phone']);
-                        const email = getVal(emp, ['ಕಛೇರಿ ಇ-ಮೇಲ್', 'ಕಛೇರಿ ಇ ಮೇಲ್', 'ಇ-ಮೇಲ್', 'email', 'mail']);
+                        const name = locale === 'kn' ? emp.Name : emp.Name_en;
+                        const designation =
+                          locale === 'kn' ? emp.Designation : emp.Designation_en;
+                        const department =
+                          locale === 'kn' ? emp.Department : emp.Department_en;
+                        const cugNumber = emp.Mobile;
+                        const email = emp.Email;
 
                         const rowTheme = ROW_COLORS[index % ROW_COLORS.length];
 
                         return (
                           <div
-                            key={index}
+                            key={`${emp['Sl No']}-${emp.Email}-mobile-${index}`}
                             className={`${rowTheme.bg} rounded-xl border border-slate-200/80 p-3.5 space-y-2.5`}
                           >
                             <div className="flex justify-between items-start">
