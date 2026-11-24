@@ -92,7 +92,7 @@ export default function WorkforcePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/souharda/workforce/staff.json')
+  fetch('/souharda/workforce.json')
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
